@@ -9,7 +9,25 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <h1 className="font-bold text-red-500">Welcome to Spring of Engivia!</h1>
+      <div className="flex">
+        <div className="flex flex-col items-center my-auto w-1/2">
+          <img className="h-20" src="/engivia_logo.png" alt="logo" />
+          <h1 className="mt-10 text-3xl font-bold text-[#0284C7]">
+            エンジビアの泉
+          </h1>
+          <p className="mb-10 text-[#38BDF8]">
+            〜素晴らしきプログラミング豆知識〜
+          </p>
+          <button className="py-2 px-4 rounded-md border-2">
+            Sign in with GitHub
+          </button>
+        </div>
+        <img
+          className="object-cover w-1/2 h-screen"
+          src="/AdobeStock_162810993_Preview.jpeg"
+          alt="spring"
+        />
+      </div>
     </div>
   );
 }
