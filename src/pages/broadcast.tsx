@@ -10,7 +10,7 @@ const Broadcast = () => {
         </div>
         <img className="h-10 rounded-full" src="/15007672.jpeg" alt="avatar" />
       </div>
-      <p>あああああああ</p>
+      <p>いいいいいい</p>
     </div>
   );
 };
