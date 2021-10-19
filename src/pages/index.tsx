@@ -1,6 +1,16 @@
 import Head from "next/head";
+import { useAuth } from "src/lib/auth";
 
 export default function Home() {
+  const auth = useAuth();
+
+  const SignInWithGitHub = () => {
+    auth?.signInWithGithub();
+  };
+  const SignOutWithGitHub = () => {
+    auth?.signOut();
+  };
+
   return (
     <div>
       <Head>
@@ -18,8 +28,17 @@ export default function Home() {
           <p className="mb-10 text-[#38BDF8]">
             〜素晴らしきプログラミング豆知識〜
           </p>
-          <button className="py-2 px-4 rounded-md border-2">
+          <button
+            onClick={SignInWithGitHub}
+            className="py-2 px-4 rounded-md border-2"
+          >
             Sign in with GitHub
+          </button>
+          <button
+            onClick={SignOutWithGitHub}
+            className="py-2 px-4 rounded-md border-2"
+          >
+            Sign Out
           </button>
         </div>
         <img
