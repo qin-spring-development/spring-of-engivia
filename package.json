@@ -12,23 +12,33 @@
     "check-format": "prettier --check .",
     "check-lint": "eslint . --ext ts --ext tsx --ext js",
     "format": "prettier --write .",
-    "test-all": "yarn check-types && yarn check-format && yarn check-lint && yarn build"
+    "test-all": "yarn check-types && yarn check-format && yarn check-lint && yarn build",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@heroicons/react": "^1.0.4",
     "firebase": "8.6.2",
     "js-cookie": "^3.0.1",
+    "@tailwindcss/postcss7-compat": "^2.2.17",
     "next": "11.1.2",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   },
   "devDependencies": {
     "@svgr/webpack": "^5.5.0",
     "@types/js-cookie": "^3.0.0",
+    "@babel/core": "^7.15.8",
+    "@storybook/addon-actions": "^6.3.12",
+    "@storybook/addon-essentials": "^6.3.12",
+    "@storybook/addon-links": "^6.3.12",
+    "@storybook/react": "^6.3.12",
     "@types/node": "^16.11.1",
     "@types/react": "^17.0.30",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "autoprefixer": "^10.3.7",
+    "autoprefixer": "^9",
+    "babel-loader": "8.1.0",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
     "eslint-config-prettier": "^8.3.0",
@@ -36,9 +46,8 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-tailwindcss": "^1.17.0",
     "husky": "^7.0.0",
-    "postcss": "^8.3.9",
+    "postcss": "^7",
     "prettier": "^2.4.1",
-    "tailwindcss": "^2.2.17",
     "typescript": "^4.4.4"
   }
 }

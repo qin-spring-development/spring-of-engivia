@@ -23,6 +23,7 @@ const Broadcast = () => {
           <UserIcon className="p-1 h-10 text-gray-500 bg-gray-200 rounded-full" />
         )}
       </div>
+      <p>{auth?.user?.email}</p>
     </div>
   );
 };
