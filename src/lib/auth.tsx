@@ -9,7 +9,7 @@ import {
 } from "react";
 import Cookies from "js-cookie";
 import { auth, firebase } from "src/lib/firebase";
-import { createUser } from "src/lib/db";
+import { createUser, getUser } from "src/lib/db";
 
 type Props = {
   children: ReactNode;
@@ -57,7 +57,7 @@ const useProviderAuth = () => {
       const user = await formatUser(rawUser);
       const { token, emailVerified, ...withOutToken } = user;
 
-      createUser(user.uid, withOutToken);
+      (await getUser(user.uid)) ?? createUser(user.uid, withOutToken);
 
       setUser(user);
       return user;
