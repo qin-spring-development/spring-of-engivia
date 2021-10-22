@@ -1,0 +1,24 @@
+users:
+  documentId: userId
+  name: string
+  photoUrl: string
+  isAdmin: bool # 作成時はfalse
+
+broadcasts: # 放送一覧
+  documentId: random
+  title: string
+  broadCastingDate: timestamp
+  broadCastUrl: string? # youtubeのurl
+  engiviaCount: int # engiviaを作る:+1 削除:-1
+  # feature中のengiviaIdを持った方が良い?
+
+  engivias:
+    documentId: random
+    body: string
+    featureStatus: string #"^(BEFORE|IN_FEATURE|DONE)$"
+    createAt: timestamp
+
+    postUser:
+      documentId: userId
+      name: string
+      photoUrl: string
