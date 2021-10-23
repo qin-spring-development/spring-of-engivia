@@ -1,4 +1,9 @@
+import { UserIcon } from "@heroicons/react/solid";
+import { useAuth } from "src/lib/auth";
+
 const Broadcast = () => {
+  const auth = useAuth();
+
   return (
     <div className="h-screen bg-gray-100">
       <div className="flex items-center py-5 px-4 bg-white shadow-sm">
@@ -8,9 +13,17 @@ const Broadcast = () => {
             エンジビアの泉
           </h1>
         </div>
-        <img className="h-10 rounded-full" src="/15007672.jpeg" alt="avatar" />
+        {auth?.user ? (
+          <img
+            className="h-10 rounded-full"
+            src={auth.user.photoURL}
+            alt="avatar"
+          />
+        ) : (
+          <UserIcon className="p-1 h-10 text-gray-500 bg-gray-200 rounded-full" />
+        )}
       </div>
-      <p>いいいいいい</p>
+      <p>{auth?.user?.email}</p>
     </div>
   );
 };

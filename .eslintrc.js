@@ -22,5 +22,6 @@ module.exports = {
   plugins: ["react", "@typescript-eslint", "tailwindcss"],
   rules: {
     "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
   },
 };
