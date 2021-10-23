@@ -8,7 +8,8 @@ broadcasts: # 放送一覧
   documentId: random
   title: string
   broadCastingDate: timestamp
-  broadCastUrl: string? # youtubeのurl
+  status: string #"^(BEFORE|IN_PROGRESS|DONE)$"
+  broadCastUrl: string?
   engiviaCount: int # engiviaを作る:+1 削除:-1
   # feature中のengiviaIdを持った方が良い?
 
