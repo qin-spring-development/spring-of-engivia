@@ -1,8 +1,8 @@
 import { UserIcon } from "@heroicons/react/solid";
-import { useAuth } from "src/lib/auth";
+import { useSession } from "next-auth/client";
 
 const Broadcast = () => {
-  const auth = useAuth();
+  const [session] = useSession();
 
   return (
     <div className="h-screen bg-gray-100">
@@ -13,17 +13,19 @@ const Broadcast = () => {
             エンジビアの泉
           </h1>
         </div>
-        {auth?.user ? (
+        {session?.user ? (
           <img
             className="h-10 rounded-full"
-            src={auth.user.photoURL}
+            src={session && session.user.image}
             alt="avatar"
           />
         ) : (
           <UserIcon className="p-1 h-10 text-gray-500 bg-gray-200 rounded-full" />
         )}
       </div>
-      <p>{auth?.user?.email}</p>
+      <p>{session && session.user.name}</p>
+      <p>{session && session.user.email}</p>
+      <p>{session && session.user.id}</p>
     </div>
   );
 };
