@@ -1,3 +1,5 @@
+import { BaseLayout } from "src/components/Layouts/BaseLayout";
+
 interface EngiviaData {
   text: string;
   image: string;
@@ -56,7 +58,7 @@ const afterFeatureData: EngiviaData[] = [
 
 const Feature = () => {
   return (
-    <section className="h-screen bg-gray-100">
+    <BaseLayout title="放送設定">
       <div className="mx-auto max-w-7xl">
         <div className="container py-24 px-5 mx-auto">
           {/* タイトル部分 */}
@@ -171,7 +173,7 @@ const Feature = () => {
           </div>
         </div>
       </div>
-    </section>
+    </BaseLayout>
   );
 };
 
