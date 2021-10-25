@@ -22,6 +22,7 @@ const storage = firebase.storage();
 const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 export type SnapshotType = firebase.firestore.DocumentData;
 export type TimestampType = firebase.firestore.Timestamp;
+export type FieldValueType = firebase.firestore.FieldValue;
 export type QuerySnapshotType = firebase.firestore.DocumentSnapshot;
 
 export { auth, db, storage, timestamp, firebase };

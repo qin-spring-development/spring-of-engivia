@@ -9,23 +9,23 @@ export const BroadCastList: FC = () => {
 
   useEffect(() => {
     // snapshot.docsは、firestoreのbroadcasts全てを配列でリアルタイムに取得
-
-    db.collection("broadcasts").onSnapshot((snapshot) =>
-      setBroadcasts(snapshot.docs.map((doc) => doc.data()) as BroadcastType[])
-    );
+    db.collection("broadcasts")
+      .orderBy("broadCastingDate")
+      .onSnapshot((snapshot) =>
+        setBroadcasts(snapshot.docs.map((doc) => doc.data()) as BroadcastType[])
+      );
   }, []);
 
   return (
-    <div className="bg-gray-100">
-      <div className="mt-10">
-        {broadcasts?.map((broadcast) => {
-          return (
-            <div key={broadcast.id}>
-              <BroadcastItem broadcast={broadcast} />
-            </div>
-          );
-        })}
-      </div>
+    <div className="mx-auto max-w-3xl">
+      <h1 className="py-10 mx-auto text-4xl font-bold">放送一覧</h1>
+      {broadcasts?.map((broadcast) => {
+        return (
+          <div key={broadcast.id}>
+            <BroadcastItem broadcast={broadcast} />
+          </div>
+        );
+      })}
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { db } from "src/lib/firebase";
+import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import { BroadcastFeatureList } from "src/components/BroadcastFeatureList";
 import { EngiviaType } from "src/types/interface";
 
@@ -19,9 +20,9 @@ const InFeature = () => {
   }, [broadcastId]);
 
   return (
-    <div className="h-screen bg-gray-100">
+    <BaseLayout title="放送中">
       <BroadcastFeatureList engivias={engivias} broadcastId={broadcastId} />
-    </div>
+    </BaseLayout>
   );
 };
 

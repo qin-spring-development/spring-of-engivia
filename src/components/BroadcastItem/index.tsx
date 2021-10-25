@@ -36,7 +36,7 @@ export const BroadcastItem: FC<Props> = (props) => {
   };
 
   return (
-    <div className="py-5 px-7 mx-auto max-w-3xl text-[#6B7280] bg-white rounded-md border-b">
+    <div className="py-5 px-7 text-[#6B7280] bg-white rounded-md border-b">
       <div className="flex justify-between">
         <div>
           <button

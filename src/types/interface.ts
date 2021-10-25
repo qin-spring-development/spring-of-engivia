@@ -1,5 +1,3 @@
-import { TimestampType } from "src/lib/firebase";
-
 export interface EngiviaType {
   postUser: {
     name?: string;
@@ -7,7 +5,7 @@ export interface EngiviaType {
     uid: string;
   };
   body: string;
-  createdAt: TimestampType;
+  createdAt: any;
   featureStatus: string;
   id: string;
   likes: number;
@@ -15,7 +13,7 @@ export interface EngiviaType {
 
 export interface BroadcastType {
   broadCastUrl: string;
-  broadCastingDate: TimestampType;
+  broadCastingDate: any;
   engiviaCount: number;
   id: string;
   status: string;
