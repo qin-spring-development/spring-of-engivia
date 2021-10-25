@@ -4,58 +4,57 @@ interface EngiviaData {
   name: string;
   id: number;
 }
+// const FeatureText: string[] = [
+//   "フィーチャー前",
+//   "フィーチャー中",
+//   "フィーチャー済み",
+// ];
+
+const beforeFeatureData: EngiviaData[] = [
+  {
+    text: "HTMLにはポータルという便利な要素がある",
+    image: "15007672.jpeg",
+    name: "松平ケン",
+    id: 12345678,
+  },
+  {
+    text: "HTMLにはポータルという便利な要素がある",
+    image: "15007672.jpeg",
+    name: "松平ケン",
+    id: 123456789,
+  },
+  {
+    text: "HTMLにはポータルという便利な要素がある",
+    image: "15007672.jpeg",
+    name: "松平ケン",
+    id: 1234567890,
+  },
+  {
+    text: "HTMLにはポータルという便利な要素がある",
+    image: "15007672.jpeg",
+    name: "松平ケン",
+    id: 12345678901,
+  },
+];
+
+const featuringData: EngiviaData[] = [];
+
+const afterFeatureData: EngiviaData[] = [
+  {
+    text: "HTMLにはポータルという便利な要素がある",
+    image: "15007672.jpeg",
+    name: "松平ケン",
+    id: 12345678,
+  },
+  {
+    text: "HTMLにはポータルという便利な要素がある",
+    image: "15007672.jpeg",
+    name: "松平ケン",
+    id: 1234567,
+  },
+];
 
 const Feature = () => {
-  // const FeatureText: string[] = [
-  //   "フィーチャー前",
-  //   "フィーチャー中",
-  //   "フィーチャー済み",
-  // ];
-
-  const beforeFeatureData: EngiviaData[] = [
-    {
-      text: "HTMLにはポータルという便利な要素がある",
-      image: "15007672.jpeg",
-      name: "松平ケン",
-      id: 12345678,
-    },
-    {
-      text: "HTMLにはポータルという便利な要素がある",
-      image: "15007672.jpeg",
-      name: "松平ケン",
-      id: 123456789,
-    },
-    {
-      text: "HTMLにはポータルという便利な要素がある",
-      image: "15007672.jpeg",
-      name: "松平ケン",
-      id: 1234567890,
-    },
-    {
-      text: "HTMLにはポータルという便利な要素がある",
-      image: "15007672.jpeg",
-      name: "松平ケン",
-      id: 12345678901,
-    },
-  ];
-
-  const featuringData: EngiviaData[] = [];
-
-  const afterFeatureData: EngiviaData[] = [
-    {
-      text: "HTMLにはポータルという便利な要素がある",
-      image: "15007672.jpeg",
-      name: "松平ケン",
-      id: 12345678,
-    },
-    {
-      text: "HTMLにはポータルという便利な要素がある",
-      image: "15007672.jpeg",
-      name: "松平ケン",
-      id: 1234567,
-    },
-  ];
-
   return (
     <section className="h-screen bg-gray-100">
       <div className="mx-auto max-w-7xl">
