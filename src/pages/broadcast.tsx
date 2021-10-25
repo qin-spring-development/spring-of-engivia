@@ -1,5 +1,6 @@
 import { UserIcon } from "@heroicons/react/solid";
 import { useAuth } from "src/lib/auth";
+import { BroadCastList } from "src/components/BroadcastList";
 
 const Broadcast = () => {
   const auth = useAuth();
@@ -23,7 +24,9 @@ const Broadcast = () => {
           <UserIcon className="p-1 h-10 text-gray-500 bg-gray-200 rounded-full" />
         )}
       </div>
-      <p>{auth?.user?.email}</p>
+      <div>
+        <BroadCastList />
+      </div>
     </div>
   );
 };

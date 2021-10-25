@@ -9,8 +9,6 @@ type WithOutToken = {
 };
 
 export const createUser = (uid: string, user: WithOutToken) => {
-  console.log(typeof user);
-
   return db.collection("users").doc(uid).set(user, { merge: true });
 };
 
