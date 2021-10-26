@@ -1,3 +1,5 @@
+import { BroadcastList } from "src/components/BroadcastList";
+
 const Broadcast = () => {
   return (
     <div className="h-screen bg-gray-100">
@@ -10,7 +12,7 @@ const Broadcast = () => {
         </div>
         <img className="h-10 rounded-full" src="/15007672.jpeg" alt="avatar" />
       </div>
-      <p>いいいいいい</p>
+      <BroadcastList />
     </div>
   );
 };
