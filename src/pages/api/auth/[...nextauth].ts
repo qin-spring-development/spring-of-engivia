@@ -1,5 +1,4 @@
-import { Session } from "inspector";
-import NextAuth, { User } from "next-auth";
+import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
 
 const options = {
@@ -11,13 +10,8 @@ const options = {
     }),
   ],
   callbacks: {
-    async redirect(url: string, baseUrl: string) {
-      return url.startsWith(baseUrl) ? url : `${baseUrl}/broadcast`;
-    },
-
-    session: async (session: any, user: User) => {
-      session.user.id = "aaaaa";
-      return Promise.resolve(session);
+    async redirect(url: string) {
+      return url;
     },
   },
 };

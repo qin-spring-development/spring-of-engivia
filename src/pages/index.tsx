@@ -1,5 +1,5 @@
 import Head from "next/head";
-import GitHubIcon from "src/svg/github-icon.svg";
+import SlackIcon from "src/svg/slack-icon.svg";
 import { signIn, signOut } from "next-auth/client";
 
 export default function Home() {
@@ -21,14 +21,18 @@ export default function Home() {
             〜素晴らしきプログラミング豆知識〜
           </p>
           <button
-            onClick={() => signIn()}
+            onClick={() =>
+              signIn("slack", {
+                callbackUrl: "/broadcast",
+              })
+            }
             className="flex items-center py-2 px-4 hover:bg-gray-100 rounded-md border-2"
           >
-            <GitHubIcon />
-            <p className="ml-2">Sign in with GitHub</p>
+            <SlackIcon />
+            <p className="ml-2">Sign in with Slack</p>
           </button>
           <button
-            onClick={() => signOut()}
+            onClick={() => signOut({ callbackUrl: "/" })}
             className="py-2 px-4 mt-4 hover:bg-gray-100 rounded-md border-2"
           >
             Sign Out
