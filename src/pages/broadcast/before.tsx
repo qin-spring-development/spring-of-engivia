@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { db } from "src/lib/firebase";
 import { BroadcastType } from "src/types/interface";
-import { initialBroadcastInfo } from "src/const/initialState";
+import { initialBroadcastInfo } from "src/constant/initialState";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import { BroadcastTitle } from "src/components/BroadcastTitle";
 

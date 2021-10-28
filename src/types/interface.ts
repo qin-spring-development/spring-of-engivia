@@ -8,7 +8,7 @@ export interface EngiviaType {
   createdAt: any;
   featureStatus: string;
   id: string;
-  likes: number;
+  totalLikes: number;
 }
 
 export interface BroadcastType {

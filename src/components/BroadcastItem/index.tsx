@@ -36,12 +36,12 @@ export const BroadcastItem: FC<Props> = (props) => {
   };
 
   return (
-    <div className="py-5 px-7 text-[#6B7280] bg-white rounded-md border-b">
+    <div className="py-5 px-7 text-gray-500 bg-white rounded-md border-b">
       <div className="flex justify-between">
         <div>
           <button
             onClick={onBroadcastState}
-            className="text-[#0284C7]"
+            className="text-light-blue-600"
           >{`${title}`}</button>
 
           <div className="flex items-center mt-2">
@@ -53,9 +53,9 @@ export const BroadcastItem: FC<Props> = (props) => {
           <span
             className={`py-1 px-3 text-sm rounded-full ${
               status === "BEFORE"
-                ? "bg-[#FFEDD5] text-[#C2410C]"
+                ? "bg-orange-100 text-orange-700"
                 : status === "IN_FEATURE"
-                ? "bg-[#D1FAE5] text-[#047857]"
+                ? "bg-green-100 text-green-700"
                 : "bg-gray-200"
             }`}
           >

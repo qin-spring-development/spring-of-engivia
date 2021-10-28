@@ -2,7 +2,7 @@ import type { FC } from "react";
 import { useState, useEffect } from "react";
 import { db } from "src/lib/firebase";
 import { EngiviaType, BroadcastType } from "src/types/interface";
-import { initialBroadcastInfo } from "src/const/initialState";
+import { initialBroadcastInfo } from "src/constant/initialState";
 import { BroadcastFeatureItem } from "src/components/BroadcastFeatureItem";
 import { BroadcastTitle } from "src/components/BroadcastTitle";
 

@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const BroadcastFeatureItem: FC<Props> = (props) => {
-  const { body, likes, postUser, id, featureStatus } = props.engivia;
+  const { body, totalLikes, postUser, id, featureStatus } = props.engivia;
 
   const handleClick = () => {
     const docRef = db
@@ -17,7 +17,7 @@ export const BroadcastFeatureItem: FC<Props> = (props) => {
       .doc(props.broadcastId)
       .collection("engivias")
       .doc(id);
-    docRef.update({ likes: firebase.firestore.FieldValue.increment(1) });
+    docRef.update({ totalLikes: firebase.firestore.FieldValue.increment(1) });
   };
 
   return (
@@ -41,7 +41,7 @@ export const BroadcastFeatureItem: FC<Props> = (props) => {
               <span>{postUser?.name ? postUser?.name : "No name"}</span>
             </div>
             <div className="inline py-3 px-10 text-4xl font-bold text-[#0284C7] bg-[#FEF3C7] rounded-lg">
-              <span>{likes}</span>
+              <span>{totalLikes}</span>
               <span className="text-xl">へえ</span>
             </div>
           </div>
@@ -54,7 +54,7 @@ export const BroadcastFeatureItem: FC<Props> = (props) => {
             へえボターン
           </button>
           <div className="inline ml-10 text-4xl font-bold text-[#0284C7]">
-            <span>{likes}</span>
+            <span>{totalLikes}</span>
             <span className="text-xl">へえ</span>
           </div>
         </div>
