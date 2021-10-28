@@ -1,8 +1,6 @@
-import { firebase } from "src/lib/firebase";
-
 export const initialBroadcastInfo = {
   broadCastUrl: "",
-  broadCastingDate: firebase.firestore.FieldValue.serverTimestamp(),
+  broadCastingDate: "",
   engiviaCount: 0,
   id: "",
   status: "",

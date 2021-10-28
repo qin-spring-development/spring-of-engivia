@@ -1,20 +1,15 @@
 import type { FC } from "react";
-import { useEffect, useState } from "react";
-import { db } from "src/lib/firebase";
-import { BroadcastType } from "src/types/interface";
+import useSWR from "swr";
 import { BroadcastItem } from "src/components/BroadcastItem";
+import { BroadcastType } from "src/types/interface";
+import fetcher from "utils/fetcher";
 
 export const BroadCastList: FC = () => {
-  const [broadcasts, setBroadcasts] = useState<BroadcastType[]>([]);
+  const { data } = useSWR("/api/broadcasts", fetcher);
+  const broadcasts: BroadcastType[] = data?.broadcasts;
+  console.log(data);
 
-  useEffect(() => {
-    // snapshot.docsは、firestoreのbroadcasts全てを配列でリアルタイムに取得
-    db.collection("broadcasts")
-      .orderBy("broadCastingDate")
-      .onSnapshot((snapshot) =>
-        setBroadcasts(snapshot.docs.map((doc) => doc.data()) as BroadcastType[])
-      );
-  }, []);
+  if (!data) return <div>Loading...</div>;
 
   return (
     <div className="mx-auto max-w-3xl">

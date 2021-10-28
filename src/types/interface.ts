@@ -13,7 +13,7 @@ export interface EngiviaType {
 
 export interface BroadcastType {
   broadCastUrl: string;
-  broadCastingDate: any;
+  broadCastingDate: string;
   engiviaCount: number;
   id: string;
   status: string;

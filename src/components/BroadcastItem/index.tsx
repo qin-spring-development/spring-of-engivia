@@ -11,10 +11,7 @@ type Props = {
 export const BroadcastItem: FC<Props> = (props) => {
   const { title, broadCastingDate, engiviaCount, status, id } = props.broadcast;
   const router = useRouter();
-  const date = format(
-    parseISO(broadCastingDate.toDate().toISOString()),
-    "yyyy年MM月dd日"
-  );
+  const date = format(parseISO(broadCastingDate), "yyyy年MM月dd日");
 
   const onBroadcastState = () => {
     if (status === "BEFORE") {
