@@ -10,4 +10,7 @@ module.exports = {
     });
     return config;
   },
+  dev: {
+    baseUrl: "http://localhost:3000",
+  },
 };
