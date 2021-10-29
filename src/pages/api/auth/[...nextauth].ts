@@ -9,11 +9,6 @@ const options = {
       clientSecret: process.env.SLACK_CLIENT_SECRET,
     }),
   ],
-  callbacks: {
-    async redirect(url: string) {
-      return url;
-    },
-  },
 };
 
 export default (req: any, res: any) => NextAuth(req, res, options);
