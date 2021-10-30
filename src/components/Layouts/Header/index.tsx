@@ -1,8 +1,8 @@
 import { UserIcon } from "@heroicons/react/solid";
-import { useAuth } from "src/lib/auth";
+import { useSession } from "next-auth/client";
 
 export const Header = () => {
-  const auth = useAuth();
+  const [session] = useSession();
 
   return (
     <header>
@@ -10,15 +10,15 @@ export const Header = () => {
         <div className="flex flex-grow items-center">
           {/* Todo: next.jsのImageが使えないので一旦このまま */}
           <img className="h-10" src="/engivia_logo.png" alt="logo" />
-          <h1 className="ml-4 text-xl font-bold text-[#0284C7]">
+          <h1 className="ml-4 text-xl font-bold text-light-blue-600">
             エンジビアの泉
           </h1>
         </div>
-        {auth?.user ? (
+        {session?.user ? (
           /* Todo: next.jsのImageが使えないので一旦このまま */
           <img
             className="h-10 rounded-full"
-            src={auth.user.photoURL}
+            src={session && session.user.image}
             alt="avatar"
           />
         ) : (

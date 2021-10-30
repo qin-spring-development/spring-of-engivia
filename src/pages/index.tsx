@@ -1,17 +1,8 @@
 import Head from "next/head";
-import { useAuth } from "src/lib/auth";
-import GitHubIcon from "src/svg/github-icon.svg";
+import SlackIcon from "src/svg/slack-icon.svg";
+import { signIn, signOut } from "next-auth/client";
 
 export default function Home() {
-  const auth = useAuth();
-
-  const SignInWithGitHub = () => {
-    auth?.signInWithGithub();
-  };
-  const SignOutWithGitHub = () => {
-    auth?.signOut();
-  };
-
   return (
     <div>
       <Head>
@@ -30,14 +21,18 @@ export default function Home() {
             〜素晴らしきプログラミング豆知識〜
           </p>
           <button
-            onClick={SignInWithGitHub}
+            onClick={() =>
+              signIn("slack", {
+                callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/broadcast`,
+              })
+            }
             className="flex items-center py-2 px-4 hover:bg-gray-100 rounded-md border-2"
           >
-            <GitHubIcon />
-            <p className="ml-2">Sign in with GitHub</p>
+            <SlackIcon />
+            <p className="ml-2">Sign in with Slack</p>
           </button>
           <button
-            onClick={SignOutWithGitHub}
+            onClick={() => signOut({ callbackUrl: "/" })}
             className="py-2 px-4 mt-4 hover:bg-gray-100 rounded-md border-2"
           >
             Sign Out
