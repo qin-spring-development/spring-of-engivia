@@ -29,27 +29,31 @@ export const BroadcastList = () => {
   ];
   return (
     <div className="flex flex-col justify-center items-center">
-      <h1 className="text-3xl font-bold text-gray-900">放送一覧</h1>
-      {Datas.map((data) => {
-        return (
-          <>
-            <div className="">
-              <p className="text-sm text-blue-400">{data.title}</p>
-              <div className="flex items-center">
-                <CalendarIcon className="h-5 text-gray-400" />
-                <p className="text-sm text-gray-400">{data.date}</p>
+      <h1 className="mt-10 text-3xl font-bold text-gray-900">放送一覧</h1>
+      <div className="mt-5   ">
+        {Datas.map((data) => {
+          return (
+            <>
+              <div className="">
+                <p className="text-sm text-blue-400">{data.title}</p>
+                <div className="flex items-center">
+                  <CalendarIcon className="h-5 text-gray-400" />
+                  <p className="text-sm text-gray-400">{data.date}</p>
+                </div>
+                <div className="">
+                  <p className="py-3 px-6 text-gray-600 rounded-full">
+                    {data.state}
+                  </p>
+                  <div className="flex items-center">
+                    <AcademicCapIcon className="h-5 text-gray-400" />
+                    <p className="text-sm text-gray-400">{data.count}</p>
+                  </div>
+                </div>
               </div>
-              <p className="py-3 px-6 text-gray-600 rounded-full">
-                {data.state}
-              </p>
-              <div className="flex items-center">
-                <AcademicCapIcon className="h-5 text-gray-400" />
-                <p className="text-sm text-gray-400">{data.count}</p>
-              </div>
-            </div>
-          </>
-        );
-      })}
+            </>
+          );
+        })}
+      </div>
     </div>
   );
 };
