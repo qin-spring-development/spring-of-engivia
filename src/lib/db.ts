@@ -1,15 +1,14 @@
 import { db } from "src/lib/firebase";
-
-type WithOutToken = {
-  email: string | null;
-  name: string | null;
-  photoURL: string | undefined;
-  provider: string | undefined;
-  uid: string;
-};
+import { WithOutToken, Broadcast } from "src/types/interface";
 
 export const createUser = (uid: string, user: WithOutToken) => {
   return db.collection("users").doc(uid).set(user, { merge: true });
+};
+
+export const createBroadcast = (data: Broadcast) => {
+  const broadcast = db.collection("broadcasts").doc();
+  data.id = broadcast.id;
+  return broadcast.set(data);
 };
 
 export const getUser = async (uid: string) => {

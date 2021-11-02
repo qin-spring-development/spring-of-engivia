@@ -19,3 +19,20 @@ export interface BroadcastType {
   status: string;
   title: string;
 }
+export interface WithOutToken {
+  email: string | null;
+  name: string | null;
+  photoURL: string | undefined;
+  provider: string | undefined;
+  uid: string;
+}
+
+export interface Broadcast {
+  broadCastUrl: string;
+  broadCastingDate: string;
+  engiviaCount: number;
+  featureID: string;
+  id: string;
+  status: string;
+  title: string;
+}
