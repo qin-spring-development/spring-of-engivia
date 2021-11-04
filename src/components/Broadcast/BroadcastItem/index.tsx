@@ -10,26 +10,15 @@ type Props = {
 
 export const BroadcastItem: FC<Props> = (props) => {
   const { title, broadCastingDate, engiviaCount, status, id } = props.broadcast;
+
   const router = useRouter();
   const date = format(parseISO(broadCastingDate), "yyyy年MM月dd日");
 
-  const onBroadcastState = () => {
-    if (status === "BEFORE") {
-      router.push({
-        pathname: "/broadcast/before",
-        query: { id: id },
-      });
-    } else if (status === "IN_FEATURE") {
-      router.push({
-        pathname: "/broadcast/feature",
-        query: { id: id },
-      });
-    } else {
-      router.push({
-        pathname: "/broadcast/done",
-        query: { id: id },
-      });
-    }
+  const onClickHandler = () => {
+    router.push({
+      pathname: "/broadcast",
+      query: { id: id },
+    });
   };
 
   return (
@@ -37,7 +26,7 @@ export const BroadcastItem: FC<Props> = (props) => {
       <div className="flex justify-between">
         <div>
           <button
-            onClick={onBroadcastState}
+            onClick={onClickHandler}
             className="text-light-blue-600"
           >{`${title}`}</button>
 

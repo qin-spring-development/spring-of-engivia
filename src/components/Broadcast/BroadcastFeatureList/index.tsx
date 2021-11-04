@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { db } from "src/lib/firebase";
 import { EngiviaType, BroadcastType } from "src/types/interface";
 import { initialBroadcastInfo } from "src/constant/initialState";
-import { BroadcastFeatureItem } from "src/components/BroadcastFeatureItem";
-import { BroadcastTitle } from "src/components/BroadcastTitle";
+import { BroadcastFeatureItem } from "src/components/Broadcast/BroadcastFeatureItem";
+import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
 
 type Props = {
   engivias: EngiviaType[];
@@ -12,23 +12,23 @@ type Props = {
 };
 
 export const BroadcastFeatureList: FC<Props> = ({ engivias, broadcastId }) => {
-  const [broadcastInfo, setBroadcastInfo] =
-    useState<BroadcastType>(initialBroadcastInfo);
+  // const [broadcastInfo, setBroadcastInfo] =
+  //   useState<BroadcastType>(initialBroadcastInfo);
 
-  useEffect(() => {
-    const getBroadcastInfo = async () => {
-      const broadcastRef = await db
-        .collection("broadcasts")
-        .doc(broadcastId)
-        .get();
-      setBroadcastInfo(broadcastRef.data() as BroadcastType);
-    };
-    getBroadcastInfo();
-  }, [broadcastId]);
+  // useEffect(() => {
+  //   const getBroadcastInfo = async () => {
+  //     const broadcastRef = await db
+  //       .collection("broadcasts")
+  //       .doc(broadcastId)
+  //       .get();
+  //     setBroadcastInfo(broadcastRef.data() as BroadcastType);
+  //   };
+  //   getBroadcastInfo();
+  // }, [broadcastId]);
 
   return (
     <div className="mx-auto max-w-2xl">
-      <BroadcastTitle broadcastInfo={broadcastInfo} />
+      {/* <BroadcastTitle broadcastInfo={broadcastInfo} /> */}
       {engivias.map((engivia, index) => (
         <div key={engivia.id}>
           <BroadcastFeatureItem

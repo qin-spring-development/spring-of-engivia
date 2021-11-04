@@ -1,15 +1,13 @@
 import type { FC } from "react";
-import useSWR from "swr";
-import { BroadcastItem } from "src/components/BroadcastItem";
-import { BroadcastType } from "src/types/interface";
-import fetcher from "utils/fetcher";
+import { BroadcastItem } from "src/components/Broadcast/BroadcastItem";
+import { useBroadcasts } from "src/hooks/useBroadcasts";
 
 export const BroadCastList: FC = () => {
-  const { data } = useSWR("/api/broadcasts", fetcher);
-  const broadcasts: BroadcastType[] = data?.broadcasts;
-  console.log(data);
+  const { broadcasts, error, isLoading, isEmpty } = useBroadcasts();
 
-  if (!data) return <div>Loading...</div>;
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div className="text-red-600">{error.message}</div>;
+  if (isEmpty) return <div>データは空です</div>;
 
   return (
     <div className="mx-auto max-w-3xl">
