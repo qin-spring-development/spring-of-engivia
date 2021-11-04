@@ -55,12 +55,6 @@ export default function Home() {
             <SlackIcon />
             <p className="ml-2">Sign in with Slack</p>
           </button>
-          <button
-            onClick={() => signOut({ callbackUrl: "/" })}
-            className="py-2 px-4 mt-4 hover:bg-gray-100 rounded-md border-2"
-          >
-            Sign Out
-          </button>
         </div>
         <img
           className="object-cover w-[57%] h-screen"
