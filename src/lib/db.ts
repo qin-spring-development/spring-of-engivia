@@ -21,3 +21,39 @@ export const getUser = async (uid: string) => {
     });
   return data;
 };
+
+export const getEngivia = async (broadcastId: string, engiviaId: string) => {
+  const engivia = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .doc(engiviaId)
+    .get()
+    .then((snapshot) => {
+      return snapshot.data();
+    });
+  return engivia;
+};
+
+export const updateBroadcastFeatureId = async (
+  broadcastId: string,
+  engiviaId: string,
+  isNull: boolean
+) => {
+  const engivia = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .doc(engiviaId)
+    .get()
+    .then((snapshot) => {
+      return snapshot.data();
+    });
+
+  const broadcastRef = db.collection("broadcasts").doc(broadcastId);
+  if (!isNull) {
+    await broadcastRef.set({ featureId: null }, { merge: true });
+  } else {
+    await broadcastRef.set({ featureId: engivia?.id }, { merge: true });
+  }
+};
