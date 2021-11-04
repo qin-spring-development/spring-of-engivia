@@ -15,6 +15,7 @@ export interface BroadcastType {
   broadCastUrl: string;
   broadCastingDate: string;
   engiviaCount: number;
+  featureId: string;
   id: string;
   status: string;
   title: string;
