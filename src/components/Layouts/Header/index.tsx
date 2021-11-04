@@ -1,5 +1,5 @@
 import { UserIcon } from "@heroicons/react/solid";
-import { useSession } from "next-auth/client";
+import { signOut, useSession } from "next-auth/client";
 
 export const Header = () => {
   const [session] = useSession();
@@ -14,6 +14,12 @@ export const Header = () => {
             エンジビアの泉
           </h1>
         </div>
+        <button
+          onClick={() => signOut({ callbackUrl: "/" })}
+          className="py-2 px-4 hover:bg-gray-100 rounded-md border-2"
+        >
+          ログアウト
+        </button>
         {session?.user ? (
           /* Todo: next.jsのImageが使えないので一旦このまま */
           <img
