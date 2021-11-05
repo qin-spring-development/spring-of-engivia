@@ -1,75 +1,75 @@
-import { ChangeEvent, useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { Form } from "src/components/Form";
+import type { NextPage } from "next";
+import { useState, useEffect } from "react";
+import { db } from "src/lib/firebase";
+import { useRouter } from "next/router";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
-import { Broadcast } from "src/types/interface";
-import { REQUIRE_MSG } from "src/constant/validationMessage";
+import { updateBroadcastFeatureId } from "src/lib/db";
+import { EngiviaType } from "src/types/interface";
 
-const Settings = () => {
-  // Todo: React Hooks Form を導入次第変更
-  const [input, setInput] = useState({
-    title: "",
-    date: "",
-  });
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    mode: "onSubmit",
-    reValidateMode: "onChange",
-  });
+const Settings: NextPage = () => {
+  const [engivias, setEngivias] = useState<EngiviaType[]>();
+  const router = useRouter();
+  const broadcastId = router.query.id as string;
 
-  const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
+  useEffect(() => {
+    const unsubscribe = db
+      .collection("broadcasts")
+      .doc(broadcastId)
+      .collection("engivias")
+      .onSnapshot((snapshots) => {
+        const engivias = snapshots.docChanges().map((snapshot) => {
+          return snapshot.doc.data() as EngiviaType;
+        });
+        setEngivias(engivias);
+      });
+    return () => unsubscribe();
+  }, []);
+
+  const onDisplay = async (broadcastId: string, engiviaId: string) => {
+    console.log("表示したよ");
+    updateBroadcastFeatureId(broadcastId, engiviaId, true);
   };
 
-  const onSubmitHandler: SubmitHandler<Broadcast> = (data) => {
-    console.log(data);
+  const onSetNull = (broadcastId: string, engiviaId: string) => {
+    console.log("消したよ");
+    updateBroadcastFeatureId(broadcastId, engiviaId, false);
+  };
+
+  const onGoToEditPage = () => {
+    router.push({
+      pathname: "/admin/edit-broadcast",
+      query: { id: broadcastId },
+    });
   };
 
   return (
-    <BaseLayout title="放送を作成">
-      <div className="mx-auto max-w-3xl">
-        <h1 className="py-10 mx-auto text-4xl font-bold text-gray-900">
-          放送を作成
-        </h1>
-        <form onSubmit={handleSubmit(onSubmitHandler)}>
-          {/* Todo: validationのパターンを検討 */}
-          <div className="flex flex-col gap-10 w-full">
-            <Form
-              id="title"
-              type="text"
-              value={input.title}
-              placeholder="タイトルを入力する"
-              register={register("title", { required: REQUIRE_MSG })}
-              isInvalid={errors?.title}
-              onChange={onChangeInputHandler}
-            />
-            {/* Todo: dateにするなら手入力も出来たほうがいい */}
-            <Form
-              id="broadCastingDate"
-              type="date"
-              value={input.date}
-              placeholder="2021/09/03"
-              register={register("broadCastingDate", { required: REQUIRE_MSG })}
-              isInvalid={errors?.broadCastingDate}
-              onChange={onChangeInputHandler}
-            />
-            <div className="space-x-4 w-full text-center">
-              <button
-                type="submit"
-                className="py-3 px-8 text-white bg-light-blue-600 rounded-md"
-              >
-                保存する
-              </button>
-              <button className="py-3 px-8 ml-8 text-light-blue-700 bg-light-blue-100 rounded-md">
-                キャンセル
-              </button>
-            </div>
+    <BaseLayout title="管理画面">
+      <h1 className="text-2xl font-bold">管理画面だよ</h1>
+      <button
+        onClick={onGoToEditPage}
+        className="py-2 px-4 mr-2 mb-10 text-white bg-green-500 rounded-lg"
+      >
+        編集
+      </button>
+      {engivias?.map((engivia) => {
+        return (
+          <div key={engivia.id} className="mb-5">
+            <p>{engivia.body}</p>
+            <button
+              onClick={() => onDisplay(broadcastId, engivia.id)}
+              className="py-2 px-4 mr-2 text-white bg-red-500 rounded-lg"
+            >
+              エンジビア表示
+            </button>
+            <button
+              onClick={() => onSetNull(broadcastId, engivia.id)}
+              className="py-2 px-4 text-white bg-blue-500 rounded-lg"
+            >
+              null
+            </button>
           </div>
-        </form>
-      </div>
+        );
+      })}
     </BaseLayout>
   );
 };
