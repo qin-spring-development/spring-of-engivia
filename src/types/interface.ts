@@ -1,13 +1,21 @@
+export interface UserType {
+  name: string;
+  photoUrl: string;
+  uid: string;
+}
+export interface JoinUserType {
+  likes: number;
+  name: string;
+  photoUrl: string;
+  uid: string;
+}
 export interface EngiviaType {
-  postUser: {
-    name?: string;
-    photoUrl: string;
-    uid: string;
-  };
   body: string;
-  createdAt: any;
+  createdAt: string;
   featureStatus: string;
   id: string;
+  joinUser: JoinUserType[];
+  postUser: UserType;
   totalLikes: number;
 }
 
@@ -35,5 +43,9 @@ export interface Broadcast {
   featureID: string;
   id: string;
   status: string;
+  title: string;
+}
+export interface BroadcastFormType {
+  date: string;
   title: string;
 }
