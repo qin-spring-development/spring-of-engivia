@@ -12,6 +12,7 @@ export interface JoinUserType {
 export interface EngiviaType {
   body: string;
   createdAt: string;
+  engiviaNumber: number;
   featureStatus: string;
   id: string;
   joinUser: JoinUserType[];
@@ -23,6 +24,7 @@ export interface BroadcastType {
   broadCastUrl: string;
   broadCastingDate: string;
   engiviaCount: number;
+  featureCount: number;
   featureId: string;
   id: string;
   status: string;
@@ -35,7 +37,6 @@ export interface WithOutToken {
   provider: string | undefined;
   uid: string;
 }
-
 export interface Broadcast {
   broadCastUrl: string;
   broadCastingDate: string;
