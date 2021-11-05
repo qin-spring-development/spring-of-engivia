@@ -11,7 +11,6 @@ export default function Home() {
           name="description"
           content="気軽にエンジビアの豆知識・ムダ知識を披露する場。Zoomを同時に開きながら楽しむアプリ。"
         />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <div className="flex">
