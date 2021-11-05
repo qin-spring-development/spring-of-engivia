@@ -1,37 +1,19 @@
 import type { NextPage } from "next";
-import { useState, useEffect } from "react";
-import { db } from "src/lib/firebase";
 import { useRouter } from "next/router";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import { updateBroadcastFeatureId } from "src/lib/db";
-import { EngiviaType } from "src/types/interface";
+import { useSubscribeEngivias } from "src/hooks/useSubscribeEngivias";
 
 const Settings: NextPage = () => {
-  const [engivias, setEngivias] = useState<EngiviaType[]>();
   const router = useRouter();
   const broadcastId = router.query.id as string;
-
-  useEffect(() => {
-    const unsubscribe = db
-      .collection("broadcasts")
-      .doc(broadcastId)
-      .collection("engivias")
-      .onSnapshot((snapshots) => {
-        const engivias = snapshots.docChanges().map((snapshot) => {
-          return snapshot.doc.data() as EngiviaType;
-        });
-        setEngivias(engivias);
-      });
-    return () => unsubscribe();
-  }, []);
+  const engivias = useSubscribeEngivias(broadcastId);
 
   const onDisplay = async (broadcastId: string, engiviaId: string) => {
-    console.log("表示したよ");
     updateBroadcastFeatureId(broadcastId, engiviaId, true);
   };
 
   const onSetNull = (broadcastId: string, engiviaId: string) => {
-    console.log("消したよ");
     updateBroadcastFeatureId(broadcastId, engiviaId, false);
   };
 

@@ -1,35 +1,13 @@
 import type { NextPage } from "next";
-import { db } from "src/lib/firebase";
-import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { EngiviaType } from "src/types/interface";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
-import { getEngivia } from "src/lib/db";
+import { useOnSnapshotEngivia } from "src/hooks/useOnSnapshotEngivia";
 
 const Broadcast: NextPage = () => {
-  const [engivia, setEngivia] = useState<EngiviaType | null>();
   const router = useRouter();
   const broadcastId = router.query.id as string;
-
-  useEffect(() => {
-    db.collection("broadcasts")
-      .doc(broadcastId)
-      .onSnapshot(async (doc) => {
-        const broadcast = doc.data();
-        if (broadcast?.featureId === null) {
-          setEngivia(null);
-        } else {
-          const engivia = (await getEngivia(
-            broadcastId,
-            broadcast?.featureId
-          )) as EngiviaType;
-          setEngivia(engivia);
-        }
-      });
-  }, []);
-
-  console.log({ engivia });
+  const engivia = useOnSnapshotEngivia(broadcastId);
 
   return (
     <BaseLayout title="放送中">
@@ -80,11 +58,6 @@ const Broadcast: NextPage = () => {
           </div>
         </div>
       )}
-      {/* {broadcast?.featureId === null ? (
-        <h1>次のエンジビアをお待ちください</h1>
-      ) : (
-        <h1>{broadcast.id}</h1>
-      )} */}
     </BaseLayout>
   );
 };
