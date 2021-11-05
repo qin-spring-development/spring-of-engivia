@@ -1,5 +1,4 @@
 import { db } from "./firebase-admin";
-import { BroadcastType } from "src/types/interface";
 
 export const getAllBroadcasts = async () => {
   const snapshot = await db
@@ -15,15 +14,6 @@ export const getBroadcast = async (broadcastId: string) => {
   const broadcast = docRef.data();
   return broadcast;
 };
-
-// export const getBroadcast = async (broadcastId: string) => {
-//   const broadcast = db
-//     .collection("broadcasts")
-//     .doc(broadcastId)
-//     .onSnapshot((docSnapshot) => {
-//       return docSnapshot.data() as BroadcastType;
-//     });
-// };
 
 export const getEngivias = async (broadcastId: string) => {
   const snapshot = db
