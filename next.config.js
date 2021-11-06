@@ -13,4 +13,5 @@ module.exports = {
   dev: {
     baseUrl: "http://localhost:3000",
   },
+  i18n: { locales: ["ja"], defaultLocale: "ja" },
 };
