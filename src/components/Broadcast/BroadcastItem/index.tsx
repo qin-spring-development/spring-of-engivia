@@ -11,14 +11,23 @@ type Props = {
 export const BroadcastItem: FC<Props> = (props) => {
   const { title, broadCastingDate, engiviaCount, status, id } = props.broadcast;
 
+  const admin = true;
+
   const router = useRouter();
   const date = format(parseISO(broadCastingDate), "yyyy年MM月dd日");
 
   const onClickHandler = () => {
-    router.push({
-      pathname: "/broadcast",
-      query: { id: id },
-    });
+    if (admin) {
+      router.push({
+        pathname: "/admin/settings",
+        query: { id: id },
+      });
+    } else {
+      router.push({
+        pathname: "/broadcast",
+        query: { id: id },
+      });
+    }
   };
 
   return (

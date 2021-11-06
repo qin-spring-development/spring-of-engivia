@@ -1,10 +1,11 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent } from "react";
 import { useRouter } from "next/router";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { format, parseISO } from "date-fns";
+import { mutate } from "swr";
 import { Form } from "src/components/Form";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
-import { BroadcastFormType } from "src/types/interface";
+import { BroadcastFormType, BroadcastType } from "src/types/interface";
 import { REQUIRE_MSG } from "src/constant/validationMessage";
 import { updateBroadcast } from "src/lib/db";
 import { useBroadcast } from "src/hooks/useBroadcast";
@@ -14,10 +15,7 @@ const CreateBroadcast = () => {
   const router = useRouter();
   const broadcastId = router.query.id as string;
   const { broadcast, error, isLoading } = useBroadcast(broadcastId);
-  const [input, setInput] = useState({
-    title: "",
-    date: "",
-  });
+
   const {
     register,
     handleSubmit,
@@ -28,11 +26,25 @@ const CreateBroadcast = () => {
   });
 
   const onChangeInputHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
   };
 
-  const onSubmitHandler: SubmitHandler<BroadcastFormType> = (data) => {
-    updateBroadcast(data, broadcastId);
+  const onSubmitHandler: SubmitHandler<BroadcastFormType> = (formData) => {
+    mutate(
+      `/api/broadcast/${broadcastId}`,
+      async (data) => {
+        return {
+          broadcast: {
+            ...data.broadcast,
+            title: formData.title,
+            broadCastingDate: new Date(formData.date).toISOString(),
+          },
+        };
+      },
+      false
+    );
+    updateBroadcast(formData, broadcastId);
+    mutate(`/api/broadcast/${broadcastId}`);
     router.push("/broadcasts");
   };
 
@@ -78,6 +90,8 @@ const CreateBroadcast = () => {
                 キャンセル
               </button>
             </div>
+            <p>{broadcast.title}</p>
+            <p>{broadcast.broadCastingDate}</p>
           </div>
         </form>
       </div>
