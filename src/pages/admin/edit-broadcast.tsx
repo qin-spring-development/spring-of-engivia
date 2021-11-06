@@ -32,7 +32,7 @@ const CreateBroadcast = () => {
   const onSubmitHandler: SubmitHandler<BroadcastFormType> = (formData) => {
     mutate(
       `/api/broadcast/${broadcastId}`,
-      async (data) => {
+      async (data: any) => {
         return {
           broadcast: {
             ...data.broadcast,
