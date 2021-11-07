@@ -1,6 +1,7 @@
 import Head from "next/head";
 import SlackIcon from "src/svg/slack-icon.svg";
 import { signIn, signOut } from "next-auth/client";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -11,17 +12,36 @@ export default function Home() {
           name="description"
           content="気軽にエンジビアの豆知識・ムダ知識を披露する場。Zoomを同時に開きながら楽しむアプリ。"
         />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <div className="flex">
         <div className="flex flex-col items-center my-auto w-[43%]">
-          <img className="h-20" src="/engivia_logo.png" alt="logo" />
-          <h1 className="mt-10 text-3xl font-bold text-[#0284C7]">
-            エンジビアの泉
+          <Image
+            src="/engivia_logo.png"
+            alt="エンジビアの泉"
+            loading="eager"
+            width={56}
+            height={60}
+          />
+
+          <h1 className="mt-6">
+            <Image
+              src="/logo.png"
+              alt="エンジビアの泉"
+              loading="eager"
+              width={206}
+              height={36}
+              priority
+            />
           </h1>
-          <p className="mb-10 text-[#38BDF8]">
-            〜素晴らしきプログラミング豆知識〜
+          <p className="mt-2 mb-10">
+            <Image
+              src="/logo_sub.png"
+              alt="〜素晴らしきプログラミング豆知識〜"
+              loading="eager"
+              width={258}
+              height={20}
+            />
           </p>
           <button
             onClick={() =>
