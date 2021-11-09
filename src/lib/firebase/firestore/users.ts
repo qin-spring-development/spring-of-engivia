@@ -1,17 +1,21 @@
-import { db } from "src/lib/firebase";
+import { db } from "src/lib/firebase/config";
 
-type WithOutToken = {
+export type FormatUser = {
+  uid: string;
   email: string | null;
   name: string | null;
   photoURL: string | undefined;
   provider: string | undefined;
-  uid: string;
 };
 
-export const createUser = (uid: string, user: WithOutToken) => {
-  console.log(typeof user);
+const adminUsers = [""];
 
-  return db.collection("users").doc(uid).set(user, { merge: true });
+export const createUser = (user: FormatUser) => {
+  const isAdmin = adminUsers.includes(user.uid);
+  return db
+    .collection("users")
+    .doc(user.uid)
+    .set({ ...user, isAdmin }, { merge: true });
 };
 
 export const getUser = async (uid: string) => {
