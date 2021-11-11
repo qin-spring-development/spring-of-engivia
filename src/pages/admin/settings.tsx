@@ -14,6 +14,7 @@ import {
 } from "src/hooks/useSubscribe";
 import { useIsBroadcastEditScreen } from "src/hooks/useSharedState";
 import { EngiviaType } from "src/types/interface";
+import { Button } from "src/components/Button";
 
 const Settings: NextPage = () => {
   const router = useRouter();
@@ -55,18 +56,22 @@ const Settings: NextPage = () => {
             <div className="absolute right-0">
               {broadcast?.status === "BEFORE" ? (
                 <div>
-                  <button
+                  <Button
+                    isSubmitting={false}
+                    primary={true}
+                    type="button"
                     onClick={onBeginBroadcast}
-                    className="py-2 px-4 mr-2 text-white bg-light-blue-600 rounded-md"
                   >
                     放送を開始する
-                  </button>
-                  <button
+                  </Button>
+                  <Button
+                    isSubmitting={false}
+                    primary={false}
+                    type="button"
                     onClick={onEditBroadcast}
-                    className="py-2 px-4 mr-2 text-light-blue-700 bg-light-blue-100 rounded-md"
                   >
                     編集する
-                  </button>
+                  </Button>
                 </div>
               ) : (
                 <button
