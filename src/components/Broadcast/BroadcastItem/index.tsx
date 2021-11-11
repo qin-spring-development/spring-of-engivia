@@ -3,30 +3,40 @@ import { useRouter } from "next/router";
 import { AcademicCapIcon, CalendarIcon } from "@heroicons/react/solid";
 import { format, parseISO } from "date-fns";
 import { BroadcastType } from "src/types/interface";
+import { useBroadcastId, useBroadcast } from "src/hooks/useSharedState";
 
 type Props = {
   broadcast: BroadcastType;
+  isAdmin: boolean;
 };
 
-export const BroadcastItem: FC<Props> = (props) => {
-  const { title, broadCastingDate, engiviaCount, status, id } = props.broadcast;
-
-  const admin = true;
+export const BroadcastItem: FC<Props> = ({ broadcast, isAdmin }) => {
+  const { title, broadCastingDate, engiviaCount, status, id } = broadcast;
+  const { setBroadcastId } = useBroadcastId();
+  const { setBroadcast } = useBroadcast();
 
   const router = useRouter();
   const date = format(parseISO(broadCastingDate), "yyyy年MM月dd日");
 
   const onClickHandler = () => {
-    if (admin) {
+    if (status === "AFTER") {
+      router.push({
+        pathname: "/broadcast-after",
+        query: { id: id },
+      });
+    } else if (status === "IN_FEATURE") {
+      router.push({
+        pathname: "/broadcasting",
+        query: { id: id },
+      });
+    } else if (isAdmin) {
       router.push({
         pathname: "/admin/settings",
         query: { id: id },
       });
-    } else {
-      router.push({
-        pathname: "/broadcast",
-        query: { id: id },
-      });
+    } else if (status === "BEFORE") {
+      setBroadcast(broadcast);
+      setBroadcastId(id);
     }
   };
 
@@ -34,10 +44,9 @@ export const BroadcastItem: FC<Props> = (props) => {
     <div className="py-5 px-7 text-gray-500 bg-white rounded-md border-b">
       <div className="flex justify-between">
         <div>
-          <button
-            onClick={onClickHandler}
-            className="text-light-blue-600"
-          >{`${title}`}</button>
+          <button onClick={onClickHandler} className="text-light-blue-600">
+            {title}
+          </button>
 
           <div className="flex items-center mt-2">
             <CalendarIcon className="mr-1 h-5" />
