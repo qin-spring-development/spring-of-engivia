@@ -1,23 +1,28 @@
 import { FC } from "react";
 
 export type Props = {
-  label: string;
+  className?: string;
+  status: string;
 };
 
-export const Label: FC<Props> = ({ label }) => {
+export const Label: FC<Props> = ({ className, status }) => {
   return (
-    <>
+    <div className={className}>
       <span
         className={`py-1 px-3 text-sm rounded-full ${
-          label === "放送前・エンジビア募集中"
+          status === "BEFORE"
             ? "text-orange-700 bg-orange-100"
-            : label === "放送中"
+            : status === "IN_PROGRESS"
             ? "text-green-700 bg-green-100"
             : "text-gray-900 bg-gray-200"
         }`}
       >
-        {label}
+        {status === "BEFORE"
+          ? "放送前・エンジビア募集中"
+          : status === "IN_PROGRESS"
+          ? "放送中"
+          : "放送済"}
       </span>
-    </>
+    </div>
   );
 };

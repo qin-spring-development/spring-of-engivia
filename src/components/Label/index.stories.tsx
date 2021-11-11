@@ -12,17 +12,17 @@ const Template: Story<Props> = (args) => <Label {...args} />;
 export const BeforeBroadcast = Template.bind({});
 
 BeforeBroadcast.args = {
-  label: "放送前・エンジビア募集中",
+  status: "BEFORE",
 };
 
 export const OnAirBroadcast = Template.bind({});
 
 OnAirBroadcast.args = {
-  label: "放送中",
+  status: "IN_PROGRESS",
 };
 
 export const AfterBroadcast = Template.bind({});
 
 AfterBroadcast.args = {
-  label: "放送済",
+  status: "DONE",
 };
