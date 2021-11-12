@@ -1,5 +1,4 @@
 import useSWR from "swr";
-import { EngiviaType } from "src/types/interface";
 
 export const useSharedState = (key: string, fallback: any) => {
   const { data, mutate } = useSWR(key, null, { fallback });
@@ -39,9 +38,9 @@ export const useEngivias = () => {
   return { engivias, setEngivias };
 };
 
-export const useUserEngivias = () => {
-  const [userEngivias, setUserEngivias] = useSharedState("userEngivias", []);
-  return { userEngivias, setUserEngivias };
+export const useUserEngivia = () => {
+  const [userEngivia, setUserEngivia] = useSharedState("userEngivia", {});
+  return { userEngivia, setUserEngivia };
 };
 
 export const useIsEngiviaCreateScreen = () => {
@@ -58,4 +57,9 @@ export const useIsEngiviaEditScreen = () => {
     false
   );
   return { isEngiviaEditScreen, setIsEngiviaEditScreen };
+};
+
+export const useIsAdmin = () => {
+  const [isAdmin, setIsAdmin] = useSharedState("isAdmin", false);
+  return { isAdmin, setIsAdmin };
 };

@@ -8,7 +8,7 @@ import {
   useBroadcasts,
   useEngivia,
   useEngivias,
-  useUserEngivias,
+  useUserEngivia,
 } from "src/hooks/useSharedState";
 
 export const useSubscribeBroadcast = (broadcastId?: string) => {
@@ -96,8 +96,7 @@ export const useSubscribeUserEngivia = (
   broadcastId: string,
   userId: string
 ) => {
-  const { userEngivias, setUserEngivias } = useUserEngivias();
-  const [engivia, setEngivia] = useState<EngiviaType>();
+  const { userEngivia, setUserEngivia } = useUserEngivia();
 
   useEffect(() => {
     const unsubscribe = db
@@ -111,10 +110,14 @@ export const useSubscribeUserEngivia = (
         const engivia = engivias.find(
           (engivia) => engivia.postUser.uid === userId
         );
-        setUserEngivias(engivia);
+        if (engivia === undefined) {
+          setUserEngivia(null);
+        } else {
+          setUserEngivia(engivia);
+        }
       });
     return () => unsubscribe();
   }, []);
 
-  return userEngivias;
+  return userEngivia;
 };

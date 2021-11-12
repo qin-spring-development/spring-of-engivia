@@ -7,9 +7,13 @@ import { BroadcastFormType } from "src/types/interface";
 import { REQUIRE_MSG } from "src/constant/validationMessage";
 import { createBroadcast } from "src/lib/db";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
-import { useIsEngiviaCreateScreen } from "src/hooks/useSharedState";
+import {
+  useIsEngiviaCreateScreen,
+  useBroadcastId,
+} from "src/hooks/useSharedState";
 
 export const EngiviaCreate: FC = () => {
+  const { broadcastId } = useBroadcastId();
   const { setIsEngiviaCreateScreen } = useIsEngiviaCreateScreen();
   const [formData, setFormData] = useState({
     title: "",
@@ -37,7 +41,7 @@ export const EngiviaCreate: FC = () => {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <BroadcastTitle />
+      <BroadcastTitle broadcastId={broadcastId} />
       <form onSubmit={handleSubmit(onSubmitHandler)}>
         <div className="flex flex-col gap-10 w-full">
           <Form

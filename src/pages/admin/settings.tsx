@@ -52,7 +52,7 @@ const Settings: NextPage = () => {
       ) : (
         <div className="mx-auto max-w-6xl">
           <div className="flex relative justify-center items-center">
-            <BroadcastTitle />
+            <BroadcastTitle broadcastId={broadcastId} />
             <div className="absolute right-0">
               {broadcast?.status === "BEFORE" ? (
                 <div>

@@ -5,22 +5,22 @@ import { EngiviaInput } from "src/components/Engivia/EngiviaInput";
 import {
   useBroadcastId,
   useIsEngiviaEditScreen,
-  useEngivia,
+  useUserEngivia,
 } from "src/hooks/useSharedState";
 
 type Props = {
-  engivia?: EngiviaType;
+  userEngivia?: EngiviaType;
 };
 
-export const EngiviaConfirm: FC<Props> = ({ engivia }) => {
+export const EngiviaConfirm: FC<Props> = ({ userEngivia }) => {
   const { broadcastId, setBroadcastId } = useBroadcastId();
-  const { setEngivia } = useEngivia();
+  const { setUserEngivia } = useUserEngivia();
   const { isEngiviaEditScreen, setIsEngiviaEditScreen } =
     useIsEngiviaEditScreen();
   const onDeleteEngivia = () => {
-    if (engivia) {
-      deleteEngivia(broadcastId, engivia.id);
-      setEngivia({});
+    if (userEngivia) {
+      deleteEngivia(broadcastId, userEngivia.id);
+      setUserEngivia(null);
       setBroadcastId("");
     }
   };
@@ -35,26 +35,26 @@ export const EngiviaConfirm: FC<Props> = ({ engivia }) => {
 
   return (
     <>
-      {engivia && isEngiviaEditScreen ? (
-        <EngiviaInput engivia={engivia} />
+      {userEngivia && isEngiviaEditScreen ? (
+        <EngiviaInput userEngivia={userEngivia} />
       ) : (
-        engivia && (
+        userEngivia && (
           <div className="mx-auto max-w-3xl">
             <div className="py-7 px-10 mb-5 bg-white rounded-lg">
               <div className="flex flex-col items-center mb-10">
                 <p className="mb-5 text-xl font-bold text-[#0284C7]">
                   {`エンジビアかな???`}
                 </p>
-                <p className="text-4xl">{engivia?.body}</p>
+                <p className="text-4xl">{userEngivia?.body}</p>
               </div>
               <div className="flex justify-between items-end">
                 <div className="flex items-center">
                   <img
                     className="mr-2 h-8 rounded-full"
-                    src={engivia?.postUser?.photoUrl}
+                    src={userEngivia.postUser?.photoUrl}
                     alt="avatar"
                   />
-                  <span>{engivia.postUser.name}</span>
+                  <span>{userEngivia.postUser?.name}</span>
                 </div>
               </div>
             </div>

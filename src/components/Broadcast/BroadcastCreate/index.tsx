@@ -67,7 +67,11 @@ export const BroadcastCreate: FC = () => {
             >
               作成する
             </button>
-            <button className="py-3 px-8 ml-8 text-light-blue-700 bg-light-blue-100 rounded-md">
+            <button
+              type="button"
+              onClick={() => setIsEngiviaCreateScreen(false)}
+              className="py-3 px-8 ml-8 text-light-blue-700 bg-light-blue-100 rounded-md"
+            >
               キャンセル
             </button>
           </div>

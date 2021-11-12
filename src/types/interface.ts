@@ -15,7 +15,7 @@ export interface EngiviaType {
   engiviaNumber: number;
   featureStatus: string;
   id: string;
-  joinUser: JoinUserType[];
+  joinUsers: JoinUserType[];
   postUser: UserType;
   totalLikes: number;
 }

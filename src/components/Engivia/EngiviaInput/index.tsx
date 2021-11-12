@@ -5,20 +5,20 @@ import { EngiviaType } from "src/types/interface";
 import {
   useBroadcastId,
   useIsEngiviaEditScreen,
-  useEngivia,
+  useUserEngivia,
 } from "src/hooks/useSharedState";
 
 type Props = {
-  engivia?: EngiviaType;
+  userEngivia?: EngiviaType;
 };
 
-export const EngiviaInput: FC<Props> = ({ engivia }) => {
+export const EngiviaInput: FC<Props> = ({ userEngivia }) => {
   const [engiviaBody, setEngiviaBody] = useState<string | undefined>(
-    engivia?.body
+    userEngivia?.body
   );
   const { broadcastId, setBroadcastId } = useBroadcastId();
   const { setIsEngiviaEditScreen } = useIsEngiviaEditScreen();
-  const { setEngivia } = useEngivia();
+  const { setUserEngivia } = useUserEngivia();
 
   const onChangeInputHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setEngiviaBody(e.target.value);
@@ -27,14 +27,14 @@ export const EngiviaInput: FC<Props> = ({ engivia }) => {
   const onCreateEngivia = async () => {
     if (engiviaBody) {
       const engivia = await createEngivia(broadcastId, engiviaBody);
-      setEngivia(engivia);
+      setUserEngivia(engivia);
       setIsEngiviaEditScreen(false);
     }
   };
 
-  const onUpdateEngivia = () => {
-    if (engivia && engiviaBody) {
-      updateEngivia(broadcastId, engivia.id, engiviaBody);
+  const onUpdateEngivia = async () => {
+    if (userEngivia && engiviaBody) {
+      updateEngivia(broadcastId, userEngivia.id, engiviaBody);
       setIsEngiviaEditScreen(false);
     }
   };
@@ -55,7 +55,7 @@ export const EngiviaInput: FC<Props> = ({ engivia }) => {
         className="p-4 mb-10 focus:outline-none"
         onChange={onChangeInputHandler}
       />
-      {engivia ? (
+      {userEngivia ? (
         <div className="flex justify-center">
           <button
             onClick={onUpdateEngivia}

@@ -1,8 +1,13 @@
 import type { FC } from "react";
-import { useBroadcast } from "src/hooks/useSharedState";
+import { useSubscribeBroadcast } from "src/hooks/useSubscribe";
 
-export const BroadcastTitle: FC = () => {
-  const { broadcast } = useBroadcast();
+type Props = {
+  broadcastId: string;
+};
+
+export const BroadcastTitle: FC<Props> = ({ broadcastId }) => {
+  const broadcast = useSubscribeBroadcast(broadcastId);
+
   return (
     <div>
       {broadcast?.status && (
@@ -11,14 +16,14 @@ export const BroadcastTitle: FC = () => {
             className={`inline py-1 px-3 text-sm rounded-full ${
               broadcast.status === "BEFORE"
                 ? "bg-[#FFEDD5] text-[#C2410C]"
-                : broadcast.status === "IN_FEATURE"
+                : broadcast.status === "IN_PROGRESS"
                 ? "bg-[#D1FAE5] text-[#047857]"
                 : "bg-gray-200"
             }`}
           >
             {broadcast.status === "BEFORE"
               ? "放送前・エンジビア募集中"
-              : broadcast.status === "IN_FEATURE"
+              : broadcast.status === "IN_PROGRESS"
               ? "放送中"
               : "放送済み"}
           </p>

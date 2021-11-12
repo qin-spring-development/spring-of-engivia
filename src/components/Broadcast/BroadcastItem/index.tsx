@@ -19,14 +19,9 @@ export const BroadcastItem: FC<Props> = ({ broadcast, isAdmin }) => {
   const date = format(parseISO(broadCastingDate), "yyyy年MM月dd日");
 
   const onClickHandler = () => {
-    if (status === "AFTER") {
+    if (status === "DONE") {
       router.push({
-        pathname: "/broadcast-after",
-        query: { id: id },
-      });
-    } else if (status === "IN_FEATURE") {
-      router.push({
-        pathname: "/broadcasting",
+        pathname: "/broadcast-done",
         query: { id: id },
       });
     } else if (isAdmin) {
@@ -34,7 +29,7 @@ export const BroadcastItem: FC<Props> = ({ broadcast, isAdmin }) => {
         pathname: "/admin/settings",
         query: { id: id },
       });
-    } else if (status === "BEFORE") {
+    } else {
       setBroadcast(broadcast);
       setBroadcastId(id);
     }
@@ -58,14 +53,14 @@ export const BroadcastItem: FC<Props> = ({ broadcast, isAdmin }) => {
             className={`py-1 px-3 text-sm rounded-full ${
               status === "BEFORE"
                 ? "bg-orange-100 text-orange-700"
-                : status === "IN_FEATURE"
+                : status === "IN_PROGRESS"
                 ? "bg-green-100 text-green-700"
                 : "bg-gray-200"
             }`}
           >
             {status === "BEFORE"
               ? "放送前・エンジビア募集中"
-              : status === "IN_FEATURE"
+              : status === "IN_PROGRESS"
               ? "放送中"
               : "放送済み"}
           </span>

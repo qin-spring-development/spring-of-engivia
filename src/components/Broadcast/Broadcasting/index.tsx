@@ -1,30 +1,22 @@
 import type { FC } from "react";
-import { BaseLayout } from "src/components/Layouts/BaseLayout";
-import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
-import {
-  useSubscribeEngivia,
-  useSubscribeBroadcast,
-} from "src/hooks/useSubscribe";
+import { useSubscribeEngivia } from "src/hooks/useSubscribe";
+import { useBroadcastId } from "src/hooks/useSharedState";
+import { voteLikes } from "src/lib/db";
 
-type Props = {
-  broadcastId: string;
-};
-
-const Broadcasting: FC<Props> = ({ broadcastId }) => {
+export const Broadcasting: FC = () => {
+  const { broadcastId } = useBroadcastId();
   const engivia = useSubscribeEngivia(broadcastId);
-  const broadcast = useSubscribeBroadcast(broadcastId);
+
+  const handleClick = () => {
+    voteLikes(broadcastId, engivia.id);
+  };
 
   return (
-    <BaseLayout title="放送">
-      <BroadcastTitle />
+    <>
       {engivia === null ? (
         <div className="mx-auto max-w-4xl">
           <div className="py-10 px-10 mb-2 bg-white rounded-lg">
-            <span className="text-3xl">
-              {broadcast?.status === "AFTER"
-                ? `${broadcast.title}は終了しました`
-                : "次のエンジビアをお待ちください"}
-            </span>
+            <span className="text-3xl">次のエンジビアをお待ちください</span>
           </div>
         </div>
       ) : (
@@ -56,9 +48,9 @@ const Broadcasting: FC<Props> = ({ broadcastId }) => {
           <div className="flex items-center my-10">
             <button
               className="py-2 px-4 text-white bg-red-500 rounded-lg"
-              // onClick={handleClick}
+              onClick={handleClick}
             >
-              へえボターン
+              へえボタン
             </button>
             <div className="inline ml-10 text-4xl font-bold text-[#0284C7]">
               <span>{engivia?.totalLikes}</span>
@@ -67,8 +59,6 @@ const Broadcasting: FC<Props> = ({ broadcastId }) => {
           </div>
         </div>
       )}
-    </BaseLayout>
+    </>
   );
 };
-
-export default Broadcasting;

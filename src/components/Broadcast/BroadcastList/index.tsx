@@ -1,16 +1,15 @@
 import type { FC } from "react";
-import { useState } from "react";
 import { BroadcastItem } from "src/components/Broadcast/BroadcastItem";
 import { BroadcastCreate } from "src/components/Broadcast/BroadcastCreate";
 import { BroadcastType } from "src/types/interface";
-import { useIsEngiviaCreateScreen } from "src/hooks/useSharedState";
+import { useIsEngiviaCreateScreen, useIsAdmin } from "src/hooks/useSharedState";
 
 type Props = {
   broadcasts: BroadcastType[];
 };
 
 export const BroadCastList: FC<Props> = ({ broadcasts }) => {
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const { isAdmin, setIsAdmin } = useIsAdmin();
   const { isEngiviaCreateScreen, setIsEngiviaCreateScreen } =
     useIsEngiviaCreateScreen();
 
