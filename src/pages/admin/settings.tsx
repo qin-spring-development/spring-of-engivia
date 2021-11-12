@@ -58,7 +58,7 @@ const Settings: NextPage = () => {
                 <div>
                   <Button
                     isSubmitting={false}
-                    primary={true}
+                    isPrimary={true}
                     type="button"
                     onClick={onBeginBroadcast}
                   >
@@ -66,7 +66,7 @@ const Settings: NextPage = () => {
                   </Button>
                   <Button
                     isSubmitting={false}
-                    primary={false}
+                    isPrimary={false}
                     type="button"
                     onClick={onEditBroadcast}
                   >
