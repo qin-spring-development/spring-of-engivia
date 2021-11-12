@@ -1,10 +1,9 @@
 import useSWR from "swr";
+import { fetcher } from "src/utils/fetcher";
 import { BroadcastType } from "src/types/interface";
 
 export const useBroadcasts = () => {
-  const { data, error } = useSWR("/api/broadcasts", {
-    revalidateOnMount: true,
-  });
+  const { data, error, mutate } = useSWR("/api/broadcasts", fetcher);
   const broadcasts: BroadcastType[] = data?.broadcasts;
 
   return {
@@ -12,5 +11,6 @@ export const useBroadcasts = () => {
     error,
     isLoading: !error && !broadcasts,
     isEmpty: broadcasts && broadcasts.length === 0,
+    mutate,
   };
 };
