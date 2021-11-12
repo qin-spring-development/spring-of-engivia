@@ -21,7 +21,16 @@ export const BroadcastEnd = () => {
           放送済み
         </span>
       </div>
-      <h1 className="mt-5 text-3xl font-bold">第4回エンジビアの泉</h1>
+      <h1 className="mt-5 mb-9 text-3xl font-bold">第4回エンジビアの泉</h1>
+      <iframe
+        width="765"
+        height="400"
+        src="https://www.youtube.com/embed/CVUSb6DkO2A"
+        title="YouTube video"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      ></iframe>
       <input
         className="py-2 px-2 mt-5 rounded-md border-2 border-gray-300 border-solid"
         placeholder="URLを入力する"
