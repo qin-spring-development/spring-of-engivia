@@ -1,8 +1,4 @@
 import { FC } from "react";
-//classNameの文字列を配列として読み込んで、スペースをつけて返す関数
-const classNamesSet = (...classes: string[]) => {
-  return classes.filter(Boolean).join(" ");
-};
 
 export type Props = {
   className?: string;
@@ -31,10 +27,7 @@ export const Label: FC<Props> = ({ className, status }) => {
   }
   return (
     <div className={className}>
-      <span
-        className={classNamesSet(textColor, "py-1 px-3 text-sm rounded-full")}
-      >
-        {/* <span className={"py-1 px-3 text-sm rounded-full ${textColor}"}> */}
+      <span className={`py-1 px-3 text-sm rounded-full ${textColor}`}>
         {broadcastStatus}
       </span>
     </div>
