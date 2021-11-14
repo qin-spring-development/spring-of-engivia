@@ -1,11 +1,12 @@
 import type { FC, ChangeEvent } from "react";
 import { useState } from "react";
-import { createEngivia, updateEngivia } from "src/lib/db";
+import { createEngivia, updateEngivia, createJoinUsers } from "src/lib/db";
 import { EngiviaType } from "src/types/interface";
 import {
   useBroadcastId,
   useIsEngiviaEditScreen,
   useUserEngivia,
+  useUser,
 } from "src/hooks/useSharedState";
 
 type Props = {
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export const EngiviaInput: FC<Props> = ({ userEngivia }) => {
+  const { user } = useUser();
   const [engiviaBody, setEngiviaBody] = useState<string | undefined>(
     userEngivia?.body
   );
@@ -26,9 +28,10 @@ export const EngiviaInput: FC<Props> = ({ userEngivia }) => {
 
   const onCreateEngivia = async () => {
     if (engiviaBody) {
-      const engivia = await createEngivia(broadcastId, engiviaBody);
+      const engivia = await createEngivia(broadcastId, engiviaBody, user);
       setUserEngivia(engivia);
       setIsEngiviaEditScreen(false);
+      createJoinUsers(broadcastId, engivia.id, user);
     }
   };
 

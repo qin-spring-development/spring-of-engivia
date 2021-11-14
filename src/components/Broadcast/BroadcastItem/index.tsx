@@ -3,14 +3,18 @@ import { useRouter } from "next/router";
 import { AcademicCapIcon, CalendarIcon } from "@heroicons/react/solid";
 import { format, parseISO } from "date-fns";
 import { BroadcastType } from "src/types/interface";
-import { useBroadcastId, useBroadcast } from "src/hooks/useSharedState";
+import {
+  useBroadcastId,
+  useBroadcast,
+  useUser,
+} from "src/hooks/useSharedState";
 
 type Props = {
   broadcast: BroadcastType;
-  isAdmin: boolean;
 };
 
-export const BroadcastItem: FC<Props> = ({ broadcast, isAdmin }) => {
+export const BroadcastItem: FC<Props> = ({ broadcast }) => {
+  const { user } = useUser();
   const { title, broadCastingDate, engiviaCount, status, id } = broadcast;
   const { setBroadcastId } = useBroadcastId();
   const { setBroadcast } = useBroadcast();
@@ -24,7 +28,7 @@ export const BroadcastItem: FC<Props> = ({ broadcast, isAdmin }) => {
         pathname: "/broadcast-done",
         query: { id: id },
       });
-    } else if (isAdmin) {
+    } else if (user.isAdmin) {
       router.push({
         pathname: "/admin/settings",
         query: { id: id },

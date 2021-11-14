@@ -1,5 +1,5 @@
 import { firebase, db } from "src/lib/firebase";
-import { WithOutToken, BroadcastFormType } from "src/types/interface";
+import { WithOutToken, BroadcastFormType, UserType } from "src/types/interface";
 
 export const getUser = async (uid: string) => {
   const data = await db
@@ -108,9 +108,10 @@ export const getEngivia = async (broadcastId: string, engiviaId: string) => {
 
 export const createEngivia = async (
   broadcastId: string,
-  engiviaBody: string
+  engiviaBody: string,
+  user: UserType
 ) => {
-  const engiviaRef = db
+  const engiviaRef = await db
     .collection("broadcasts")
     .doc(broadcastId)
     .collection("engivias")
@@ -121,16 +122,47 @@ export const createEngivia = async (
     engiviaNumber: 0,
     featureStatus: "BEFORE",
     id: engiviaRef.id,
-    joinUsers: [],
     postUser: {
-      name: "spring-development",
-      photoUrl: "https://avatars.githubusercontent.com/u/92626637?v=4",
-      uid: "0VdnReeUhHOkonTR3EFmRb3UO4v1",
+      name: user.name,
+      image: user.image,
+      uid: user.uid,
     },
     totalLikes: 0,
   };
   engiviaRef.set(engivia);
+
+  const engiviaLengthRef = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .get();
+
+  const engiviaLength = engiviaLengthRef.docs.length;
+  engiviaRef.set({ engiviaNumber: engiviaLength }, { merge: true });
+
+  const broadcastRef = await db.collection("broadcasts").doc(broadcastId);
+
+  broadcastRef.set({ engiviaCount: engiviaLength }, { merge: true });
   return engivia;
+};
+
+export const createJoinUsers = async (
+  broadcastId: string,
+  engiviaId: string,
+  user: UserType
+) => {
+  db.collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .doc(engiviaId)
+    .collection("joinUsers")
+    .doc(user.uid)
+    .set({
+      likes: 0,
+      name: user.name,
+      image: user.image,
+      uid: user.uid,
+    });
 };
 
 export const updateEngivia = async (
@@ -147,6 +179,39 @@ export const updateEngivia = async (
   engiviaRef.set({ body }, { merge: true });
 };
 
+export const updateTotalLikes = async (
+  broadcastId: string,
+  engiviaId: string
+) => {
+  const snapshot = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .doc(engiviaId)
+    .collection("joinUsers")
+    .get();
+
+  const totalLikes = snapshot.docs
+    .map((doc) => doc.data().likes)
+    .reduce((prev, current) => prev + current, 1);
+
+  const totalJoinUsersLength = snapshot.docs.length;
+
+  const sumTotalLikes =
+    (Math.round((totalLikes / totalJoinUsersLength) * 5) * 10) / 10;
+
+  const engiviaRef = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .doc(engiviaId);
+
+  engiviaRef.set({ totalLikes: sumTotalLikes }, { merge: true });
+  console.log({ sumTotalLikes });
+
+  // ({ body }, { merge: true });
+};
+
 export const deleteEngivia = async (broadcastId: string, engiviaId: string) => {
   await db
     .collection("broadcasts")
@@ -156,9 +221,11 @@ export const deleteEngivia = async (broadcastId: string, engiviaId: string) => {
     .delete();
 };
 
-export const voteLikes = async (broadcastId: string, engiviaId: string) => {
-  const uid = "e3eqU6k13hhDuZe1BiusnkQ4LkD3";
-
+export const voteLikes = async (
+  broadcastId: string,
+  engiviaId: string,
+  user: UserType
+) => {
   const joinUserRef = await db
     .collection("broadcasts")
     .doc(broadcastId)
@@ -166,74 +233,110 @@ export const voteLikes = async (broadcastId: string, engiviaId: string) => {
     .doc(engiviaId)
     .collection("joinUsers");
 
-  const itemRef = joinUserRef.doc(uid);
+  const itemRef = joinUserRef.doc(user.uid);
   const doc = await itemRef.get();
   if (doc.exists) {
-    console.log("あるよ", doc.data());
+    const likesRef = db
+      .collection("broadcasts")
+      .doc(broadcastId)
+      .collection("engivias")
+      .doc(engiviaId)
+      .collection("joinUsers")
+      .doc(user.uid);
+    likesRef.set(
+      { likes: firebase.firestore.FieldValue.increment(1) },
+      { merge: true }
+    );
   } else {
     db.collection("broadcasts")
       .doc(broadcastId)
       .collection("engivias")
       .doc(engiviaId)
       .collection("joinUsers")
-      .doc(uid)
+      .doc(user.uid)
       .set({
         likes: 1,
-        name: "osamu",
-        photoUrl: "https://avatars.githubusercontent.com/u/15007672?v=4",
-        uid,
+        name: user.name,
+        image: user.image,
+        uid: user.uid,
       });
-    console.log("新規作成したよ");
   }
-
-  // const engiviaDoc = await engiviaRef.get();
-  // const engivia = engiviaDoc.data();
-  // const joinUserRef = db
-  //   .collection("broadcasts")
-  //   .doc(broadcastId)
-  //   .collection("engivias")
-  //   .doc(engivia?.id)
-  //   .collection("joinUsers")
-  //   .doc(uid)
-  //   .set({
-  //     likes: 1,
-  //     name: "osamu",
-  //     photoUrl: "https://avatars.githubusercontent.com/u/15007672?v=4",
-  //     uid,
-  //   });
-
-  // console.log(await joinUserRef);
-
-  // const engiviaDoc = await engiviaRef.get();
-  // const engivia = engiviaDoc.data();
-
-  // const isExist = engivia?.joinUsers.find((joinUser) => joinUser.uid === uid);
-  // if (isExist) {
-  //   console.log(isExist);
-
-  // engiviaRef.set(
-  //   {
-  //     joinUsers: [
-  //       {
-  //         likes: firebase.firestore.FieldValue.increment(1),
-  //       },
-  //     ],
-  //   },
-  //   { merge: true }
-  // );
-  // } else {
-  //   engiviaRef.set(
-  //     {
-  //       joinUsers: [
-  //         {
-  //           likes: 1,
-  //           name: "osamu",
-  //           photoUrl: "https://avatars.githubusercontent.com/u/15007672?v=4",
-  //           uid: "e3eqU6k13hhDuZe1BiusnkQ4LkD3",
-  //         },
-  //       ],
-  //     },
-  //     { merge: true }
-  //   );
-  // }
 };
+
+// 配列内ではincrement使えないっぽい...
+// export const voteLikes = async (
+//   broadcastId: string,
+//   engiviaId: string
+//   // uid: string
+// ) => {
+//   const uid = "tesgsasdfasddfat";
+//   const engiviaRef = await db
+//     .collection("broadcasts")
+//     .doc(broadcastId)
+//     .collection("engivias")
+//     .doc(engiviaId);
+
+//   const engiviaDoc = await engiviaRef.get();
+//   const engivia = engiviaDoc.data();
+//   const isExist = engivia?.joinUsers.find((joinUser) => joinUser.uid === uid);
+//   if (isExist) {
+//     console.log("あるよ");
+//     const engiviaRef = db
+//       .collection("broadcasts")
+//       .doc(broadcastId)
+//       .collection("engivias")
+//       .doc(engiviaId);
+//     const arrJoinUsers = engiviaRef.update({
+//       joinUsers: firebase.firestore.FieldValue.arrayUnion({
+//         likes: 2,
+//         name: "osamu",
+//         photoUrl: "https://avatars.githubusercontent.com/u/15007672?v=4",
+//         uid,
+//       }),
+//     });
+//   } else {
+//     const engiviaRef = db
+//       .collection("broadcasts")
+//       .doc(broadcastId)
+//       .collection("engivias")
+//       .doc(engiviaId);
+//     const arrJoinUsers = engiviaRef.update({
+//       joinUsers: firebase.firestore.FieldValue.arrayUnion({
+//         likes: 1,
+//         name: "osamu",
+//         photoUrl: "https://avatars.githubusercontent.com/u/15007672?v=4",
+//         uid,
+//       }),
+//     });
+//   }
+
+// .set({
+//       joinUsers: [
+//         {
+//           likes: 1,
+//           name: "osamu",
+//           photoUrl: "https://avatars.githubusercontent.com/u/15007672?v=4",
+//           uid,
+//         },
+//       ],
+//     });
+//   console.log("ないよ");
+
+// db.collection("broadcasts")
+//   .doc(broadcastId)
+//   .collection("engivias")
+//   .doc(engiviaId)
+//   .set(
+//     {
+//       joinUsers: [
+//         {
+//           likes: 1,
+//           name: "osamu",
+//           photoUrl: "https://avatars.githubusercontent.com/u/15007672?v=4",
+//           uid,
+//         },
+//       ],
+//     },
+//     { merge: true }
+//   );
+// };

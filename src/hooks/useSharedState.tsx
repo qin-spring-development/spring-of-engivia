@@ -1,7 +1,8 @@
 import useSWR from "swr";
+import { users } from "src/constant/users";
 
-export const useSharedState = (key: string, fallback: any) => {
-  const { data, mutate } = useSWR(key, null, { fallback });
+export const useSharedState = (key: string, fallbackData: any) => {
+  const { data, mutate } = useSWR(key, { fallbackData });
   return [data, mutate];
 };
 
@@ -28,19 +29,22 @@ export const useIsBroadcastEditScreen = () => {
   return { isBroadcastEditScreen, setIsBroadcastEditScreen };
 };
 
-export const useEngivia = () => {
-  const [engivia, setEngivia] = useSharedState("engivia", {});
-  return { engivia, setEngivia };
-};
-
 export const useEngivias = () => {
   const [engivias, setEngivias] = useSharedState("engivias", []);
   return { engivias, setEngivias };
 };
 
 export const useUserEngivia = () => {
-  const [userEngivia, setUserEngivia] = useSharedState("userEngivia", {});
+  const [userEngivia, setUserEngivia] = useSharedState("userEngivia", null);
   return { userEngivia, setUserEngivia };
+};
+
+export const useFeatureEngivia = () => {
+  const [featureEngivia, setFeatureEngivia] = useSharedState(
+    "featureEngivia",
+    null
+  );
+  return { featureEngivia, setFeatureEngivia };
 };
 
 export const useIsEngiviaCreateScreen = () => {
@@ -59,7 +63,12 @@ export const useIsEngiviaEditScreen = () => {
   return { isEngiviaEditScreen, setIsEngiviaEditScreen };
 };
 
-export const useIsAdmin = () => {
-  const [isAdmin, setIsAdmin] = useSharedState("isAdmin", false);
-  return { isAdmin, setIsAdmin };
+export const useLikes = () => {
+  const [likes, setLikes] = useSharedState("likes", 0);
+  return { likes, setLikes };
+};
+
+export const useUser = () => {
+  const [user, setUser] = useSharedState("user", users[1]);
+  return { user, setUser };
 };

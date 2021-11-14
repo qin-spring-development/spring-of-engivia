@@ -1,6 +1,9 @@
 export interface UserType {
+  email: string;
+  image: string;
+  isAdmin: boolean;
   name: string;
-  photoUrl: string;
+  provider: string;
   uid: string;
 }
 export interface JoinUserType {

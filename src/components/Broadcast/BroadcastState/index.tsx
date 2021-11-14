@@ -8,13 +8,13 @@ import {
   useSubscribeUserEngivia,
   useSubscribeBroadcast,
 } from "src/hooks/useSubscribe";
-import { useBroadcastId } from "src/hooks/useSharedState";
+import { useBroadcastId, useUser } from "src/hooks/useSharedState";
 
-export const BroadcastBefore: FC = () => {
-  const userId = "0VdnReeUhHOkonTR3EFmRb3UO4v1";
+export const BroadcastState: FC = () => {
+  const { user } = useUser();
   const { broadcastId } = useBroadcastId();
   const broadcast = useSubscribeBroadcast(broadcastId);
-  const userEngivia = useSubscribeUserEngivia(broadcastId, userId);
+  const userEngivia = useSubscribeUserEngivia(broadcastId, user.uid);
 
   return (
     <div>
@@ -24,7 +24,7 @@ export const BroadcastBefore: FC = () => {
       ) : broadcast?.status === "IN_PROGRESS" ? (
         <Broadcasting />
       ) : userEngivia ? (
-        <EngiviaConfirm userEngivia={userEngivia} />
+        <EngiviaConfirm />
       ) : (
         <EngiviaInput />
       )}

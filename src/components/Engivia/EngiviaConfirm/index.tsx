@@ -8,13 +8,9 @@ import {
   useUserEngivia,
 } from "src/hooks/useSharedState";
 
-type Props = {
-  userEngivia?: EngiviaType;
-};
-
-export const EngiviaConfirm: FC<Props> = ({ userEngivia }) => {
+export const EngiviaConfirm: FC = () => {
   const { broadcastId, setBroadcastId } = useBroadcastId();
-  const { setUserEngivia } = useUserEngivia();
+  const { userEngivia, setUserEngivia } = useUserEngivia();
   const { isEngiviaEditScreen, setIsEngiviaEditScreen } =
     useIsEngiviaEditScreen();
   const onDeleteEngivia = () => {
@@ -43,7 +39,7 @@ export const EngiviaConfirm: FC<Props> = ({ userEngivia }) => {
             <div className="py-7 px-10 mb-5 bg-white rounded-lg">
               <div className="flex flex-col items-center mb-10">
                 <p className="mb-5 text-xl font-bold text-[#0284C7]">
-                  {`エンジビアかな???`}
+                  {`エンジビア${userEngivia.engiviaNumber}`}
                 </p>
                 <p className="text-4xl">{userEngivia?.body}</p>
               </div>
@@ -51,7 +47,7 @@ export const EngiviaConfirm: FC<Props> = ({ userEngivia }) => {
                 <div className="flex items-center">
                   <img
                     className="mr-2 h-8 rounded-full"
-                    src={userEngivia.postUser?.photoUrl}
+                    src={userEngivia.postUser?.image}
                     alt="avatar"
                   />
                   <span>{userEngivia.postUser?.name}</span>

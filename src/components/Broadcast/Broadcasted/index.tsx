@@ -4,14 +4,13 @@ import { useBroadcastId, useUserEngivia } from "src/hooks/useSharedState";
 
 export const Broadcasted: FC = () => {
   const { broadcastId, setBroadcastId } = useBroadcastId();
-  const { userEngivia, setUserEngivia } = useUserEngivia();
+  const { setUserEngivia } = useUserEngivia();
 
   const broadcast = useSubscribeBroadcast(broadcastId);
 
   const onBackBroadcasts = () => {
     setBroadcastId("");
     setUserEngivia(null);
-    console.log({ userEngivia });
   };
 
   return (
