@@ -17,12 +17,10 @@ const options = {
   ],
   callbacks: {
     async session(session: Session, token: any) {
-      session.user = token;
+      session.user = token.user;
       return session;
     },
     async jwt(token: any, user: User, account: Account, profile: Profile) {
-      console.log("token");
-      console.log(token);
       if (user) {
         token.user = user;
         token.account = account;
