@@ -8,13 +8,8 @@ export type ReqUser = {
   provider: string;
 };
 
-export type ResUser = {
-  uid: string;
-  email: string;
-  name: string;
+export type ResUser = ReqUser & {
   isAdmin: boolean;
-  image: string;
-  provider: string;
 };
 
 const adminUsers = [""];
