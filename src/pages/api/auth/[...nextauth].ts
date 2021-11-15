@@ -1,4 +1,4 @@
-import NextAuth, { Session, User } from "next-auth";
+import NextAuth, { Account, Profile, Session, User } from "next-auth";
 import Providers from "next-auth/providers";
 import {
   createUser,
@@ -17,10 +17,12 @@ const options = {
   ],
   callbacks: {
     async session(session: Session, token: any) {
-      session.user = token.user;
+      session.user = token;
       return session;
     },
-    async jwt(token: any, user: User, account: any, profile: any) {
+    async jwt(token: any, user: User, account: Account, profile: Profile) {
+      console.log("token");
+      console.log(token);
       if (user) {
         token.user = user;
         token.account = account;
@@ -28,7 +30,7 @@ const options = {
       }
       return token;
     },
-    async signIn(user: User, account: any, profile: any) {
+    async signIn(user: User, account: Account, profile: Profile) {
       if (user !== null) {
         (await getUser(user.id)) ?? createUser(toReqUser(user, account));
         const data = await getUser(user.id);
@@ -41,7 +43,7 @@ const options = {
   },
 };
 
-const toReqUser = (user: User, account: any) => {
+const toReqUser = (user: User, account: Account) => {
   const reqUser: ReqUser = {
     uid: user.id,
     email: user.email,
