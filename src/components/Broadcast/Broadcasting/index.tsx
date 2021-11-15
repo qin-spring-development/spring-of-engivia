@@ -7,6 +7,7 @@ import {
 } from "src/hooks/useSubscribe";
 import { useBroadcastId, useUser } from "src/hooks/useSharedState";
 import { voteLikes, updateTotalLikes } from "src/lib/db";
+import { Label } from "src/components/Label";
 
 export const Broadcasting: FC = () => {
   const { user } = useUser();
@@ -35,13 +36,18 @@ export const Broadcasting: FC = () => {
             <div className="mb-3 divide-y">
               {joinUsers.map((joinUser) => (
                 <div key={joinUser.uid}>
-                  <div className="flex items-center my-3">
-                    <img
-                      className="mr-2 h-10 rounded-full"
-                      src={joinUser.image}
-                      alt="avatar"
-                    />
-                    <h1>{joinUser.name}</h1>
+                  <div className="flex justify-between items-center my-3">
+                    <div className="flex items-center">
+                      <img
+                        className="mr-2 h-10 rounded-full"
+                        src={joinUser.image}
+                        alt="avatar"
+                      />
+                      <h1>{joinUser.name}</h1>
+                    </div>
+                    <span className="py-1 px-3 text-sm text-gray-700 bg-white rounded-full border-2">
+                      {`${joinUser.likes} へえ`}
+                    </span>
                   </div>
                 </div>
               ))}
