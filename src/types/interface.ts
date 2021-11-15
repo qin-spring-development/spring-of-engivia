@@ -9,7 +9,7 @@ export interface UserType {
 export interface JoinUserType {
   likes: number;
   name: string;
-  photoUrl: string;
+  image: string;
   uid: string;
 }
 export interface EngiviaType {

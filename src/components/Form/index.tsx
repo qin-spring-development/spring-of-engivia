@@ -9,7 +9,7 @@ export type Props = {
   name?: string;
   placeholder?: string;
   register?: UseFormRegisterReturn;
-  isInvalid: any;
+  isInvalid?: any;
   onChange: ChangeEventHandler<HTMLInputElement>;
 };
 

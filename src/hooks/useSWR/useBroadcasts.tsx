@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { fetcher } from "src/utils/fetcher";
+import { fetcher } from "src/lib/fetcher";
 import { BroadcastType } from "src/types/interface";
 
 export const useBroadcasts = () => {

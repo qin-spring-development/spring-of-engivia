@@ -1,14 +1,11 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { db } from "src/lib/firebase";
-import { BroadcastType } from "src/types/interface";
-import { EngiviaType } from "src/types/interface";
+import { EngiviaType, BroadcastType, JoinUserType } from "src/types/interface";
 import { getEngivia } from "src/lib/db";
 import {
   useBroadcast,
-  useBroadcasts,
   useEngivias,
   useUserEngivia,
-  useLikes,
   useFeatureEngivia,
 } from "src/hooks/useSharedState";
 
@@ -24,13 +21,13 @@ export const useSubscribeBroadcast = (broadcastId?: string) => {
         setBroadcast(broadcastRef);
       });
     return () => unsubscribe();
-  }, []);
+  }, [broadcastId, setBroadcast]);
 
   return broadcast;
 };
 
 export const useSubscribeBroadcasts = () => {
-  const { broadcasts, setBroadcasts } = useBroadcasts();
+  const [broadcasts, setBroadcasts] = useState<BroadcastType[]>([]);
 
   useEffect(() => {
     const unsubscribe = db
@@ -68,7 +65,7 @@ export const useSubscribeFeatureEngivia = (broadcastId: string) => {
         }
       });
     return () => unsubscribe();
-  }, []);
+  }, [broadcastId, setFeatureEngivia]);
 
   return featureEngivia;
 };
@@ -89,7 +86,7 @@ export const useSubscribeEngivias = (broadcastId: string) => {
         setEngivias(engivias);
       });
     return () => unsubscribe();
-  }, []);
+  }, [broadcastId, setEngivias]);
 
   return engivias;
 };
@@ -117,7 +114,7 @@ export const useSubscribeUserEngivia = (broadcastId: string, uid: string) => {
         }
       });
     return () => unsubscribe();
-  }, []);
+  }, [broadcastId, uid, setUserEngivia]);
 
   return userEngivia;
 };
@@ -127,7 +124,7 @@ export const useSubscribeLikes = (
   engiviaId: string,
   uid: string
 ) => {
-  const { likes, setLikes } = useLikes();
+  const [likes, setLikes] = useState<number>(0);
 
   useEffect(() => {
     const unsubscribe = db
@@ -145,4 +142,55 @@ export const useSubscribeLikes = (
   }, [broadcastId, engiviaId, uid, setLikes, likes]);
 
   return likes;
+};
+
+export const useSubscribeTotalLikes = (
+  broadcastId: string,
+  engiviaId: string
+) => {
+  const [totalLikes, setTotalLikes] = useState<number>(0);
+
+  useEffect(() => {
+    const unsubscribe = db
+      .collection("broadcasts")
+      .doc(broadcastId)
+      .collection("engivias")
+      .doc(engiviaId)
+      .onSnapshot(async (snapshot) => {
+        const totalLikesDoc = await snapshot.data();
+        if (totalLikesDoc) {
+          setTotalLikes(totalLikesDoc?.totalLikes);
+        }
+      });
+
+    return () => unsubscribe();
+  }, [broadcastId, engiviaId, totalLikes]);
+
+  return totalLikes;
+};
+
+export const useSubscribeJoinUsers = (
+  broadcastId: string,
+  engiviaId: string
+) => {
+  const [joinUsers, setJoinUsers] = useState<JoinUserType[]>([]);
+
+  useEffect(() => {
+    const unsubscribe = db
+      .collection("broadcasts")
+      .doc(broadcastId)
+      .collection("engivias")
+      .doc(engiviaId)
+      .collection("joinUsers")
+      // .orderBy("createdAt", "asc")
+      .onSnapshot((snapshots) => {
+        const joinUsers = snapshots.docs.map((snapshot) => {
+          return snapshot.data() as JoinUserType;
+        });
+        setJoinUsers(joinUsers);
+      });
+    return () => unsubscribe();
+  }, [broadcastId, engiviaId]);
+
+  return joinUsers;
 };

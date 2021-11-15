@@ -11,11 +11,6 @@ export const useBroadcast = () => {
   return { broadcast, setBroadcast };
 };
 
-export const useBroadcasts = () => {
-  const [broadcasts, setBroadcasts] = useSharedState("broadcasts", []);
-  return { broadcasts, setBroadcasts };
-};
-
 export const useBroadcastId = () => {
   const [broadcastId, setBroadcastId] = useSharedState("broadcastId", "");
   return { broadcastId, setBroadcastId };
@@ -61,11 +56,6 @@ export const useIsEngiviaEditScreen = () => {
     false
   );
   return { isEngiviaEditScreen, setIsEngiviaEditScreen };
-};
-
-export const useLikes = () => {
-  const [likes, setLikes] = useSharedState("likes", 0);
-  return { likes, setLikes };
 };
 
 export const useUser = () => {

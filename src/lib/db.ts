@@ -193,7 +193,7 @@ export const updateTotalLikes = async (
 
   const totalLikes = snapshot.docs
     .map((doc) => doc.data().likes)
-    .reduce((prev, current) => prev + current, 1);
+    .reduce((prev, current) => prev + current, 0);
 
   const totalJoinUsersLength = snapshot.docs.length;
 
@@ -207,9 +207,6 @@ export const updateTotalLikes = async (
     .doc(engiviaId);
 
   engiviaRef.set({ totalLikes: sumTotalLikes }, { merge: true });
-  console.log({ sumTotalLikes });
-
-  // ({ body }, { merge: true });
 };
 
 export const deleteEngivia = async (broadcastId: string, engiviaId: string) => {
@@ -261,6 +258,12 @@ export const voteLikes = async (
         uid: user.uid,
       });
   }
+};
+
+export const setYoutubeURL = async (broadcastId: string, url: string) => {
+  db.collection("broadcasts")
+    .doc(broadcastId)
+    .set({ broadCastUrl: url }, { merge: true });
 };
 
 // 配列内ではincrement使えないっぽい...
