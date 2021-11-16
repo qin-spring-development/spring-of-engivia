@@ -14,4 +14,5 @@ export const EntryTittle = Template.bind({});
 EntryTittle.args = {
   placeholder: "エンジビアを入力する",
   rows: 3,
+  maxlength: 100,
 };

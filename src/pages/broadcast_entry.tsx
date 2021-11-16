@@ -30,6 +30,7 @@ const BroadcastEntry = () => {
               value={entry.title}
               placeholder="エンジビアを入力する"
               rows={3}
+              maxlength={100}
               onChange={onChangeEntryHandler}
             />
             <div className="space-x-4 w-full text-center">

@@ -7,6 +7,7 @@ export type Props = {
   name?: string;
   placeholder?: string;
   rows: number;
+  maxlength: number;
   cols?: number;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
 };
@@ -19,6 +20,7 @@ export const TextArea: FC<Props> = ({
   placeholder,
   rows,
   cols,
+  maxlength,
   onChange,
 }) => {
   return (
@@ -31,6 +33,7 @@ export const TextArea: FC<Props> = ({
         placeholder={placeholder}
         rows={rows}
         cols={cols}
+        maxLength={maxlength}
         onChange={onChange}
       />
     </div>
