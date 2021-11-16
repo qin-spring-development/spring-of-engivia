@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from "react";
-import { Form } from "src/components/Form";
+import { Form } from "src/components/Form/Input";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 
 const Setting = () => {
