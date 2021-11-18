@@ -1,51 +1,42 @@
 import type { FC } from "react";
+import { useRouter } from "next/router";
 import { BroadcastItem } from "src/components/Broadcast/BroadcastItem";
-import { BroadcastCreate } from "src/components/Broadcast/BroadcastCreate";
 import { BroadcastType } from "src/types/interface";
-import { useIsEngiviaCreateScreen, useUser } from "src/hooks/useSharedState";
+import { useUser } from "src/hooks/useSharedState";
+import { Button } from "src/components/Button";
 
 type Props = {
   broadcasts: BroadcastType[];
 };
 
-export const BroadCastList: FC<Props> = ({ broadcasts }) => {
+export const BroadcastList: FC<Props> = ({ broadcasts }) => {
   const { user } = useUser();
+  const router = useRouter();
 
-  const { isEngiviaCreateScreen, setIsEngiviaCreateScreen } =
-    useIsEngiviaCreateScreen();
-
-  const onCreateBroadcast = () => {
-    setIsEngiviaCreateScreen(true);
+  const handleRegistration = () => {
+    router.push("/admin/registration");
   };
 
   return (
     <div className="mx-auto max-w-3xl">
-      {isEngiviaCreateScreen ? (
-        <BroadcastCreate />
-      ) : (
-        <div>
-          <div className="flex justify-between items-center">
-            <h1 className="py-10 text-4xl font-bold">放送一覧</h1>
-            <div>
-              {user.isAdmin && (
-                <button
-                  onClick={onCreateBroadcast}
-                  className="py-2 px-4 mr-2 text-white bg-light-blue-600 rounded-md"
-                >
-                  放送を作成する
-                </button>
-              )}
-            </div>
-          </div>
-          {broadcasts?.map((broadcast) => {
-            return (
-              <div key={broadcast.id}>
-                <BroadcastItem broadcast={broadcast} />
-              </div>
-            );
-          })}
+      <div className="flex justify-between items-center">
+        <h1 className="py-10 text-4xl font-bold">放送一覧</h1>
+        {user.isAdmin && (
+          <Button
+            isSubmitting={false}
+            isPrimary={true}
+            type="button"
+            onClick={handleRegistration}
+          >
+            放送を作成する
+          </Button>
+        )}
+      </div>
+      {broadcasts?.map((broadcast) => (
+        <div key={broadcast.id}>
+          <BroadcastItem broadcast={broadcast} />
         </div>
-      )}
+      ))}
     </div>
   );
 };

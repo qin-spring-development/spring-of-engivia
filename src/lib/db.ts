@@ -20,7 +20,7 @@ export const createBroadcast = (data: BroadcastFormType) => {
   const broadcastRef = db.collection("broadcasts").doc();
   const broadcast = {
     broadCastUrl: "",
-    broadCastingDate: new Date(data.date).toISOString(),
+    broadCastingDate: new Date(data.broadCastingDate).toISOString(),
     engiviaCount: 0,
     featureId: null,
     id: broadcastRef.id,
@@ -40,7 +40,7 @@ export const updateBroadcast = async (
 
   const updateBroadcast = {
     title: data.title,
-    broadCastingDate: new Date(data.date).toISOString(),
+    broadCastingDate: new Date(data.broadCastingDate).toISOString(),
   };
 
   broadcastRef.set(updateBroadcast, { merge: true });
@@ -265,81 +265,3 @@ export const setYoutubeURL = async (broadcastId: string, url: string) => {
     .doc(broadcastId)
     .set({ broadCastUrl: url }, { merge: true });
 };
-
-// 配列内ではincrement使えないっぽい...
-// export const voteLikes = async (
-//   broadcastId: string,
-//   engiviaId: string
-//   // uid: string
-// ) => {
-//   const uid = "tesgsasdfasddfat";
-//   const engiviaRef = await db
-//     .collection("broadcasts")
-//     .doc(broadcastId)
-//     .collection("engivias")
-//     .doc(engiviaId);
-
-//   const engiviaDoc = await engiviaRef.get();
-//   const engivia = engiviaDoc.data();
-//   const isExist = engivia?.joinUsers.find((joinUser) => joinUser.uid === uid);
-//   if (isExist) {
-//     console.log("あるよ");
-//     const engiviaRef = db
-//       .collection("broadcasts")
-//       .doc(broadcastId)
-//       .collection("engivias")
-//       .doc(engiviaId);
-//     const arrJoinUsers = engiviaRef.update({
-//       joinUsers: firebase.firestore.FieldValue.arrayUnion({
-//         likes: 2,
-//         name: "osamu",
-//         photoUrl: "https://avatars.githubusercontent.com/u/15007672?v=4",
-//         uid,
-//       }),
-//     });
-//   } else {
-//     const engiviaRef = db
-//       .collection("broadcasts")
-//       .doc(broadcastId)
-//       .collection("engivias")
-//       .doc(engiviaId);
-//     const arrJoinUsers = engiviaRef.update({
-//       joinUsers: firebase.firestore.FieldValue.arrayUnion({
-//         likes: 1,
-//         name: "osamu",
-//         photoUrl: "https://avatars.githubusercontent.com/u/15007672?v=4",
-//         uid,
-//       }),
-//     });
-//   }
-
-// .set({
-//       joinUsers: [
-//         {
-//           likes: 1,
-//           name: "osamu",
-//           photoUrl: "https://avatars.githubusercontent.com/u/15007672?v=4",
-//           uid,
-//         },
-//       ],
-//     });
-//   console.log("ないよ");
-
-// db.collection("broadcasts")
-//   .doc(broadcastId)
-//   .collection("engivias")
-//   .doc(engiviaId)
-//   .set(
-//     {
-//       joinUsers: [
-//         {
-//           likes: 1,
-//           name: "osamu",
-//           photoUrl: "https://avatars.githubusercontent.com/u/15007672?v=4",
-//           uid,
-//         },
-//       ],
-//     },
-//     { merge: true }
-//   );
-// };

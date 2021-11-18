@@ -50,6 +50,6 @@ export interface Broadcast {
   title: string;
 }
 export interface BroadcastFormType {
-  date: string;
   title: string;
+  broadCastingDate: string;
 }

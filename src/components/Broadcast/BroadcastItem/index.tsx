@@ -8,6 +8,8 @@ import {
   useBroadcast,
   useUser,
 } from "src/hooks/useSharedState";
+import { Button } from "src/components/Button";
+import { Label } from "src/components/Label";
 
 type Props = {
   broadcast: BroadcastType;
@@ -22,7 +24,7 @@ export const BroadcastItem: FC<Props> = ({ broadcast }) => {
   const router = useRouter();
   const date = format(parseISO(broadCastingDate), "yyyy年MM月dd日");
 
-  const onClickHandler = () => {
+  const handleClick = () => {
     if (status === "DONE") {
       router.push({
         pathname: "/broadcast-done",
@@ -43,7 +45,7 @@ export const BroadcastItem: FC<Props> = ({ broadcast }) => {
     <div className="py-5 px-7 text-gray-500 bg-white rounded-md border-b">
       <div className="flex justify-between">
         <div>
-          <button onClick={onClickHandler} className="text-light-blue-600">
+          <button onClick={handleClick} className="text-light-blue-600">
             {title}
           </button>
 
@@ -53,21 +55,7 @@ export const BroadcastItem: FC<Props> = ({ broadcast }) => {
           </div>
         </div>
         <div className="inline text-right">
-          <span
-            className={`py-1 px-3 text-sm rounded-full ${
-              status === "BEFORE"
-                ? "bg-orange-100 text-orange-700"
-                : status === "IN_PROGRESS"
-                ? "bg-green-100 text-green-700"
-                : "bg-gray-200"
-            }`}
-          >
-            {status === "BEFORE"
-              ? "放送前・エンジビア募集中"
-              : status === "IN_PROGRESS"
-              ? "放送中"
-              : "放送済み"}
-          </span>
+          <Label status={status} />
           <div className="flex items-center mt-2">
             <span className="flex items-center ml-auto">
               <AcademicCapIcon className="h-5" />

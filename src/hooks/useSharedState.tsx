@@ -42,14 +42,6 @@ export const useFeatureEngivia = () => {
   return { featureEngivia, setFeatureEngivia };
 };
 
-export const useIsEngiviaCreateScreen = () => {
-  const [isEngiviaCreateScreen, setIsEngiviaCreateScreen] = useSharedState(
-    "isEngiviaCreateScreen",
-    false
-  );
-  return { isEngiviaCreateScreen, setIsEngiviaCreateScreen };
-};
-
 export const useIsEngiviaEditScreen = () => {
   const [isEngiviaEditScreen, setIsEngiviaEditScreen] = useSharedState(
     "isEngiviaEditScreen",
