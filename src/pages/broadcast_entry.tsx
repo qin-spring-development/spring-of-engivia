@@ -32,6 +32,8 @@ const BroadcastEntry = () => {
               rows={3}
               maxlength={100}
               onChange={onChangeEntryHandler}
+              classNameAlert=""
+              length={0}
             />
             <div className="space-x-4 w-full text-center">
               <button className="py-3 px-8 text-white bg-light-blue-600 rounded-md">

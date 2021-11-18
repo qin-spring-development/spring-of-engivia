@@ -7,9 +7,11 @@ export type Props = {
   name?: string;
   placeholder?: string;
   rows: number;
+  length: number;
   maxlength: number;
   cols?: number;
   onChange: ChangeEventHandler<HTMLTextAreaElement>;
+  classNameAlert: string;
 };
 
 export const TextArea: FC<Props> = ({
@@ -20,22 +22,27 @@ export const TextArea: FC<Props> = ({
   placeholder,
   rows,
   cols,
+  length,
   maxlength,
   onChange,
+  classNameAlert,
 }) => {
   return (
-    <div className={className}>
+    <div>
       <textarea
         id={id}
         defaultValue={value}
         name={name}
-        className="py-2 px-3 w-full text-base leading-8 text-gray-500 bg-white rounded-md border border-gray-300 focus:ring outline-none"
+        className={`py-2 px-3 w-full text-base leading-8 bg-white rounded-md text-gray-500 border border-gray-300 bg-white rounded-md focus:ring outline-none ${className}`}
         placeholder={placeholder}
         rows={rows}
         cols={cols}
         maxLength={maxlength}
         onChange={onChange}
       />
+      <div className={`float-right ${classNameAlert}`}>
+        {length}/{maxlength}
+      </div>
     </div>
   );
 };
