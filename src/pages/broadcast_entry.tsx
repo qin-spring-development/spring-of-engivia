@@ -2,10 +2,13 @@ import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import { Label } from "src/components/Label";
 import { ChangeEvent, useState } from "react";
 import { TextArea } from "src/components/Form/TextArea";
+import { Button } from "src/components/Button";
 
 const BroadcastEntry = () => {
   // Todo: BEFORE|IN_PROGRESS|DONEいずれかが入る Hooks導入次第変更
   const status = "BEFORE";
+  const maxlength = 100;
+  const [length, setLength] = useState(0);
 
   // Todo: React Hooks Form を導入次第変更
   const [entry, setEntry] = useState({
@@ -14,7 +17,16 @@ const BroadcastEntry = () => {
 
   const onChangeEntryHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     console.log(e.target.value);
+    console.log(e.target.value.length);
+
+    // エンジビアは100文字以内の文字数制限
+
+    const setLength = e.target.value.replace(/\n/g, "").length;
+    if (setLength > 10) alert("10文字以内にしてください");
+    return;
   };
+
+  console.log(length);
 
   return (
     <BaseLayout title="放送を作成">
@@ -30,15 +42,20 @@ const BroadcastEntry = () => {
               value={entry.title}
               placeholder="エンジビアを入力する"
               rows={3}
-              maxlength={100}
+              maxlength={maxlength}
               onChange={onChangeEntryHandler}
               classNameAlert=""
-              length={0}
+              length={length}
             />
-            <div className="space-x-4 w-full text-center">
-              <button className="py-3 px-8 text-white bg-light-blue-600 rounded-md">
+            <div className="w-full text-center">
+              <Button
+                isSubmitting={false}
+                type="button"
+                onClick={() => console.log("テスト")}
+                isPrimary={true}
+              >
                 保存する
-              </button>
+              </Button>
             </div>
           </div>
         </form>
