@@ -3,12 +3,7 @@ import { useRouter } from "next/router";
 import { AcademicCapIcon, CalendarIcon } from "@heroicons/react/solid";
 import { format, parseISO } from "date-fns";
 import { BroadcastType } from "src/types/interface";
-import {
-  useBroadcastId,
-  useBroadcast,
-  useUser,
-} from "src/hooks/useSharedState";
-import { Button } from "src/components/Button";
+import { useUser } from "src/hooks/useSharedState";
 import { Label } from "src/components/Label";
 
 type Props = {
@@ -18,8 +13,6 @@ type Props = {
 export const BroadcastItem: FC<Props> = ({ broadcast }) => {
   const { user } = useUser();
   const { title, broadCastingDate, engiviaCount, status, id } = broadcast;
-  const { setBroadcastId } = useBroadcastId();
-  const { setBroadcast } = useBroadcast();
 
   const router = useRouter();
   const date = format(parseISO(broadCastingDate), "yyyy年MM月dd日");
@@ -30,14 +23,21 @@ export const BroadcastItem: FC<Props> = ({ broadcast }) => {
         pathname: "/broadcast-done",
         query: { id: id },
       });
-    } else if (user.isAdmin) {
+    } else if (user.isAdmin && status === "BEFORE") {
       router.push({
-        pathname: "/admin/settings",
+        pathname: "/admin/broadcasting",
         query: { id: id },
       });
-    } else {
-      setBroadcast(broadcast);
-      setBroadcastId(id);
+    } else if (user.isAdmin && status === "IN_FEATURE") {
+      router.push({
+        pathname: "/admin/broadcasting",
+        query: { id: id },
+      });
+    } else if (status === "BEFORE") {
+      router.push({
+        pathname: "/users/engivia-registration",
+        query: { id: id, uid: user.uid },
+      });
     }
   };
 

@@ -1,18 +1,18 @@
-export interface UserType {
+export type UserType = {
   email: string;
   image: string;
   isAdmin: boolean;
   name: string;
   provider: string;
   uid: string;
-}
-export interface JoinUserType {
+};
+export type JoinUserType = {
   likes: number;
   name: string;
   image: string;
   uid: string;
-}
-export interface EngiviaType {
+};
+export type EngiviaType = {
   body: string;
   createdAt: string;
   engiviaNumber: number;
@@ -21,9 +21,9 @@ export interface EngiviaType {
   joinUsers: JoinUserType[];
   postUser: UserType;
   totalLikes: number;
-}
+};
 
-export interface BroadcastType {
+export type BroadcastType = {
   broadCastUrl: string;
   broadCastingDate: string;
   engiviaCount: number;
@@ -32,15 +32,15 @@ export interface BroadcastType {
   id: string;
   status: string;
   title: string;
-}
-export interface WithOutToken {
+};
+export type WithOutToken = {
   email: string | null;
   name: string | null;
   photoURL: string | undefined;
   provider: string | undefined;
   uid: string;
-}
-export interface Broadcast {
+};
+export type Broadcast = {
   broadCastUrl: string;
   broadCastingDate: string;
   engiviaCount: number;
@@ -48,8 +48,8 @@ export interface Broadcast {
   id: string;
   status: string;
   title: string;
-}
-export interface BroadcastFormType {
+};
+export type BroadcastFormType = {
   title: string;
   broadCastingDate: string;
-}
+};

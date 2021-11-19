@@ -2,15 +2,10 @@ import { useState, useEffect } from "react";
 import { db } from "src/lib/firebase";
 import { EngiviaType, BroadcastType, JoinUserType } from "src/types/interface";
 import { getEngivia } from "src/lib/db";
-import {
-  useBroadcast,
-  useEngivias,
-  useUserEngivia,
-  useFeatureEngivia,
-} from "src/hooks/useSharedState";
+import { useEngivias, useFeatureEngivia } from "src/hooks/useSharedState";
 
 export const useSubscribeBroadcast = (broadcastId?: string) => {
-  const { broadcast, setBroadcast } = useBroadcast();
+  const [broadcast, setBroadcast] = useState<BroadcastType>();
 
   useEffect(() => {
     const unsubscribe = db
@@ -92,8 +87,6 @@ export const useSubscribeEngivias = (broadcastId: string) => {
 };
 
 export const useSubscribeUserEngivia = (broadcastId: string, uid: string) => {
-  const { userEngivia, setUserEngivia } = useUserEngivia();
-
   useEffect(() => {
     const unsubscribe = db
       .collection("broadcasts")
@@ -108,15 +101,15 @@ export const useSubscribeUserEngivia = (broadcastId: string, uid: string) => {
         );
 
         if (engivia === null) {
-          setUserEngivia(null);
+          // setUserEngivia(null);
         } else {
-          setUserEngivia(engivia);
+          // setUserEngivia(engivia);
         }
       });
     return () => unsubscribe();
-  }, [broadcastId, uid, setUserEngivia]);
+  }, [broadcastId, uid]);
 
-  return userEngivia;
+  // return userEngivia;
 };
 
 export const useSubscribeLikes = (

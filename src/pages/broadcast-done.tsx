@@ -34,7 +34,7 @@ const BroadcastDone: NextPage = () => {
 
   return (
     <BaseLayout title="放送済み">
-      <BroadcastTitle broadcastId={broadcastId} />
+      {/* <BroadcastTitle broadcastId={broadcastId} /> */}
       <div className="flex flex-col items-center text-center">
         {broadcast?.broadCastUrl && (
           <iframe

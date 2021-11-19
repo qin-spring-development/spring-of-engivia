@@ -14,7 +14,7 @@ export const BroadcastList: FC<Props> = ({ broadcasts }) => {
   const router = useRouter();
 
   const handleRegistration = () => {
-    router.push("/admin/registration");
+    router.push("/admin/broadcast-registration");
   };
 
   return (
@@ -32,8 +32,8 @@ export const BroadcastList: FC<Props> = ({ broadcasts }) => {
           </Button>
         )}
       </div>
-      {broadcasts?.map((broadcast) => (
-        <div key={broadcast.id}>
+      {broadcasts.map((broadcast, index) => (
+        <div key={index}>
           <BroadcastItem broadcast={broadcast} />
         </div>
       ))}

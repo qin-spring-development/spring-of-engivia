@@ -119,7 +119,7 @@ export const createEngivia = async (
   const engivia = {
     body: engiviaBody,
     createdAt: new Date().toISOString(),
-    engiviaNumber: 0,
+    // engiviaNumber: 0, // なぜか初期値が0で取得してしまう
     featureStatus: "BEFORE",
     id: engiviaRef.id,
     postUser: {

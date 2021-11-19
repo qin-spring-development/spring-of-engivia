@@ -1,41 +1,34 @@
+import Image from "next/image";
+import Link from "next/link";
 import { UserIcon } from "@heroicons/react/solid";
 import { signOut, useSession } from "next-auth/client";
 import { useUser } from "src/hooks/useSharedState";
-import Image from "next/image";
 import { users } from "src/constant/users";
 import { UserType } from "src/types/interface";
-import { useUserEngivia } from "src/hooks/useSharedState";
 
 export const Header = () => {
   const [session] = useSession();
   const { user, setUser } = useUser();
-  const { setUserEngivia } = useUserEngivia();
 
   const changeUserHandler = (user: UserType) => {
     setUser(user);
-    setUserEngivia(null);
   };
 
   return (
     <header>
-      <div className="flex items-center py-5 px-4 bg-white shadow-sm">
+      <div className="flex items-center py-3 px-6 bg-white shadow-sm">
         <div className="flex flex-grow gap-2 items-center">
-          <Image
-            src="/engivia_logo.png"
-            alt="エンジビアの泉"
-            loading="eager"
-            width={30}
-            height={32}
-          />
-
-          <Image
-            src="/logo.png"
-            alt="エンジビアの泉"
-            loading="eager"
-            width={126}
-            height={22.5}
-            priority
-          />
+          <Link href="/broadcasts">
+            <a>
+              <Image
+                src="/engivia_logo_with_title.png"
+                alt="エンジビアの泉"
+                loading="eager"
+                width={160}
+                height={25}
+              />
+            </a>
+          </Link>
         </div>
         <span className="mr-5">{user.name}</span>
         <button
