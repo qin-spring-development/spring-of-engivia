@@ -5,6 +5,7 @@ import { format, parseISO } from "date-fns";
 import { BroadcastType } from "src/types/interface";
 import { useUser } from "src/hooks/useSharedState";
 import { Label } from "src/components/Label";
+import { createJoinUsers } from "src/lib/db";
 
 type Props = {
   broadcast: BroadcastType;
@@ -34,6 +35,7 @@ export const BroadcastItem: FC<Props> = ({ broadcast }) => {
         query: { id: id },
       });
     } else if (status === "IN_PROGRESS") {
+      // createJoinUsers(id, engivia.id, user);
       router.push({
         pathname: "/users/broadcasting",
         query: { id: id },
