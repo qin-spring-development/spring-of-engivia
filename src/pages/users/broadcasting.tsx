@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import {
   useSubscribeBroadcast,
@@ -16,12 +17,18 @@ const Broadcasting: NextPage = () => {
   const { user } = useUser();
   const router = useRouter();
   const broadcastId = router.query.id as string;
+
   const broadcast = useSubscribeBroadcast(broadcastId);
   const featureEngivia = useSubscribeFeatureEngivia(broadcastId);
-
   const likes = useSubscribeLikes(broadcastId, featureEngivia?.id, user.uid);
   const totalLikes = useSubscribeTotalLikes(broadcastId, featureEngivia?.id);
   const joinUsers = useSubscribeJoinUsers(broadcastId, featureEngivia?.id);
+
+  useEffect(() => {
+    if (broadcast?.status === "DONE") {
+      router.push("/broadcasts");
+    }
+  }, [broadcast?.status, broadcastId, router, broadcast]);
 
   const handleClick = async () => {
     voteLikes(broadcastId, featureEngivia?.id, user);

@@ -1,26 +1,34 @@
-import type { NextPage } from "next";
-import { useState } from "react";
-import { useRouter } from "next/router";
+import type { GetServerSideProps, NextPage } from "next";
+import { useEffect, useState } from "react";
+import router, { useRouter } from "next/router";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
-import {
-  useSubscribeEngivias,
-  useSubscribeBroadcast,
-} from "src/hooks/useSubscribe";
+import { useSubscribeBroadcast } from "src/hooks/useSubscribe";
 import { useUser } from "src/hooks/useSharedState";
 import { EngiviaList } from "src/components/Engivia/EngiviaList";
 import { deleteBroadcast, setYoutubeURL } from "src/lib/db";
 import { convertEmbedURL } from "src/lib/convertEmbedURL";
 import { Button } from "src/components/Button";
 import { Form } from "src/components/Form";
+import { getBroadcast, getEngivias } from "src/lib/db-admin";
+import { BroadcastType, EngiviaType } from "src/types/interface";
 
-const BroadcastDone: NextPage = () => {
+type Props = {
+  broadcast: BroadcastType;
+  engivias: EngiviaType[];
+};
+
+const BroadcastDone: NextPage<Props> = ({ broadcast, engivias }) => {
+  const { user } = useUser();
   const [url, setUrl] = useState<string>("");
   const router = useRouter();
   const broadcastId = router.query.id as string;
-  const engivias = useSubscribeEngivias(broadcastId);
-  const broadcast = useSubscribeBroadcast(broadcastId);
-  const { user } = useUser();
+
+  useEffect(() => {
+    if (broadcast === undefined) {
+      router.push("/broadcasts");
+    }
+  }, [router, broadcast]);
 
   const onDeleteBroadcast = () => {
     deleteBroadcast(broadcastId);
@@ -34,7 +42,7 @@ const BroadcastDone: NextPage = () => {
 
   return (
     <BaseLayout title="放送済み">
-      {/* <BroadcastTitle broadcastId={broadcastId} /> */}
+      <BroadcastTitle broadcast={broadcast} />
       <div className="flex flex-col items-center text-center">
         {broadcast?.broadCastUrl && (
           <iframe
@@ -84,5 +92,22 @@ const BroadcastDone: NextPage = () => {
 
 export default BroadcastDone;
 
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const broadcastId = context.query.id as string;
+  const broadcast = await getBroadcast(broadcastId);
+  const engivias = await getEngivias(broadcastId);
+  if (broadcast === undefined) {
+    return {
+      redirect: {
+        permanent: false, // 永続的なリダイレクトかどうか
+        destination: "/broadcasts", // リダイレクト先
+      },
+    };
+  } else {
+    return { props: { broadcast, engivias } };
+  }
+};
+
 // className = "flex relative justify-center items-center";
+// className = "absolute right-0";
 // className = "absolute right-0";
