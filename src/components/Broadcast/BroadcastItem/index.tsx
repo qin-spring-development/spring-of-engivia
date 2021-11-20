@@ -5,7 +5,7 @@ import { format, parseISO } from "date-fns";
 import { BroadcastType } from "src/types/interface";
 import { useUser } from "src/hooks/useSharedState";
 import { Label } from "src/components/Label";
-import { createJoinUsers } from "src/lib/db";
+// import { createJoinUsers } from "src/lib/db";
 
 type Props = {
   broadcast: BroadcastType;
