@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { db } from "src/lib/firebase";
 import { EngiviaType, BroadcastType, JoinUserType } from "src/types/interface";
 import { getEngivia } from "src/lib/db";
-import { useEngivias, useFeatureEngivia } from "src/hooks/useSharedState";
+import { initialEngiviaInfo } from "src/constant/initialState";
 
 export const useSubscribeBroadcast = (broadcastId?: string) => {
   const [broadcast, setBroadcast] = useState<BroadcastType>();
@@ -41,7 +41,7 @@ export const useSubscribeBroadcasts = () => {
 };
 
 export const useSubscribeFeatureEngivia = (broadcastId: string) => {
-  const { featureEngivia, setFeatureEngivia } = useFeatureEngivia();
+  const [featureEngivia, setFeatureEngivia] = useState<EngiviaType>();
 
   useEffect(() => {
     const unsubscribe = db
@@ -50,7 +50,7 @@ export const useSubscribeFeatureEngivia = (broadcastId: string) => {
       .onSnapshot(async (doc) => {
         const broadcast = doc.data();
         if (broadcast?.featureId === null) {
-          setFeatureEngivia(null);
+          setFeatureEngivia(undefined);
         } else {
           const engivia = (await getEngivia(
             broadcastId,
@@ -61,12 +61,11 @@ export const useSubscribeFeatureEngivia = (broadcastId: string) => {
       });
     return () => unsubscribe();
   }, [broadcastId, setFeatureEngivia]);
-
   return featureEngivia;
 };
 
 export const useSubscribeEngivias = (broadcastId: string) => {
-  const { engivias, setEngivias } = useEngivias();
+  const [engivias, setEngivias] = useState<EngiviaType[]>();
 
   useEffect(() => {
     const unsubscribe = db
@@ -87,6 +86,8 @@ export const useSubscribeEngivias = (broadcastId: string) => {
 };
 
 export const useSubscribeUserEngivia = (broadcastId: string, uid: string) => {
+  const [userEngivia, setUserEngivia] =
+    useState<EngiviaType>(initialEngiviaInfo);
   useEffect(() => {
     const unsubscribe = db
       .collection("broadcasts")
@@ -100,25 +101,24 @@ export const useSubscribeUserEngivia = (broadcastId: string, uid: string) => {
           (engivia) => engivia.postUser?.uid === uid
         );
 
-        if (engivia === null) {
-          // setUserEngivia(null);
+        if (engivia === undefined) {
+          setUserEngivia(initialEngiviaInfo);
         } else {
-          // setUserEngivia(engivia);
+          setUserEngivia(engivia);
         }
       });
     return () => unsubscribe();
   }, [broadcastId, uid]);
 
-  // return userEngivia;
+  return userEngivia;
 };
 
 export const useSubscribeLikes = (
   broadcastId: string,
-  engiviaId: string,
+  engiviaId: string | undefined,
   uid: string
 ) => {
   const [likes, setLikes] = useState<number>(0);
-
   useEffect(() => {
     const unsubscribe = db
       .collection("broadcasts")
@@ -139,7 +139,7 @@ export const useSubscribeLikes = (
 
 export const useSubscribeTotalLikes = (
   broadcastId: string,
-  engiviaId: string
+  engiviaId: string | undefined
 ) => {
   const [totalLikes, setTotalLikes] = useState<number>(0);
 
@@ -164,7 +164,7 @@ export const useSubscribeTotalLikes = (
 
 export const useSubscribeJoinUsers = (
   broadcastId: string,
-  engiviaId: string
+  engiviaId: string | undefined
 ) => {
   const [joinUsers, setJoinUsers] = useState<JoinUserType[]>([]);
 

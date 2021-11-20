@@ -1,28 +1,35 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
-import { EngiviaType, BroadcastType } from "src/types/interface";
 import { deleteEngivia } from "src/lib/db";
-import { getUserEngivia, getBroadcast } from "src/lib/db-admin";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
-import { initialEngiviaInfo } from "src/constant/initialState";
 import { Button } from "src/components/Button";
 import { EngiviaCard } from "src/components/Engivia/EngiviaCard";
 import { EngiviaInput } from "src/components/Engivia/EngiviaInput";
+import {
+  useSubscribeBroadcast,
+  useSubscribeUserEngivia,
+} from "src/hooks/useSubscribe";
+import { useUser } from "src/hooks/useSharedState";
 
-type Props = {
-  userEngivia: EngiviaType;
-  broadcast: BroadcastType;
-};
-
-const EngiviaRegistration: NextPage<Props> = ({ userEngivia, broadcast }) => {
+const EngiviaRegistration: NextPage = () => {
+  const { user } = useUser();
   const router = useRouter();
+  const broadcastId = router.query.id as string;
+  const broadcast = useSubscribeBroadcast(broadcastId);
+  const userEngivia = useSubscribeUserEngivia(broadcastId, user.uid);
   const [confirm, setConfirm] = useState<boolean>(true);
-  const [engiviaBody, setEngiviaBody] = useState<string>(userEngivia?.body);
+
+  useEffect(() => {
+    if (broadcast?.status === "IN_PROGRESS") {
+      router.push(`/users/broadcasting?id=${broadcastId}`);
+    }
+  }, [broadcast?.status, broadcastId, router]);
 
   const handleDeleteEngivia = () => {
-    deleteEngivia(broadcast.id, userEngivia.id);
+    deleteEngivia(broadcastId, userEngivia.id);
+    alert("削除しました");
     router.push("/broadcasts");
   };
   const handleEditEngivia = () => {
@@ -35,10 +42,9 @@ const EngiviaRegistration: NextPage<Props> = ({ userEngivia, broadcast }) => {
         <BroadcastTitle broadcast={broadcast} />
       </div>
 
-      {/* {userEngivia.id !== "" && confirm ? ( */}
-      {userEngivia !== undefined && confirm ? (
+      {userEngivia.id !== "" && confirm ? (
         <div>
-          <EngiviaCard engivia={userEngivia} engiviaBody={engiviaBody} />
+          <EngiviaCard engivia={userEngivia} />
           <div className="flex justify-center">
             <Button
               isSubmitting={false}
@@ -61,9 +67,8 @@ const EngiviaRegistration: NextPage<Props> = ({ userEngivia, broadcast }) => {
       ) : (
         <EngiviaInput
           userEngivia={userEngivia}
-          broadcast={broadcast}
-          engiviaBody={engiviaBody}
-          setEngiviaBody={setEngiviaBody}
+          broadcastId={broadcastId}
+          setConfirm={setConfirm}
         />
       )}
     </BaseLayout>
@@ -71,15 +76,3 @@ const EngiviaRegistration: NextPage<Props> = ({ userEngivia, broadcast }) => {
 };
 
 export default EngiviaRegistration;
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const broadcastId = context.query.id as string;
-  const uid = context.query.uid as string;
-  const userEngivia = await getUserEngivia(broadcastId, uid);
-  const broadcast = await getBroadcast(broadcastId);
-  if (!userEngivia) {
-    return { props: { initialEngiviaInfo, broadcast } };
-  } else {
-    return { props: { userEngivia, broadcast } };
-  }
-};

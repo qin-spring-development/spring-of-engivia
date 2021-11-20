@@ -1,4 +1,4 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import {
@@ -7,19 +7,18 @@ import {
   endBroadcast,
 } from "src/lib/db";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
-import { useSubscribeEngivias } from "src/hooks/useSubscribe";
-import { BroadcastType, EngiviaType } from "src/types/interface";
+import {
+  useSubscribeEngivias,
+  useSubscribeBroadcast,
+} from "src/hooks/useSubscribe";
+import { EngiviaType } from "src/types/interface";
 import { Button } from "src/components/Button";
-import { getBroadcast } from "src/lib/db-admin";
 
-type Props = {
-  broadcast: BroadcastType;
-};
-
-const Broadcasting: NextPage<Props> = ({ broadcast }) => {
+const Broadcasting: NextPage = () => {
   const router = useRouter();
-  const broadcastId = broadcast.id;
+  const broadcastId = router.query.id as string;
   const engivias = useSubscribeEngivias(broadcastId);
+  const broadcast = useSubscribeBroadcast(broadcastId);
 
   const onDisplay = async (broadcastId: string, engiviaId: string) => {
     updateBroadcastFeatureId(broadcastId, engiviaId, true);
@@ -107,9 +106,3 @@ const Broadcasting: NextPage<Props> = ({ broadcast }) => {
 };
 
 export default Broadcasting;
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const broadcastId = context.query.id as string;
-  const broadcast = await getBroadcast(broadcastId);
-  return { props: { broadcast } };
-};

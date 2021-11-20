@@ -17,6 +17,6 @@ export const initialEngiviaInfo = {
     image: "",
     name: "",
     uid: "",
-    totalLikes: 0,
   },
+  totalLikes: 0,
 };

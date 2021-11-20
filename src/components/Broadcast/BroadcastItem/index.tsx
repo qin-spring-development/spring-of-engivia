@@ -28,9 +28,14 @@ export const BroadcastItem: FC<Props> = ({ broadcast }) => {
         pathname: "/admin/broadcasting",
         query: { id: id },
       });
-    } else if (user.isAdmin && status === "IN_FEATURE") {
+    } else if (user.isAdmin && status === "IN_PROGRESS") {
       router.push({
         pathname: "/admin/broadcasting",
+        query: { id: id },
+      });
+    } else if (status === "IN_PROGRESS") {
+      router.push({
+        pathname: "/users/broadcasting",
         query: { id: id },
       });
     } else if (status === "BEFORE") {

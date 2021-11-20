@@ -33,7 +33,7 @@ const EngiviaConfirm: NextPage<Props> = ({ userEngivia, broadcast }) => {
     <BaseLayout title="放送一覧">
       <div>
         <BroadcastTitle broadcast={broadcast} />
-        <EngiviaCard engivia={userEngivia} />
+        {/* <EngiviaCard engivia={userEngivia} /> */}
         <div>
           <div className="flex justify-center">
             <Button

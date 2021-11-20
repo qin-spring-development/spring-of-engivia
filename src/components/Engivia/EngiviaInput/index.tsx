@@ -1,40 +1,36 @@
 import type { FC, ChangeEvent, Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 import { createEngivia, updateEngivia, createJoinUsers } from "src/lib/db";
-import { EngiviaType, BroadcastType } from "src/types/interface";
+import { EngiviaType } from "src/types/interface";
 import { Button } from "src/components/Button";
 import { useUser } from "src/hooks/useSharedState";
-import router from "next/router";
 
 type Props = {
   userEngivia: EngiviaType;
-  broadcast: BroadcastType;
-  engiviaBody: string;
-  setEngiviaBody: Dispatch<SetStateAction<string>>;
+  broadcastId: string;
+  setConfirm: Dispatch<SetStateAction<boolean>>;
 };
 
 export const EngiviaInput: FC<Props> = ({
   userEngivia,
-  broadcast,
-  engiviaBody,
-  setEngiviaBody,
+  broadcastId,
+  setConfirm,
 }) => {
   const { user } = useUser();
+  const [engiviaBody, setEngiviaBody] = useState<string>(userEngivia?.body);
   const handleOnChangeInput = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setEngiviaBody(e.target.value);
   };
 
   const HandleCreateEngivia = async () => {
-    const engivia = await createEngivia(broadcast.id, engiviaBody, user);
-    createJoinUsers(broadcast.id, engivia.id, user);
-    alert("保存しました");
-    router.push("/broadcasts");
+    const engivia = await createEngivia(broadcastId, engiviaBody, user);
+    createJoinUsers(broadcastId, engivia.id, user);
+    setConfirm(true);
   };
 
   const HandleUpdateEngivia = async () => {
-    updateEngivia(broadcast.id, userEngivia.id, engiviaBody);
-    alert("変更しました");
-    router.push("/broadcasts");
+    updateEngivia(broadcastId, userEngivia.id, engiviaBody);
+    setConfirm(true);
   };
 
   return (
@@ -55,9 +51,7 @@ export const EngiviaInput: FC<Props> = ({
           type="button"
           isPrimary={true}
           onClick={
-            userEngivia === undefined
-              ? HandleCreateEngivia
-              : HandleUpdateEngivia
+            userEngivia.id !== "" ? HandleUpdateEngivia : HandleCreateEngivia
           }
         >
           保存する

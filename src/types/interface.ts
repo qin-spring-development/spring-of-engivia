@@ -6,6 +6,11 @@ export type UserType = {
   provider: string;
   uid: string;
 };
+export type PostUserType = {
+  image: string;
+  name: string;
+  uid: string;
+};
 export type JoinUserType = {
   likes: number;
   name: string;
@@ -18,8 +23,7 @@ export type EngiviaType = {
   engiviaNumber: number;
   featureStatus: string;
   id: string;
-  joinUsers: JoinUserType[];
-  postUser: UserType;
+  postUser: PostUserType;
   totalLikes: number;
 };
 

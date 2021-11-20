@@ -181,7 +181,7 @@ export const updateEngivia = async (
 
 export const updateTotalLikes = async (
   broadcastId: string,
-  engiviaId: string
+  engiviaId: string | undefined
 ) => {
   const snapshot = await db
     .collection("broadcasts")
@@ -220,7 +220,7 @@ export const deleteEngivia = async (broadcastId: string, engiviaId: string) => {
 
 export const voteLikes = async (
   broadcastId: string,
-  engiviaId: string,
+  engiviaId: string | undefined,
   user: UserType
 ) => {
   const joinUserRef = await db
