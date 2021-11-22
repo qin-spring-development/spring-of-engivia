@@ -1,11 +1,9 @@
 import React from "react";
-import { createPortal } from "react-dom";
 import {
   CancelDrop,
   closestCorners,
   CollisionDetection,
   DndContext,
-  DragOverlay,
   KeyboardSensor,
   Modifiers,
   PointerSensor,
@@ -13,10 +11,7 @@ import {
   UniqueIdentifier,
   useSensors,
   useSensor,
-  defaultDropAnimation,
-  DropAnimation,
 } from "@dnd-kit/core";
-
 import {
   SortableContext,
   arrayMove,
@@ -24,55 +19,14 @@ import {
   verticalListSortingStrategy,
   SortingStrategy,
 } from "@dnd-kit/sortable";
+import { SortableItem } from "src/components/Engivia/Item";
 
-import { Item, SortableItem } from "src/components/Engivia/Item";
-
-function insert<T>(arr: T[], index: number, elem: T) {
-  const copy = arr.slice();
-  copy.splice(index, 0, elem);
-  return copy;
-}
-
-const DroppableContainer = ({
-  children,
-  id,
-}: {
-  children: React.ReactNode;
-  columns?: number;
+type TestType = {
   id: string;
-  items: string[];
-  getStyle: ({
-    isOverContainer,
-  }: {
-    isOverContainer: boolean;
-  }) => React.CSSProperties;
-}) => {
-  const { setNodeRef } = useDroppable({ id });
-
-  return (
-    <ul ref={setNodeRef} className={"p-2 bg-gray-200 rounded"}>
-      <div className="grid gap-2 mt-2 text-sm">{children}</div>
-    </ul>
-  );
+  name: string;
 };
 
-const dropAnimation: DropAnimation = {
-  ...defaultDropAnimation,
-  dragSourceOpacity: 0.5,
-};
-
-export const defaultContainerStyle = ({
-  isOverContainer,
-}: {
-  isOverContainer: boolean;
-}) => ({
-  marginTop: 40,
-  backgroundColor: isOverContainer
-    ? "rgb(235,235,235,1)"
-    : "rgba(246,246,246,1)",
-});
-
-type Items = Record<string, string[]>;
+type Items = Record<string, TestType[]>;
 
 interface Props {
   adjustScale?: boolean;
@@ -100,7 +54,45 @@ interface Props {
   vertical?: boolean;
 }
 
-const BroadcastingDnd = ({
+export const VOID_ID = "void";
+
+const DroppableContainer = ({
+  children,
+  id,
+}: {
+  children: React.ReactNode;
+  columns?: number;
+  id: string;
+  items: string[];
+  getStyle: ({
+    isOverContainer,
+  }: {
+    isOverContainer: boolean;
+  }) => React.CSSProperties;
+}) => {
+  const { setNodeRef } = useDroppable({
+    id,
+  });
+
+  return (
+    <ul ref={setNodeRef} className={"p-2 bg-gray-200 rounded"}>
+      <div className="grid gap-2 mt-2 text-sm">{children}</div>
+    </ul>
+  );
+};
+
+const defaultContainerStyle = ({
+  isOverContainer,
+}: {
+  isOverContainer: boolean;
+}) => ({
+  marginTop: 40,
+  backgroundColor: isOverContainer
+    ? "rgb(235,235,235,1)"
+    : "rgba(246,246,246,1)",
+});
+
+const MultipleContainers = ({
   cancelDrop,
   collisionDetection = closestCorners,
   columns,
@@ -108,14 +100,25 @@ const BroadcastingDnd = ({
   getContainerStyle = defaultContainerStyle,
   modifiers,
   strategy = verticalListSortingStrategy,
-  trashable = false,
 }: Props) => {
   const [items, setItems] = React.useState<Items>(
     () =>
       initialItems ?? {
-        フィーチャー前: ["A1", "A2", "A3"],
-        フィーチャー中: ["B1", "B2", "B3"],
-        フィーチャー後: ["C1", "C2", "C3"],
+        フィーチャー前: [
+          { id: "1", name: "one" },
+          { id: "2", name: "twe" },
+          { id: "3", name: "three" },
+        ],
+        フィーチャー中: [
+          { id: "4", name: "four" },
+          { id: "5", name: "five" },
+          { id: "6", name: "six" },
+        ],
+        フィーチャー後: [
+          { id: "7", name: "seven" },
+          { id: "8", name: "eight" },
+          { id: "9", name: "nine" },
+        ],
       }
   );
   const [clonedItems, setClonedItems] = React.useState<Items | null>(null);
@@ -130,20 +133,21 @@ const BroadcastingDnd = ({
     if (id in items) {
       return id;
     }
-
-    return Object.keys(items).find((key) => items[key].includes(id));
+    const container = Object.keys(items).find((key) =>
+      items[key].find((value) => value.id === id)
+    );
+    return container;
   };
 
   const onDragCancel = () => {
     if (clonedItems) {
-      // Reset items to their original state in case items have been
-      // Dragged across containrs
       setItems(clonedItems);
     }
 
     setActiveId(null);
     setClonedItems(null);
   };
+
   return (
     <DndContext
       sensors={sensors}
@@ -154,7 +158,6 @@ const BroadcastingDnd = ({
       }}
       onDragOver={({ active, over }) => {
         const overId = over?.id;
-
         if (!overId) {
           return;
         }
@@ -170,8 +173,10 @@ const BroadcastingDnd = ({
           setItems((items) => {
             const activeItems = items[activeContainer];
             const overItems = items[overContainer];
-            const overIndex = overItems.indexOf(overId);
-            const activeIndex = activeItems.indexOf(active.id);
+            const overIndex = overItems.findIndex((item) => item.id === overId);
+            const activeIndex = activeItems.findIndex(
+              (item) => item.id === active.id
+            );
 
             let newIndex: number;
 
@@ -194,7 +199,9 @@ const BroadcastingDnd = ({
             return {
               ...items,
               [activeContainer]: [
-                ...items[activeContainer].filter((item) => item !== active.id),
+                ...items[activeContainer].filter(
+                  (item) => item.id !== active.id
+                ),
               ],
               [overContainer]: insert(
                 items[overContainer],
@@ -207,18 +214,22 @@ const BroadcastingDnd = ({
       }}
       onDragEnd={({ active, over }) => {
         const activeContainer = findContainer(active.id);
-
         if (!activeContainer) {
           setActiveId(null);
           return;
         }
 
         const overId = over?.id as string;
+
         const overContainer = findContainer(overId);
 
         if (activeContainer && overContainer) {
-          const activeIndex = items[activeContainer].indexOf(active.id);
-          const overIndex = items[overContainer].indexOf(overId);
+          const activeIndex = items[activeContainer].findIndex(
+            (item) => item.id === active.id
+          );
+          const overIndex = items[overContainer].findIndex(
+            (item) => item.id === overId
+          );
 
           if (activeIndex !== overIndex) {
             setItems((items) => ({
@@ -239,38 +250,31 @@ const BroadcastingDnd = ({
       modifiers={modifiers}
     >
       <div className="inline-grid grid-flow-col gap-4 items-start p-8 w-full h-screen font-sans bg-blue-400">
-        {Object.keys(items).map((containerId) => (
-          <SortableContext
-            key={containerId}
-            items={items[containerId]}
-            strategy={strategy}
-          >
+        {Object.entries(items).map(([key, values]) => (
+          <SortableContext key={key} items={values} strategy={strategy}>
             <DroppableContainer
-              id={containerId}
+              id={key}
               columns={columns}
-              items={items[containerId]}
+              items={values.map((value) => value.id)}
               getStyle={getContainerStyle}
             >
-              <h1>{containerId}</h1>
-              {items[containerId].map((value) => {
-                return (
-                  <SortableItem key={value} id={value}>
-                    {value}
-                  </SortableItem>
-                );
-              })}
+              <h1>{key}</h1>
+              {values.map((item) => (
+                <SortableItem key={item.id} id={item.id}>
+                  {item.name}
+                </SortableItem>
+              ))}
             </DroppableContainer>
           </SortableContext>
         ))}
       </div>
-      {createPortal(
-        <DragOverlay dropAnimation={dropAnimation} adjustScale={true}>
-          {activeId ? <Item id={activeId}>{activeId}</Item> : null}
-        </DragOverlay>,
-        document.body
-      )}
     </DndContext>
   );
 };
+function insert<T>(arr: T[], index: number, elem: T) {
+  const copy = arr.slice();
+  copy.splice(index, 0, elem);
+  return copy;
+}
 
-export default BroadcastingDnd;
+export default MultipleContainers;
