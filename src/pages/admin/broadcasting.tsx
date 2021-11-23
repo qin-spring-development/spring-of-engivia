@@ -6,7 +6,7 @@ import {
   CollisionDetection,
   DndContext,
   KeyboardSensor,
-  Modifiers,
+  // Modifiers,
   PointerSensor,
   useDroppable,
   UniqueIdentifier,
@@ -20,7 +20,7 @@ import {
   verticalListSortingStrategy,
   SortingStrategy,
 } from "@dnd-kit/sortable";
-import { SortableItem } from "src/components/Engivia/Item";
+import { SortableItem } from "src/components/Engivia/SortableItem";
 import { getBroadcast, getEngivias } from "src/lib/db-admin";
 import { GetServerSideProps } from "next";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
@@ -57,7 +57,7 @@ interface Props {
   handle?: boolean;
   renderItem?: any;
   strategy?: SortingStrategy;
-  modifiers?: Modifiers;
+  // // modifiers?: Modifiers;
   trashable?: boolean;
   vertical?: boolean;
   engivias: EngiviaType[];
@@ -108,11 +108,10 @@ const Broadcasting = ({
   columns,
   items: initialItems,
   getContainerStyle = defaultContainerStyle,
-  modifiers,
+  // modifiers,
   strategy = verticalListSortingStrategy,
   engivias,
-}: // broadcast,
-Props) => {
+}: Props) => {
   const [items, setItems] = useState<Items>(
     () =>
       initialItems ?? {
@@ -123,6 +122,10 @@ Props) => {
   );
   const [clonedItems, setClonedItems] = useState<Items | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [isInFeature, setIsInFeature] = useState<boolean>(false);
+  const [inFeatureId, setInFeatureId] = useState<string>("");
+  console.log(isInFeature);
+  console.log(inFeatureId);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -134,11 +137,11 @@ Props) => {
   const broadcast = useSubscribeBroadcast(router.query.id as string);
   const broadcastId = broadcast?.id as string;
 
-  useEffect(() => {
-    if (!user.isAdmin) {
-      router.push("/broadcasts");
-    }
-  }, [router, user]);
+  // useEffect(() => {
+  //   if (!user.isAdmin) {
+  //     router.push("/broadcasts");
+  //   }
+  // }, [router, user]);
 
   const findContainer = (id: string) => {
     if (id in items) {
@@ -295,9 +298,14 @@ Props) => {
             }
 
             const overId = over?.id as string;
-
             const overContainer = findContainer(overId);
-
+            if (activeContainer && overContainer === "フィーチャー中") {
+              setIsInFeature(true);
+              setInFeatureId(overId);
+            } else {
+              setIsInFeature(false);
+              setInFeatureId("");
+            }
             if (activeContainer && overContainer) {
               const activeIndex = items[activeContainer].findIndex(
                 (item) => item.id === active.id
@@ -322,7 +330,7 @@ Props) => {
           }}
           cancelDrop={cancelDrop}
           onDragCancel={onDragCancel}
-          modifiers={modifiers}
+          // // modifiers={modifiers}
         >
           <div className="inline-grid grid-cols-3 gap-4 items-start w-full h-screen">
             {Object.entries(items).map(([key, values]) => (
@@ -334,7 +342,8 @@ Props) => {
                   getStyle={getContainerStyle}
                 >
                   <h1 className="items-center py-4 text-xl font-bold text-center bg-gray-300 rounded-md">
-                    {key}
+                    {/* {key} */}
+                    {inFeatureId}
                   </h1>
                   {values.map((engivia) => (
                     <SortableItem key={engivia.id} engivia={engivia} />
