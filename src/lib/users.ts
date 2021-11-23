@@ -1,4 +1,4 @@
-import { db } from "src/lib/firebase/config";
+import { db } from "src/lib/firebase";
 
 export type ReqUser = {
   uid: string;

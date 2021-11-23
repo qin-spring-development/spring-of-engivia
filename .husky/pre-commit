@@ -14,21 +14,21 @@ yarn check-types ||
 # Check Prettier standards
 yarn check-format ||
 (
-  echo "🤢🤮🤢🤮 Its F**KING RAW - Your styling looks disgusting. 🤢🤮🤢🤮
-        Prettier check Faild. Run yarn format, add changes and try commit again.";
+  echo "🤢🤮🤢🤮 ぐごごごご... スタイルやばくね 🤢🤮🤢🤮
+        Prettierチェックおかしいよ. yarn formatしてもっかいコミットしてちょ.";
   false;
 )
 
 # Check ESLint standards
 yarn check-lint ||
 (
-  echo "😡🧶👋😡 Get that weaks s**t out of here! 😡🧶👋😡
-        ESLint check Faild. Make the required changes listed above, add changes and try to commit again.";
+  echo "😡🧶👋😡 うげー! なんでこった！ 😡🧶👋😡
+        ESLintチェックで引っかかったぜ. この上のやつ確認して, もっかいコミットやで.";
   false;
 )
 
 # If everything passes... try to run build
-echo "🤔🤔🤔🤔... Alright... Code looks good to me... Trying to build now. 🤔🤔🤔🤔"
+echo "🤔🤔🤔🤔... いい感じかも... 今ビルド中よ... 🤔🤔🤔🤔"
 
 # Check ESLint standards
 yarn check-lint ||
@@ -39,4 +39,4 @@ yarn check-lint ||
 )
 
 # If it builds we can commit
-echo "✅ ✅ ✅  You win this time... I am committing this now. ✅ ✅ ✅ "
+echo "✅ ✅ ✅  やったね! コミット完了 ✅ ✅ ✅ "

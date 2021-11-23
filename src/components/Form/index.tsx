@@ -3,7 +3,7 @@ import { FC, ChangeEventHandler } from "react";
 export type Props = {
   className?: string;
   type: string;
-  value: string;
+  value?: string;
   id?: string;
   name?: string;
   placeholder?: string;

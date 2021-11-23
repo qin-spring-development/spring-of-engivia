@@ -1,11 +1,6 @@
 import NextAuth, { Account, Profile, Session, User } from "next-auth";
 import Providers from "next-auth/providers";
-import {
-  createUser,
-  getUser,
-  ReqUser,
-  ResUser,
-} from "src/lib/firebase/firestore/users";
+import { createUser, getUser, ReqUser, ResUser } from "src/lib/users";
 
 const options = {
   // Configure one or more authentication providers
