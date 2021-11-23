@@ -23,6 +23,7 @@ const BroadcastDone: NextPage<Props> = ({ broadcast, engivias }) => {
   const [url, setUrl] = useState<string>("");
   const router = useRouter();
   const broadcastId = router.query.id as string;
+  // const broadcast = useSubscribeBroadcast(broadcastId);
 
   useEffect(() => {
     if (broadcast === undefined) {
@@ -38,6 +39,7 @@ const BroadcastDone: NextPage<Props> = ({ broadcast, engivias }) => {
   const onSetYoutubeURL = async () => {
     const convertedUrl = convertEmbedURL(url);
     setYoutubeURL(broadcastId, convertedUrl);
+    router.reload();
   };
 
   return (

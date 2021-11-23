@@ -23,9 +23,9 @@ export const EngiviaInput: FC<Props> = ({
   };
 
   const HandleCreateEngivia = async () => {
-    // await createEngivia(broadcastId, engiviaBody, user);
-    const engivia = await createEngivia(broadcastId, engiviaBody, user);
-    createJoinUsers(broadcastId, engivia.id, user);
+    await createEngivia(broadcastId, engiviaBody, user);
+    // const engivia = await createEngivia(broadcastId, engiviaBody, user);
+    // createJoinUsers(broadcastId, engivia.id, user);
     setConfirm(true);
   };
 
