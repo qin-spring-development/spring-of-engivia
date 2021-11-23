@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import {
   CancelDrop,
@@ -33,6 +33,7 @@ import { useSubscribeBroadcast } from "src/hooks/useSubscribe";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
 import { BroadcastType, EngiviaType } from "src/types/interface";
 import { Button } from "src/components/Button";
+import { useUser } from "src/hooks/useSharedState";
 
 type Items = Record<string, EngiviaType[]>;
 interface Props {
@@ -128,9 +129,17 @@ Props) => {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+  const { user } = useUser();
   const router = useRouter();
   const broadcast = useSubscribeBroadcast(router.query.id as string);
   const broadcastId = broadcast?.id as string;
+
+  useEffect(() => {
+    if (!user.isAdmin) {
+      router.push("/broadcasts");
+    }
+  }, [router, user]);
+
   const findContainer = (id: string) => {
     if (id in items) {
       return id;
@@ -138,6 +147,7 @@ Props) => {
     const container = Object.keys(items).find((key) =>
       items[key].find((value) => value.id === id)
     );
+
     return container;
   };
 

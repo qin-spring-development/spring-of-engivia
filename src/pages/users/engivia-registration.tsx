@@ -25,7 +25,10 @@ const EngiviaRegistration: NextPage = () => {
     if (broadcast?.status === "IN_PROGRESS") {
       router.push(`/users/broadcasting?id=${broadcastId}`);
     }
-  }, [broadcast?.status, broadcastId, router]);
+    if (user.isAdmin) {
+      router.push(`/admin/broadcasting?id=${broadcastId}`);
+    }
+  }, [broadcast?.status, broadcastId, router, user]);
 
   const handleDeleteEngivia = () => {
     deleteEngivia(broadcastId, userEngivia.id);

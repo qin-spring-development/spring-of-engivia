@@ -119,7 +119,7 @@ export const createEngivia = async (
   const engivia = {
     body: engiviaBody,
     createdAt: new Date().toISOString(),
-    // engiviaNumber: 0, // なぜか初期値が0で取得してしまう
+    engiviaNumber: null,
     featureStatus: "BEFORE",
     id: engiviaRef.id,
     postUser: {
@@ -131,18 +131,18 @@ export const createEngivia = async (
   };
   engiviaRef.set(engivia);
 
-  const engiviaLengthRef = await db
-    .collection("broadcasts")
-    .doc(broadcastId)
-    .collection("engivias")
-    .get();
+  // const engiviaLengthRef = await db
+  //   .collection("broadcasts")
+  //   .doc(broadcastId)
+  //   .collection("engivias")
+  //   .get();
 
-  const engiviaLength = engiviaLengthRef.docs.length;
-  engiviaRef.set({ engiviaNumber: engiviaLength }, { merge: true });
+  // const engiviaLength = engiviaLengthRef.docs.length;
+  // engiviaRef.set({ engiviaNumber: engiviaLength }, { merge: true });
 
-  const broadcastRef = await db.collection("broadcasts").doc(broadcastId);
+  // const broadcastRef = await db.collection("broadcasts").doc(broadcastId);
 
-  broadcastRef.set({ engiviaCount: engiviaLength }, { merge: true });
+  // broadcastRef.set({ engiviaCount: engiviaLength }, { merge: true });
   return engivia;
 };
 
