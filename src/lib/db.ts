@@ -259,6 +259,35 @@ export const voteLikes = async (
   }
 };
 
+export const addCreateNumber = async (
+  broadcastId: string,
+  engiviaId: string
+) => {
+  const broadcastRef = await db.collection("broadcasts").doc(broadcastId);
+  broadcastRef.set(
+    { engiviaCount: firebase.firestore.FieldValue.increment(1) },
+    { merge: true }
+  );
+
+  const broadcast = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .get()
+    .then((snapshot) => {
+      return snapshot.data();
+    });
+
+  const engiviaRef = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .doc(engiviaId);
+
+  if (broadcast) {
+    engiviaRef.set({ engiviaNumber: broadcast.engiviaCount }, { merge: true });
+  }
+};
+
 export const setYoutubeURL = async (broadcastId: string, url: string) => {
   db.collection("broadcasts")
     .doc(broadcastId)

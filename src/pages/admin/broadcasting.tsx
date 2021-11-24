@@ -28,6 +28,7 @@ import {
   updateBroadcastFeatureId,
   beginBroadcast,
   endBroadcast,
+  addCreateNumber,
 } from "src/lib/db";
 import { useSubscribeBroadcast } from "src/hooks/useSubscribe";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
@@ -157,6 +158,11 @@ const Broadcasting = ({
 
     setActiveId(null);
     setClonedItems(null);
+  };
+
+  const handleTitleCall = async () => {
+    await updateBroadcastFeatureId(broadcastId, inFeatureId, false);
+    await addCreateNumber(broadcastId, inFeatureId);
   };
 
   const handleBeginBroadcast = () => {
@@ -351,9 +357,7 @@ const Broadcasting = ({
                 type="button"
                 isSubmitting={inFeatureId === "" ? true : false}
                 isPrimary={true}
-                onClick={() =>
-                  updateBroadcastFeatureId(broadcastId, inFeatureId, false)
-                }
+                onClick={handleTitleCall}
               >
                 タイトルコールする
               </Button>
