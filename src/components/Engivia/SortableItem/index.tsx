@@ -1,14 +1,16 @@
 import type { FC } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { EngiviaType } from "src/types/interface";
+import { BroadcastType, EngiviaType } from "src/types/interface";
 
 type Props = {
   engivia: EngiviaType;
+  broadcast: BroadcastType | undefined;
 };
 
-export const SortableItem: FC<Props> = ({ engivia }) => {
-  const sortable = useSortable({ id: engivia.id });
+export const SortableItem: FC<Props> = ({ engivia, broadcast }) => {
+  const isDisable = broadcast?.status === "IN_PROGRESS" ? false : true;
+  const sortable = useSortable({ id: engivia.id, disabled: isDisable });
   const { attributes, setNodeRef, listeners, transform, transition } = sortable;
 
   const style = {

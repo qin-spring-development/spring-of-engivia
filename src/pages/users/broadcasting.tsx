@@ -33,8 +33,8 @@ const Broadcasting: NextPage = () => {
   }, [broadcast?.status, broadcastId, router, broadcast]);
 
   const handleClick = async () => {
-    voteLikes(broadcastId, featureEngivia?.id, user);
-    updateTotalLikes(broadcastId, featureEngivia?.id);
+    await voteLikes(broadcastId, featureEngivia?.id, user);
+    await updateTotalLikes(broadcastId, featureEngivia?.id);
   };
 
   return (
@@ -67,10 +67,9 @@ const Broadcasting: NextPage = () => {
                 へえボタン
               </button>
               <div className="inline ml-10 text-4xl font-bold text-[#0284C7]">
-                <span>{likes}</span>
+                <span>{likes === undefined ? 0 : likes}</span>
                 <span className="text-xl">へえ</span>
               </div>
-              <p>{user.name}</p>
             </div>
           </div>
         </div>

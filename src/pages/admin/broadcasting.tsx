@@ -122,10 +122,7 @@ const Broadcasting = ({
   );
   const [clonedItems, setClonedItems] = useState<Items | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [isInFeature, setIsInFeature] = useState<boolean>(false);
   const [inFeatureId, setInFeatureId] = useState<string>("");
-  console.log(isInFeature);
-  console.log(inFeatureId);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -150,7 +147,6 @@ const Broadcasting = ({
     const container = Object.keys(items).find((key) =>
       items[key].find((value) => value.id === id)
     );
-
     return container;
   };
 
@@ -161,14 +157,6 @@ const Broadcasting = ({
 
     setActiveId(null);
     setClonedItems(null);
-  };
-
-  const onDisplay = async (broadcastId: string, engiviaId: string) => {
-    updateBroadcastFeatureId(broadcastId, engiviaId, true);
-  };
-
-  const onSetNull = (broadcastId: string, engiviaId: string) => {
-    updateBroadcastFeatureId(broadcastId, engiviaId, false);
   };
 
   const handleBeginBroadcast = () => {
@@ -231,7 +219,7 @@ const Broadcasting = ({
             setClonedItems(items);
           }}
           onDragOver={({ active, over }) => {
-            const overId = over?.id;
+            const overId = over?.id as string;
             if (!overId) {
               return;
             }
@@ -291,6 +279,11 @@ const Broadcasting = ({
             }
           }}
           onDragEnd={({ active, over }) => {
+            if (items["フィーチャー中"].length > 1) {
+              console.log("だめよ");
+            } else {
+              console.log("いいよ");
+            }
             const activeContainer = findContainer(active.id);
             if (!activeContainer) {
               setActiveId(null);
@@ -300,11 +293,10 @@ const Broadcasting = ({
             const overId = over?.id as string;
             const overContainer = findContainer(overId);
             if (activeContainer && overContainer === "フィーチャー中") {
-              setIsInFeature(true);
               setInFeatureId(overId);
             } else {
-              setIsInFeature(false);
               setInFeatureId("");
+              updateBroadcastFeatureId(broadcastId, overId, true);
             }
             if (activeContainer && overContainer) {
               const activeIndex = items[activeContainer].findIndex(
@@ -342,15 +334,30 @@ const Broadcasting = ({
                   getStyle={getContainerStyle}
                 >
                   <h1 className="items-center py-4 text-xl font-bold text-center bg-gray-300 rounded-md">
-                    {/* {key} */}
-                    {inFeatureId}
+                    {key}
                   </h1>
                   {values.map((engivia) => (
-                    <SortableItem key={engivia.id} engivia={engivia} />
+                    <SortableItem
+                      key={engivia.id}
+                      engivia={engivia}
+                      broadcast={broadcast}
+                    />
                   ))}
                 </DroppableContainer>
               </SortableContext>
             ))}
+            {inFeatureId !== "" && broadcast?.status === "IN_PROGRESS" && (
+              <Button
+                type="button"
+                isSubmitting={inFeatureId === "" ? true : false}
+                isPrimary={true}
+                onClick={() =>
+                  updateBroadcastFeatureId(broadcastId, inFeatureId, false)
+                }
+              >
+                タイトルコールする
+              </Button>
+            )}
           </div>
         </DndContext>
       </div>

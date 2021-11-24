@@ -65,20 +65,19 @@ export const updateBroadcastFeatureId = async (
   engiviaId: string,
   isNull: boolean
 ) => {
-  const engivia = await db
-    .collection("broadcasts")
-    .doc(broadcastId)
-    .collection("engivias")
-    .doc(engiviaId)
-    .get()
-    .then((snapshot) => {
-      return snapshot.data();
-    });
-
   const broadcastRef = db.collection("broadcasts").doc(broadcastId);
-  if (!isNull) {
+  if (isNull) {
     await broadcastRef.set({ featureId: null }, { merge: true });
   } else {
+    const engivia = await db
+      .collection("broadcasts")
+      .doc(broadcastId)
+      .collection("engivias")
+      .doc(engiviaId)
+      .get()
+      .then((snapshot) => {
+        return snapshot.data();
+      });
     await broadcastRef.set({ featureId: engivia?.id }, { merge: true });
   }
 };
