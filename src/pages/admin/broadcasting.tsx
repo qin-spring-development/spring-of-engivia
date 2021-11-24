@@ -1,22 +1,17 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import {
-  CancelDrop,
   closestCorners,
   CollisionDetection,
   DndContext,
-  KeyboardSensor,
-  // Modifiers,
   PointerSensor,
   useDroppable,
-  UniqueIdentifier,
   useSensors,
   useSensor,
 } from "@dnd-kit/core";
 import {
   SortableContext,
   arrayMove,
-  sortableKeyboardCoordinates,
   verticalListSortingStrategy,
   SortingStrategy,
 } from "@dnd-kit/sortable";
@@ -38,52 +33,40 @@ import { useUser } from "src/hooks/useSharedState";
 
 type Items = Record<string, EngiviaType[]>;
 interface Props {
-  adjustScale?: boolean;
-  cancelDrop?: CancelDrop;
   collisionDetection?: CollisionDetection;
-  columns?: number;
-  getItemStyles?(args: {
-    value: UniqueIdentifier;
-    index: number;
-    overIndex: number;
-    isDragging: boolean;
-    containerId: UniqueIdentifier;
-    isSorting: boolean;
-    isDragOverlay: boolean;
-  }): React.CSSProperties;
-  wrapperStyle?(args: { index: number }): React.CSSProperties;
-  getContainerStyle?(args: { isOverContainer: boolean }): React.CSSProperties;
-  itemCount?: number;
-  items?: Items;
-  handle?: boolean;
-  renderItem?: any;
   strategy?: SortingStrategy;
-  // // modifiers?: Modifiers;
-  trashable?: boolean;
-  vertical?: boolean;
+  items?: Items;
   engivias: EngiviaType[];
   broadcast: BroadcastType;
 }
 
-export const VOID_ID = "void";
+function insert<T>(arr: T[], index: number, elem: T) {
+  const copy = arr.slice();
+  copy.splice(index, 0, elem);
+  return copy;
+}
+
+// DroppableContainerをまとめる
+// DroppableContainerをまとめる
+// DroppableContainerをまとめる
+// DroppableContainerをまとめる
+// DroppableContainerをまとめる
+// DroppableContainerをまとめる
+// DroppableContainerをまとめる
+// DroppableContainerをまとめる
+// DroppableContainerをまとめる
+// DroppableContainerをまとめる
+// DroppableContainerをまとめる
 
 const DroppableContainer = ({
   children,
   id,
 }: {
   children: React.ReactNode;
-  columns?: number;
   id: string;
   items: string[];
-  getStyle: ({
-    isOverContainer,
-  }: {
-    isOverContainer: boolean;
-  }) => React.CSSProperties;
 }) => {
-  const { setNodeRef } = useDroppable({
-    id,
-  });
+  const { setNodeRef } = useDroppable({ id });
 
   return (
     <ul ref={setNodeRef}>
@@ -92,44 +75,20 @@ const DroppableContainer = ({
   );
 };
 
-const defaultContainerStyle = ({
-  isOverContainer,
-}: {
-  isOverContainer: boolean;
-}) => ({
-  marginTop: 40,
-  backgroundColor: isOverContainer
-    ? "rgb(235,235,235,1)"
-    : "rgba(246,246,246,1)",
-});
-
 const Broadcasting = ({
-  cancelDrop,
   collisionDetection = closestCorners,
-  columns,
-  items: initialItems,
-  getContainerStyle = defaultContainerStyle,
-  // modifiers,
   strategy = verticalListSortingStrategy,
   engivias,
 }: Props) => {
-  const [items, setItems] = useState<Items>(
-    () =>
-      initialItems ?? {
-        フィーチャー前: engivias,
-        フィーチャー中: [],
-        フィーチャー後: [],
-      }
-  );
+  const [items, setItems] = useState<Items>({
+    フィーチャー前: engivias,
+    フィーチャー中: [],
+    フィーチャー後: [],
+  });
   const [clonedItems, setClonedItems] = useState<Items | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [inFeatureId, setInFeatureId] = useState<string>("");
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
+  const sensors = useSensors(useSensor(PointerSensor));
   const { user } = useUser();
   const router = useRouter();
   const broadcast = useSubscribeBroadcast(router.query.id as string);
@@ -326,18 +285,14 @@ const Broadcasting = ({
 
             setActiveId(null);
           }}
-          cancelDrop={cancelDrop}
           onDragCancel={onDragCancel}
-          // // modifiers={modifiers}
         >
           <div className="inline-grid grid-cols-3 gap-4 items-start w-full h-screen">
             {Object.entries(items).map(([key, values]) => (
               <SortableContext key={key} items={values} strategy={strategy}>
                 <DroppableContainer
                   id={key}
-                  columns={columns}
                   items={values.map((value) => value.id)}
-                  getStyle={getContainerStyle}
                 >
                   <h1 className="items-center py-4 text-xl font-bold text-center bg-gray-300 rounded-md">
                     {key}
@@ -368,11 +323,6 @@ const Broadcasting = ({
     </BaseLayout>
   );
 };
-function insert<T>(arr: T[], index: number, elem: T) {
-  const copy = arr.slice();
-  copy.splice(index, 0, elem);
-  return copy;
-}
 
 export default Broadcasting;
 
