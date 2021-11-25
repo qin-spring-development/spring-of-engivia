@@ -2,6 +2,7 @@ import type { FC } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { BroadcastType, EngiviaType } from "src/types/interface";
+import { adjustScale } from "@dnd-kit/core/dist/utilities";
 
 type Props = {
   engivia: EngiviaType;
@@ -21,7 +22,7 @@ export const SortableItem: FC<Props> = ({ engivia, broadcast }) => {
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <div className="py-4 px-4 bg-white rounded-md shadow-md">
+      <div className="z-10 py-4 px-4 bg-white rounded-md shadow-md">
         <span className="text-lg">{engivia.body}</span>
         <div className="flex items-center mt-4">
           <img

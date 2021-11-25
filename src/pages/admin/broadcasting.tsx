@@ -23,7 +23,7 @@ import {
   updateBroadcastFeatureId,
   beginBroadcast,
   endBroadcast,
-  addCreateNumber,
+  incrementEngiviaNumber,
 } from "src/lib/db";
 import { useSubscribeBroadcast } from "src/hooks/useSubscribe";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
@@ -45,18 +45,6 @@ function insert<T>(arr: T[], index: number, elem: T) {
   copy.splice(index, 0, elem);
   return copy;
 }
-
-// DroppableContainerをまとめる
-// DroppableContainerをまとめる
-// DroppableContainerをまとめる
-// DroppableContainerをまとめる
-// DroppableContainerをまとめる
-// DroppableContainerをまとめる
-// DroppableContainerをまとめる
-// DroppableContainerをまとめる
-// DroppableContainerをまとめる
-// DroppableContainerをまとめる
-// DroppableContainerをまとめる
 
 const DroppableContainer = ({
   children,
@@ -121,7 +109,7 @@ const Broadcasting = ({
 
   const handleTitleCall = async () => {
     await updateBroadcastFeatureId(broadcastId, inFeatureId, false);
-    await addCreateNumber(broadcastId, inFeatureId);
+    await incrementEngiviaNumber(broadcastId, inFeatureId);
   };
 
   const handleBeginBroadcast = () => {
@@ -176,149 +164,170 @@ const Broadcasting = ({
             )}
           </div>
         </div>
-        <DndContext
-          sensors={sensors}
-          collisionDetection={collisionDetection}
-          onDragStart={({ active }) => {
-            setActiveId(active.id);
-            setClonedItems(items);
-          }}
-          onDragOver={({ active, over }) => {
-            const overId = over?.id as string;
-            if (!overId) {
-              return;
-            }
+        <div className="relative">
+          <DndContext
+            sensors={sensors}
+            collisionDetection={collisionDetection}
+            onDragStart={({ active }) => {
+              setActiveId(active.id);
+              setClonedItems(items);
+            }}
+            onDragOver={({ active, over }) => {
+              const overId = over?.id as string;
+              if (!overId) {
+                return;
+              }
 
-            const overContainer = findContainer(overId);
-            const activeContainer = findContainer(active.id);
+              const overContainer = findContainer(overId);
+              const activeContainer = findContainer(active.id);
 
-            if (!overContainer || !activeContainer) {
-              return;
-            }
+              if (!overContainer || !activeContainer) {
+                return;
+              }
 
-            if (activeContainer !== overContainer) {
-              setItems((items) => {
-                const activeItems = items[activeContainer];
-                const overItems = items[overContainer];
-                const overIndex = overItems.findIndex(
-                  (item) => item.id === overId
-                );
-                const activeIndex = activeItems.findIndex(
+              if (activeContainer !== overContainer) {
+                setItems((items) => {
+                  const activeItems = items[activeContainer];
+                  const overItems = items[overContainer];
+                  const overIndex = overItems.findIndex(
+                    (item) => item.id === overId
+                  );
+                  const activeIndex = activeItems.findIndex(
+                    (item) => item.id === active.id
+                  );
+
+                  let newIndex: number;
+
+                  if (overId in items) {
+                    newIndex = overItems.length + 1;
+                  } else {
+                    const isBelowLastItem =
+                      over &&
+                      overIndex === overItems.length - 1 &&
+                      active.rect.current.translated &&
+                      active.rect.current.translated.offsetTop >
+                        over.rect.offsetTop + over.rect.height;
+
+                    const modifier = isBelowLastItem ? 1 : 0;
+
+                    newIndex =
+                      overIndex >= 0
+                        ? overIndex + modifier
+                        : overItems.length + 1;
+                  }
+
+                  return {
+                    ...items,
+                    [activeContainer]: [
+                      ...items[activeContainer].filter(
+                        (item) => item.id !== active.id
+                      ),
+                    ],
+                    [overContainer]: insert(
+                      items[overContainer],
+                      newIndex,
+                      items[activeContainer][activeIndex]
+                    ),
+                  };
+                });
+              }
+            }}
+            onDragEnd={({ active, over }) => {
+              if (items["フィーチャー中"].length === 1) {
+                console.log("disabledが発動して欲しい");
+              } else {
+                console.log("いいよ");
+              }
+              const activeContainer = findContainer(active.id);
+              if (!activeContainer) {
+                setActiveId(null);
+                return;
+              }
+
+              const overId = over?.id as string;
+              const overContainer = findContainer(overId);
+              if (activeContainer && overContainer === "フィーチャー中") {
+                setInFeatureId(overId);
+              } else {
+                setInFeatureId("");
+                updateBroadcastFeatureId(broadcastId, overId, true);
+              }
+              if (activeContainer && overContainer) {
+                const activeIndex = items[activeContainer].findIndex(
                   (item) => item.id === active.id
                 );
+                const overIndex = items[overContainer].findIndex(
+                  (item) => item.id === overId
+                );
 
-                let newIndex: number;
-
-                if (overId in items) {
-                  newIndex = overItems.length + 1;
-                } else {
-                  const isBelowLastItem =
-                    over &&
-                    overIndex === overItems.length - 1 &&
-                    active.rect.current.translated &&
-                    active.rect.current.translated.offsetTop >
-                      over.rect.offsetTop + over.rect.height;
-
-                  const modifier = isBelowLastItem ? 1 : 0;
-
-                  newIndex =
-                    overIndex >= 0
-                      ? overIndex + modifier
-                      : overItems.length + 1;
-                }
-
-                return {
-                  ...items,
-                  [activeContainer]: [
-                    ...items[activeContainer].filter(
-                      (item) => item.id !== active.id
+                if (activeIndex !== overIndex) {
+                  setItems((items) => ({
+                    ...items,
+                    [overContainer]: arrayMove(
+                      items[overContainer],
+                      activeIndex,
+                      overIndex
                     ),
-                  ],
-                  [overContainer]: insert(
-                    items[overContainer],
-                    newIndex,
-                    items[activeContainer][activeIndex]
-                  ),
-                };
-              });
-            }
-          }}
-          onDragEnd={({ active, over }) => {
-            if (items["フィーチャー中"].length > 1) {
-              console.log("だめよ");
-            } else {
-              console.log("いいよ");
-            }
-            const activeContainer = findContainer(active.id);
-            if (!activeContainer) {
-              setActiveId(null);
-              return;
-            }
-
-            const overId = over?.id as string;
-            const overContainer = findContainer(overId);
-            if (activeContainer && overContainer === "フィーチャー中") {
-              setInFeatureId(overId);
-            } else {
-              setInFeatureId("");
-              updateBroadcastFeatureId(broadcastId, overId, true);
-            }
-            if (activeContainer && overContainer) {
-              const activeIndex = items[activeContainer].findIndex(
-                (item) => item.id === active.id
-              );
-              const overIndex = items[overContainer].findIndex(
-                (item) => item.id === overId
-              );
-
-              if (activeIndex !== overIndex) {
-                setItems((items) => ({
-                  ...items,
-                  [overContainer]: arrayMove(
-                    items[overContainer],
-                    activeIndex,
-                    overIndex
-                  ),
-                }));
+                  }));
+                }
               }
-            }
 
-            setActiveId(null);
-          }}
-          onDragCancel={onDragCancel}
-        >
-          <div className="inline-grid grid-cols-3 gap-4 items-start w-full h-screen">
-            {Object.entries(items).map(([key, values]) => (
-              <SortableContext key={key} items={values} strategy={strategy}>
-                <DroppableContainer
-                  id={key}
-                  items={values.map((value) => value.id)}
-                >
-                  <h1 className="items-center py-4 text-xl font-bold text-center bg-gray-300 rounded-md">
-                    {key}
-                  </h1>
-                  {values.map((engivia) => (
-                    <SortableItem
-                      key={engivia.id}
-                      engivia={engivia}
-                      broadcast={broadcast}
-                    />
-                  ))}
-                </DroppableContainer>
-              </SortableContext>
-            ))}
-            {inFeatureId !== "" && broadcast?.status === "IN_PROGRESS" && (
-              <Button
-                type="button"
-                isSubmitting={inFeatureId === "" ? true : false}
-                isPrimary={true}
-                onClick={handleTitleCall}
-              >
-                タイトルコールする
-              </Button>
-            )}
-          </div>
-        </DndContext>
+              setActiveId(null);
+            }}
+            onDragCancel={onDragCancel}
+          >
+            <div className="inline-grid grid-cols-3 gap-4 items-start w-full h-screen">
+              {Object.entries(items).map(([key, values]) => (
+                <SortableContext key={key} items={values} strategy={strategy}>
+                  <DroppableContainer
+                    id={key}
+                    items={values.map((value) => value.id)}
+                  >
+                    <h1 className="items-center py-4 text-xl font-bold text-center bg-gray-300 rounded-md">
+                      {key}
+                    </h1>
+                    {values.map((engivia) => (
+                      <SortableItem
+                        key={engivia.id}
+                        engivia={engivia}
+                        broadcast={broadcast}
+                      />
+                    ))}
+                    {inFeatureId === "" &&
+                      broadcast?.status === "IN_PROGRESS" &&
+                      key === "フィーチャー中" && (
+                        <div className="py-8 px-4 text-center rounded-md border-2 border-gray-300 border-dashed">
+                          <span className="text-lg text-gray-400">
+                            フィーチャーする
+                          </span>
+                        </div>
+                      )}
+                    {broadcast?.status === "IN_PROGRESS" &&
+                      key === "フィーチャー後" && (
+                        <div className="py-8 px-4 text-center rounded-md border-2 border-gray-300 border-dashed">
+                          <span className="text-lg text-gray-400">
+                            フィーチャーを終える
+                          </span>
+                        </div>
+                      )}
+                    {inFeatureId !== "" &&
+                      broadcast?.status === "IN_PROGRESS" &&
+                      key === "フィーチャー中" && (
+                        <Button
+                          type="button"
+                          isSubmitting={inFeatureId === "" ? true : false}
+                          isPrimary={true}
+                          onClick={handleTitleCall}
+                        >
+                          タイトルコールする
+                        </Button>
+                      )}
+                  </DroppableContainer>
+                </SortableContext>
+              ))}
+            </div>
+          </DndContext>
+        </div>
       </div>
     </BaseLayout>
   );

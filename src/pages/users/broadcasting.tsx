@@ -28,7 +28,9 @@ const Broadcasting: NextPage = () => {
 
   useEffect(() => {
     if (broadcast?.status === "DONE") {
-      router.push("/broadcasts");
+      setTimeout(() => {
+        router.push("/broadcasts");
+      }, 5000);
     }
   }, [broadcast?.status, broadcastId, router, broadcast]);
 
@@ -44,7 +46,10 @@ const Broadcasting: NextPage = () => {
         <EngiviaJoinUsers joinUsers={joinUsers} />
       </div>
       {broadcast?.status === "DONE" ? (
-        <div>DONE</div>
+        <div className="mx-auto text-3xl text-center">
+          <p className="mb-2">本日のエンジビアの泉は終了しました。</p>
+          <p>ご視聴ありがとうございました！</p>
+        </div>
       ) : featureEngivia === undefined ? (
         <div className="mx-auto max-w-2xl">
           <div className="py-10 px-10 mb-2 bg-white rounded-lg">

@@ -130,18 +130,15 @@ export const createEngivia = async (
   };
   engiviaRef.set(engivia);
 
-  // const engiviaLengthRef = await db
-  //   .collection("broadcasts")
-  //   .doc(broadcastId)
-  //   .collection("engivias")
-  //   .get();
+  const engiviaLengthRef = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .get();
 
-  // const engiviaLength = engiviaLengthRef.docs.length;
-  // engiviaRef.set({ engiviaNumber: engiviaLength }, { merge: true });
-
-  // const broadcastRef = await db.collection("broadcasts").doc(broadcastId);
-
-  // broadcastRef.set({ engiviaCount: engiviaLength }, { merge: true });
+  const engiviaLength = engiviaLengthRef.docs.length;
+  const broadcastRef = await db.collection("broadcasts").doc(broadcastId);
+  broadcastRef.set({ engiviaCount: engiviaLength }, { merge: true });
   return engivia;
 };
 
@@ -215,6 +212,15 @@ export const deleteEngivia = async (broadcastId: string, engiviaId: string) => {
     .collection("engivias")
     .doc(engiviaId)
     .delete();
+
+  const engiviaLengthRef = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .get();
+  const engiviaLength = engiviaLengthRef.docs.length;
+  const broadcastRef = await db.collection("broadcasts").doc(broadcastId);
+  broadcastRef.set({ engiviaCount: engiviaLength }, { merge: true });
 };
 
 export const voteLikes = async (
@@ -223,6 +229,7 @@ export const voteLikes = async (
   user: UserType
 ) => {
   const joinUserRef = await db
+    // .collection(`broadcasts/${broadcastId}/engivias/${engiviaId}/joinUsers`)
     .collection("broadcasts")
     .doc(broadcastId)
     .collection("engivias")
@@ -233,6 +240,9 @@ export const voteLikes = async (
   const doc = await itemRef.get();
   if (doc.exists) {
     const likesRef = db
+      // .collection(
+      //   `broadcasts/${broadcastId}/engivias/${engiviaId}/joinUsers/${user.uid}`
+      // )
       .collection("broadcasts")
       .doc(broadcastId)
       .collection("engivias")
@@ -259,13 +269,13 @@ export const voteLikes = async (
   }
 };
 
-export const addCreateNumber = async (
+export const incrementEngiviaNumber = async (
   broadcastId: string,
   engiviaId: string
 ) => {
   const broadcastRef = await db.collection("broadcasts").doc(broadcastId);
   broadcastRef.set(
-    { engiviaCount: firebase.firestore.FieldValue.increment(1) },
+    { engiviaCurrentCount: firebase.firestore.FieldValue.increment(1) },
     { merge: true }
   );
 
@@ -284,7 +294,10 @@ export const addCreateNumber = async (
     .doc(engiviaId);
 
   if (broadcast) {
-    engiviaRef.set({ engiviaNumber: broadcast.engiviaCount }, { merge: true });
+    engiviaRef.set(
+      { engiviaNumber: broadcast.engiviaCurrentCount },
+      { merge: true }
+    );
   }
 };
 

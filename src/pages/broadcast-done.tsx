@@ -1,6 +1,6 @@
 import type { GetServerSideProps, NextPage } from "next";
 import { useEffect, useState } from "react";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
 import { useSubscribeBroadcast } from "src/hooks/useSubscribe";
@@ -18,18 +18,12 @@ type Props = {
   engivias: EngiviaType[];
 };
 
-const BroadcastDone: NextPage<Props> = ({ broadcast, engivias }) => {
+const BroadcastDone: NextPage<Props> = ({ engivias }) => {
   const { user } = useUser();
   const [url, setUrl] = useState<string>("");
   const router = useRouter();
   const broadcastId = router.query.id as string;
-  // const broadcast = useSubscribeBroadcast(broadcastId);
-
-  useEffect(() => {
-    if (broadcast === undefined) {
-      router.push("/broadcasts");
-    }
-  }, [router, broadcast]);
+  const broadcast = useSubscribeBroadcast(broadcastId);
 
   const onDeleteBroadcast = () => {
     deleteBroadcast(broadcastId);
@@ -39,7 +33,6 @@ const BroadcastDone: NextPage<Props> = ({ broadcast, engivias }) => {
   const onSetYoutubeURL = async () => {
     const convertedUrl = convertEmbedURL(url);
     setYoutubeURL(broadcastId, convertedUrl);
-    router.reload();
   };
 
   return (
@@ -50,7 +43,7 @@ const BroadcastDone: NextPage<Props> = ({ broadcast, engivias }) => {
           <iframe
             width="765"
             height="400"
-            src={broadcast?.broadCastUrl}
+            src={broadcast.broadCastUrl}
             title="YouTube video"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -96,20 +89,6 @@ export default BroadcastDone;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const broadcastId = context.query.id as string;
-  const broadcast = await getBroadcast(broadcastId);
   const engivias = await getEngivias(broadcastId);
-  if (broadcast === undefined) {
-    return {
-      redirect: {
-        permanent: false, // 永続的なリダイレクトかどうか
-        destination: "/broadcasts", // リダイレクト先
-      },
-    };
-  } else {
-    return { props: { broadcast, engivias } };
-  }
+  return { props: { engivias } };
 };
-
-// className = "flex relative justify-center items-center";
-// className = "absolute right-0";
-// className = "absolute right-0";
