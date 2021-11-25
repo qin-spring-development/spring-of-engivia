@@ -3,7 +3,7 @@ import type { FC, ReactNode, MouseEventHandler } from "react";
 export type Props = {
   isSubmitting: boolean;
   type: "button" | "submit" | "reset";
-  onClick: MouseEventHandler<HTMLButtonElement>;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   isPrimary: boolean;
   className?: string;
   children: ReactNode;

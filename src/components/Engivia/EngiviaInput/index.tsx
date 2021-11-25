@@ -1,9 +1,12 @@
 import type { FC, ChangeEvent, Dispatch, SetStateAction } from "react";
 import { useState } from "react";
-import { createEngivia, updateEngivia, createJoinUsers } from "src/lib/db";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { createEngivia, updateEngivia } from "src/lib/db";
 import { EngiviaType } from "src/types/interface";
 import { Button } from "src/components/Button";
 import { useUser } from "src/hooks/useSharedState";
+import { engiviaSchema } from "src/lib/yupSchema/engiviaSchema";
 
 type Props = {
   userEngivia: EngiviaType;
@@ -18,46 +21,59 @@ export const EngiviaInput: FC<Props> = ({
 }) => {
   const { user } = useUser();
   const [engiviaBody, setEngiviaBody] = useState<string>(userEngivia?.body);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(engiviaSchema) });
+
   const handleOnChangeInput = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setEngiviaBody(e.target.value);
   };
 
-  const HandleCreateEngivia = async () => {
-    await createEngivia(broadcastId, engiviaBody, user);
-    // const engivia = await createEngivia(broadcastId, engiviaBody, user);
-    // createJoinUsers(broadcastId, engivia.id, user);
-    setConfirm(true);
-  };
-
-  const HandleUpdateEngivia = async () => {
-    updateEngivia(broadcastId, userEngivia.id, engiviaBody);
-    setConfirm(true);
+  const HandleEngivia = async (data: { engivia: string }) => {
+    if (userEngivia.id !== "") {
+      updateEngivia(broadcastId, userEngivia.id, data.engivia);
+      setConfirm(true);
+    } else {
+      await createEngivia(broadcastId, data.engivia, user);
+      setConfirm(true);
+    }
   };
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <textarea
-        name="body"
-        id="body"
-        cols={60}
-        rows={3}
-        placeholder="エンジビアを入力する"
-        value={engiviaBody}
-        className="p-4 mb-10 focus:outline-none"
-        onChange={handleOnChangeInput}
-      />
-      <div className="flex justify-center">
-        <Button
-          isSubmitting={false}
-          type="button"
-          isPrimary={true}
-          onClick={
-            userEngivia.id !== "" ? HandleUpdateEngivia : HandleCreateEngivia
-          }
-        >
-          保存する
-        </Button>
-      </div>
+      <form onSubmit={handleSubmit(HandleEngivia)}>
+        {errors.engivia?.message ? (
+          <span className="text-red-500">{errors.engivia?.message}</span>
+        ) : (
+          <div className="h-6"></div>
+        )}
+        <div className="flex flex-col">
+          <textarea
+            id="engivia"
+            cols={60}
+            rows={3}
+            placeholder="エンジビアを入力する"
+            value={engiviaBody}
+            className="p-4 mt-2 rounded-md border border-gray-300 focus:ring focus:outline-none"
+            {...register("engivia", { required: true, maxLength: 100 })}
+            onChange={handleOnChangeInput}
+          />
+        </div>
+        <div className="flex justify-center mt-5">
+          <Button
+            isSubmitting={false}
+            type="submit"
+            isPrimary={true}
+            // onClick={
+            //   userEngivia.id !== "" ? HandleUpdateEngivia : HandleCreateEngivia
+            // }
+          >
+            保存する
+          </Button>
+        </div>
+      </form>
     </div>
   );
 };
