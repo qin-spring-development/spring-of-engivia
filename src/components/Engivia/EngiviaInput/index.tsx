@@ -62,14 +62,7 @@ export const EngiviaInput: FC<Props> = ({
           />
         </div>
         <div className="flex justify-center mt-5">
-          <Button
-            isSubmitting={false}
-            type="submit"
-            isPrimary={true}
-            // onClick={
-            //   userEngivia.id !== "" ? HandleUpdateEngivia : HandleCreateEngivia
-            // }
-          >
+          <Button isSubmitting={false} type="submit" isPrimary={true}>
             保存する
           </Button>
         </div>
