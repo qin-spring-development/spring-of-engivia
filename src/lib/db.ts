@@ -273,6 +273,19 @@ export const incrementEngiviaNumber = async (
   broadcastId: string,
   engiviaId: string
 ) => {
+  const engivia = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .doc(engiviaId)
+    .get()
+    .then((snapshot) => {
+      return snapshot.data();
+    });
+
+  /**エンジビアNoが登録済みなら処理スキップ */
+  if (engivia?.engiviaNumber) return;
+
   const broadcastRef = await db.collection("broadcasts").doc(broadcastId);
   broadcastRef.set(
     { engiviaCurrentCount: firebase.firestore.FieldValue.increment(1) },
@@ -292,7 +305,6 @@ export const incrementEngiviaNumber = async (
     .doc(broadcastId)
     .collection("engivias")
     .doc(engiviaId);
-
   if (broadcast) {
     engiviaRef.set(
       { engiviaNumber: broadcast.engiviaCurrentCount },
