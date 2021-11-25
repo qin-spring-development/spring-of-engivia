@@ -170,6 +170,7 @@ const Broadcasting = ({
             collisionDetection={collisionDetection}
             onDragStart={({ active }) => {
               setActiveId(active.id);
+              //謎
               setClonedItems(items);
             }}
             onDragOver={({ active, over }) => {
@@ -189,9 +190,11 @@ const Broadcasting = ({
                 setItems((items) => {
                   const activeItems = items[activeContainer];
                   const overItems = items[overContainer];
+
                   const overIndex = overItems.findIndex(
                     (item) => item.id === overId
                   );
+
                   const activeIndex = activeItems.findIndex(
                     (item) => item.id === active.id
                   );
@@ -234,6 +237,7 @@ const Broadcasting = ({
             }}
             onDragEnd={({ active, over }) => {
               if (items["フィーチャー中"].length === 1) {
+                // その他はdisabledにしたい
                 console.log("disabledが発動して欲しい");
               } else {
                 console.log("いいよ");
@@ -259,6 +263,7 @@ const Broadcasting = ({
                 const overIndex = items[overContainer].findIndex(
                   (item) => item.id === overId
                 );
+                console.log(items);
 
                 if (activeIndex !== overIndex) {
                   setItems((items) => ({
