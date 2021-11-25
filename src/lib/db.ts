@@ -1,5 +1,10 @@
 import { firebase, db } from "src/lib/firebase";
-import { WithOutToken, BroadcastFormType, UserType } from "src/types/interface";
+import {
+  WithOutToken,
+  BroadcastFormType,
+  UserType,
+  featureStatusType,
+} from "src/types/interface";
 
 export const getUser = async (uid: string) => {
   const data = await db
@@ -80,6 +85,20 @@ export const updateBroadcastFeatureId = async (
       });
     await broadcastRef.set({ featureId: engivia?.id }, { merge: true });
   }
+};
+
+export const updateEngiviaFeatureStatus = async (
+  broadcastId: string,
+  engiviaId: string,
+  featureStatus: featureStatusType
+) => {
+  const engiviaRef = db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .doc(engiviaId);
+
+  await engiviaRef.set({ featureStatus: featureStatus }, { merge: true });
 };
 
 export const getEngivias = async (broadcastId: string) => {

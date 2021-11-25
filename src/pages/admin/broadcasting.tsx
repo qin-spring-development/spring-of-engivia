@@ -24,10 +24,15 @@ import {
   beginBroadcast,
   endBroadcast,
   incrementEngiviaNumber,
+  updateEngiviaFeatureStatus,
 } from "src/lib/db";
 import { useSubscribeBroadcast } from "src/hooks/useSubscribe";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
-import { BroadcastType, EngiviaType } from "src/types/interface";
+import {
+  BroadcastType,
+  EngiviaType,
+  featureStatusType,
+} from "src/types/interface";
 import { Button } from "src/components/Button";
 import { useUser } from "src/hooks/useSharedState";
 
@@ -68,25 +73,41 @@ const Broadcasting = ({
   strategy = verticalListSortingStrategy,
   engivias,
 }: Props) => {
+  const getContainerName = (key: string): string => {
+    switch (key) {
+      case "before":
+        return "フィーチャー前";
+      case "inFeature":
+        return "フィーチャー中";
+      case "done":
+        return "フィーチャー後";
+      default:
+        return "";
+    }
+  };
+
+  const beforeEngivias = engivias.filter((v) => v.featureStatus == "BEFORE");
+  const featureEngivias = engivias.filter(
+    (v) => v.featureStatus == "IN_FEATURE"
+  );
+  const doneEngivias = engivias.filter((val) => val.featureStatus == "DONE");
+
   const [items, setItems] = useState<Items>({
-    フィーチャー前: engivias,
-    フィーチャー中: [],
-    フィーチャー後: [],
+    before: beforeEngivias,
+    inFeature: featureEngivias,
+    done: doneEngivias,
   });
+
   const [clonedItems, setClonedItems] = useState<Items | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [inFeatureId, setInFeatureId] = useState<string>("");
+  const [inFeatureId, setInFeatureId] = useState<string>(
+    items.inFeature[0] ? items.inFeature[0].id : ""
+  );
   const sensors = useSensors(useSensor(PointerSensor));
   const { user } = useUser();
   const router = useRouter();
   const broadcast = useSubscribeBroadcast(router.query.id as string);
   const broadcastId = broadcast?.id as string;
-
-  // useEffect(() => {
-  //   if (!user.isAdmin) {
-  //     router.push("/broadcasts");
-  //   }
-  // }, [router, user]);
 
   const findContainer = (id: string) => {
     if (id in items) {
@@ -244,13 +265,27 @@ const Broadcasting = ({
 
               const overId = over?.id as string;
               const overContainer = findContainer(overId);
-              if (activeContainer && overContainer === "フィーチャー中") {
-                setInFeatureId(overId);
-              } else {
-                setInFeatureId("");
-                updateBroadcastFeatureId(broadcastId, overId, true);
+
+              console.log(overContainer);
+              switch (overContainer) {
+                case "before": {
+                  setInFeatureId("");
+                  updateEngiviaFeatureStatus(broadcastId, overId, "BEFORE");
+                  updateBroadcastFeatureId(broadcastId, overId, true);
+                  break;
+                }
+                case "inFeature":
+                  setInFeatureId(overId);
+                  updateEngiviaFeatureStatus(broadcastId, overId, "IN_FEATURE");
+                  break;
+                case "done":
+                  setInFeatureId("");
+                  updateEngiviaFeatureStatus(broadcastId, overId, "DONE");
+                  updateBroadcastFeatureId(broadcastId, overId, true);
+                  break;
               }
-              if (activeContainer && overContainer) {
+
+              if (overContainer) {
                 const activeIndex = items[activeContainer].findIndex(
                   (item) => item.id === active.id
                 );
@@ -282,7 +317,7 @@ const Broadcasting = ({
                     items={values.map((value) => value.id)}
                   >
                     <h1 className="items-center py-4 text-xl font-bold text-center bg-gray-300 rounded-md">
-                      {key}
+                      {getContainerName(key)}
                     </h1>
                     {values.map((engivia) => (
                       <SortableItem
@@ -294,24 +329,23 @@ const Broadcasting = ({
                     ))}
                     {inFeatureId === "" &&
                       broadcast?.status === "IN_PROGRESS" &&
-                      key === "フィーチャー中" && (
+                      key === "inFeature" && (
                         <div className="py-8 px-4 text-center rounded-md border-2 border-gray-300 border-dashed">
                           <span className="text-lg text-gray-400">
                             フィーチャーする
                           </span>
                         </div>
                       )}
-                    {broadcast?.status === "IN_PROGRESS" &&
-                      key === "フィーチャー後" && (
-                        <div className="py-8 px-4 text-center rounded-md border-2 border-gray-300 border-dashed">
-                          <span className="text-lg text-gray-400">
-                            フィーチャーを終える
-                          </span>
-                        </div>
-                      )}
+                    {broadcast?.status === "IN_PROGRESS" && key === "done" && (
+                      <div className="py-8 px-4 text-center rounded-md border-2 border-gray-300 border-dashed">
+                        <span className="text-lg text-gray-400">
+                          フィーチャーを終える
+                        </span>
+                      </div>
+                    )}
                     {inFeatureId !== "" &&
                       broadcast?.status === "IN_PROGRESS" &&
-                      key === "フィーチャー中" && (
+                      key === "inFeature" && (
                         <Button
                           type="button"
                           isSubmitting={inFeatureId === "" ? true : false}
