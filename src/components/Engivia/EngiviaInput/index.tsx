@@ -45,7 +45,9 @@ export const EngiviaInput: FC<Props> = ({
     <div className="flex flex-col justify-center items-center">
       <form onSubmit={handleSubmit(HandleEngivia)}>
         {errors.engivia?.message ? (
-          <span className="text-red-500">{errors.engivia?.message}</span>
+          <span className="font-bold text-red-500">
+            {errors.engivia?.message}
+          </span>
         ) : (
           <div className="h-6"></div>
         )}

@@ -1,8 +1,7 @@
 import * as yup from "yup";
 
-const REQUIRE_MSG = "必須入力項目です";
-const VIOLATION_PASSWORD_MAX_COUNT =
-  "エンジビアは100文字以下で入力してください";
+const REQUIRE_MSG = "エンジビアを入力してください";
+const VIOLATION_PASSWORD_MAX_COUNT = "100文字以内で入力してください";
 
 export const engiviaSchema = yup.object().shape({
   engivia: yup
