@@ -20,6 +20,7 @@
     "4": "^0.0.0",
     "@dnd-kit/core": "^4.0.2",
     "@dnd-kit/sortable": "^5.1.0",
+    "@headlessui/react": "^1.4.2",
     "@heroicons/react": "^1.0.4",
     "@hookform/resolvers": "^2.8.3",
     "@tailwindcss/postcss7-compat": "^2.2.17",
