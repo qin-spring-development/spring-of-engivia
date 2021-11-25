@@ -150,6 +150,22 @@ const Broadcasting = ({
     });
   };
 
+  useEffect(() => {
+    return () => {
+      items.before.forEach((engivia) =>
+        updateEngiviaFeatureStatus(broadcastId, engivia.id, "BEFORE")
+      );
+
+      items.inFeature.forEach((engivia) =>
+        updateEngiviaFeatureStatus(broadcastId, engivia.id, "IN_FEATURE")
+      );
+
+      items.done.forEach((engivia) =>
+        updateEngiviaFeatureStatus(broadcastId, engivia.id, "DONE")
+      );
+    };
+  });
+
   return (
     <BaseLayout title="放送一覧">
       <div className="mx-auto max-w-6xl">
@@ -191,7 +207,6 @@ const Broadcasting = ({
             collisionDetection={collisionDetection}
             onDragStart={({ active }) => {
               setActiveId(active.id);
-              //謎
               setClonedItems(items);
             }}
             onDragOver={({ active, over }) => {
@@ -270,17 +285,14 @@ const Broadcasting = ({
               switch (overContainer) {
                 case "before": {
                   setInFeatureId("");
-                  updateEngiviaFeatureStatus(broadcastId, overId, "BEFORE");
                   updateBroadcastFeatureId(broadcastId, overId, true);
                   break;
                 }
                 case "inFeature":
                   setInFeatureId(overId);
-                  updateEngiviaFeatureStatus(broadcastId, overId, "IN_FEATURE");
                   break;
                 case "done":
                   setInFeatureId("");
-                  updateEngiviaFeatureStatus(broadcastId, overId, "DONE");
                   updateBroadcastFeatureId(broadcastId, overId, true);
                   break;
               }
