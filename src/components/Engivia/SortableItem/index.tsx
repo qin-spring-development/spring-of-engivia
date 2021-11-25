@@ -7,11 +7,29 @@ import { adjustScale } from "@dnd-kit/core/dist/utilities";
 type Props = {
   engivia: EngiviaType;
   broadcast: BroadcastType | undefined;
+  inFeatureId: string | undefined;
 };
 
-export const SortableItem: FC<Props> = ({ engivia, broadcast }) => {
-  const isDisable = broadcast?.status === "IN_PROGRESS" ? false : true;
-  const sortable = useSortable({ id: engivia.id, disabled: isDisable });
+export const SortableItem: FC<Props> = ({
+  engivia,
+  broadcast,
+  inFeatureId,
+}) => {
+  const isDisable = (engiviaId: string) => {
+    /** 放送中でなければ、移動不可 */
+    if (broadcast?.status !== "IN_PROGRESS") {
+      return true;
+    }
+    /** feature中のidがある場合、他のengiviaの移動は不可 */
+    if (inFeatureId !== "" && inFeatureId !== engiviaId) {
+      return true;
+    }
+    return false;
+  };
+  const sortable = useSortable({
+    id: engivia.id,
+    disabled: isDisable(engivia.id),
+  });
   const { attributes, setNodeRef, listeners, transform, transition } = sortable;
 
   const style = {

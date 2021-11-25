@@ -236,12 +236,6 @@ const Broadcasting = ({
               }
             }}
             onDragEnd={({ active, over }) => {
-              if (items["フィーチャー中"].length === 1) {
-                // その他はdisabledにしたい
-                console.log("disabledが発動して欲しい");
-              } else {
-                console.log("いいよ");
-              }
               const activeContainer = findContainer(active.id);
               if (!activeContainer) {
                 setActiveId(null);
@@ -263,7 +257,6 @@ const Broadcasting = ({
                 const overIndex = items[overContainer].findIndex(
                   (item) => item.id === overId
                 );
-                console.log(items);
 
                 if (activeIndex !== overIndex) {
                   setItems((items) => ({
@@ -296,6 +289,7 @@ const Broadcasting = ({
                         key={engivia.id}
                         engivia={engivia}
                         broadcast={broadcast}
+                        inFeatureId={inFeatureId}
                       />
                     ))}
                     {inFeatureId === "" &&
