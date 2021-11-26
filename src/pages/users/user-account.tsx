@@ -36,11 +36,10 @@ const UserProfile: NextPage = () => {
   }, []);
 
   const closeModal = async () => {
-    console.log(imageRef.current);
     setIsOpen(false);
   };
 
-  const onChangeImageHandler = async (e: ChangeEvent<HTMLInputElement>) => {
+  const handleCropImage = async (e: ChangeEvent<HTMLInputElement>) => {
     // e.target.valueだとpossibly nullエラーが出るので、エラー解消参考記事
     // https://qiita.com/obr-note/items/7229be539405267fb458
     if (e.currentTarget.files !== null) {
@@ -48,6 +47,13 @@ const UserProfile: NextPage = () => {
       setPreviewImage(URL.createObjectURL(e.currentTarget.files[0]));
       setIsOpen(true);
     }
+  };
+
+  const handleSave = () => {
+    console.log({
+      name,
+      previewImage,
+    });
   };
 
   return (
@@ -80,7 +86,7 @@ const UserProfile: NextPage = () => {
               name="avatar"
               accept="image/*"
               className="hidden"
-              onChange={onChangeImageHandler}
+              onChange={handleCropImage}
             />
           </label>
           <hr />
@@ -89,7 +95,7 @@ const UserProfile: NextPage = () => {
               type="button"
               isSubmitting={false}
               isPrimary={true}
-              onClick={() => console.log("保存")}
+              onClick={handleSave}
             >
               保存する
             </Button>
