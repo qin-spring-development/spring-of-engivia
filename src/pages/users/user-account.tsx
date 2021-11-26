@@ -1,51 +1,30 @@
 import type { NextPage } from "next";
-import { ChangeEvent, Fragment, useCallback, useRef, useState } from "react";
+import { ChangeEvent, Fragment, useState } from "react";
 import { useRouter } from "next/router";
-import ReactCrop, { Crop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import { useSession } from "next-auth/client";
 import { Form } from "src/components/Form";
 import { Button } from "src/components/Button";
-import { resizeFile } from "src/lib/resizeFile";
 import { CameraIcon } from "@heroicons/react/solid";
 import { Dialog, Transition } from "@headlessui/react";
 
-const UserProfile: NextPage = () => {
+const UserAccount: NextPage = () => {
   const [session] = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState<string | undefined>(session?.user.name);
   const [previewImage, setPreviewImage] = useState<string | undefined>(
     session?.user.image
   );
-  const aspect = 1 / 1;
-  const [crop, setCrop] = useState<Crop>({
-    unit: "%",
-    x: 0,
-    y: 0,
-    aspect,
-    width: 50 * aspect,
-    height: 50,
-  });
-  const imageRef = useRef<HTMLImageElement | null>(null);
-  const previewRef = useRef<HTMLCanvasElement | null>(null);
   const router = useRouter();
-
-  const onLoad = useCallback((img: HTMLImageElement) => {
-    imageRef.current = img;
-  }, []);
-
   const closeModal = async () => {
     setIsOpen(false);
   };
 
   const handleCropImage = async (e: ChangeEvent<HTMLInputElement>) => {
-    // e.target.valueだとpossibly nullエラーが出るので、エラー解消参考記事
-    // https://qiita.com/obr-note/items/7229be539405267fb458
     if (e.currentTarget.files !== null) {
-      // const image = await resizeFile(e.currentTarget.files[0]);
-      setPreviewImage(URL.createObjectURL(e.currentTarget.files[0]));
       setIsOpen(true);
+      setPreviewImage(URL.createObjectURL(e.currentTarget.files[0]));
     }
   };
 
@@ -147,16 +126,7 @@ const UserProfile: NextPage = () => {
               leaveTo="opacity-0 scale-95"
             >
               <div className="inline-block overflow-hidden p-3 my-8 text-left align-middle bg-white rounded-md shadow-xl transition-all transform">
-                {previewImage && (
-                  <ReactCrop
-                    // style={{ maxWidth: "50%" }}
-                    src={previewImage}
-                    crop={crop}
-                    onImageLoaded={onLoad}
-                    onChange={(c: Crop) => setCrop(c)}
-                  />
-                )}
-                <canvas ref={previewRef} style={{ display: "none" }} />
+                <img src={previewImage} alt="user" />
                 <div className="mt-4">
                   <button
                     type="button"
@@ -175,4 +145,4 @@ const UserProfile: NextPage = () => {
   );
 };
 
-export default UserProfile;
+export default UserAccount;
