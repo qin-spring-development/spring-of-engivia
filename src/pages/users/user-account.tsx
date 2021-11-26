@@ -18,7 +18,15 @@ const UserProfile: NextPage = () => {
   const [previewImage, setPreviewImage] = useState<string | undefined>(
     session?.user.image
   );
-  const [crop, setCrop] = useState({ aspect: 1 / 1 });
+  const aspect = 1 / 1;
+  const [crop, setCrop] = useState<Crop>({
+    unit: "%",
+    x: 0,
+    y: 0,
+    aspect,
+    width: 50 * aspect,
+    height: 50,
+  });
   const imageRef = useRef<HTMLImageElement | null>(null);
   const previewRef = useRef<HTMLCanvasElement | null>(null);
   const router = useRouter();
@@ -37,7 +45,7 @@ const UserProfile: NextPage = () => {
     // https://qiita.com/obr-note/items/7229be539405267fb458
     if (e.currentTarget.files !== null) {
       // const image = await resizeFile(e.currentTarget.files[0]);
-      // setPreviewImage(image);
+      setPreviewImage(URL.createObjectURL(e.currentTarget.files[0]));
       setIsOpen(true);
     }
   };
@@ -133,13 +141,15 @@ const UserProfile: NextPage = () => {
               leaveTo="opacity-0 scale-95"
             >
               <div className="inline-block overflow-hidden p-3 my-8 text-left align-middle bg-white rounded-md shadow-xl transition-all transform">
-                <ReactCrop
-                  // style={{ maxWidth: "50%" }}
-                  src={previewImage}
-                  crop={crop}
-                  onImageLoaded={onLoad}
-                  onChange={(c: Crop) => setCrop(c)}
-                />
+                {previewImage && (
+                  <ReactCrop
+                    // style={{ maxWidth: "50%" }}
+                    src={previewImage}
+                    crop={crop}
+                    onImageLoaded={onLoad}
+                    onChange={(c: Crop) => setCrop(c)}
+                  />
+                )}
                 <canvas ref={previewRef} style={{ display: "none" }} />
                 <div className="mt-4">
                   <button
