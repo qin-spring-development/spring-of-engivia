@@ -5,7 +5,7 @@ export type Props = {
   playbackRate: string;
 };
 
-export const SwichButton = () => {
+export const SwitchButton = () => {
   const [playbackRate, setPlaybackRate] = useState(0);
   const [play] = useSound("/hee.mp3", {
     playbackRate,

@@ -1,12 +1,12 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react/types-6-0";
-import { SwichButton } from "./index";
+import { SwitchButton } from "./index";
 
 export default {
-  component: SwichButton,
-  title: "Components/SwichButton",
+  component: SwitchButton,
+  title: "Components/SwitchButton",
 } as Meta;
 
-const Template: Story = () => <SwichButton />;
+const Template: Story = () => <SwitchButton />;
 
 export const Button = Template.bind({});
