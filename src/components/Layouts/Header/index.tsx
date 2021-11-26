@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { UserIcon } from "@heroicons/react/solid";
@@ -12,6 +13,7 @@ import { UserType } from "src/types/interface";
 export const Header = () => {
   const [session] = useSession();
   const { user, setUser } = useUser();
+  const router = useRouter();
 
   const changeUserHandler = (user: UserType) => {
     setUser(user);
@@ -83,6 +85,12 @@ export const Header = () => {
                     <Menu.Item>
                       {({ active }) => (
                         <button
+                          onClick={() =>
+                            router.push({
+                              pathname: "/users/user-account",
+                              query: { uid: session?.user.id },
+                            })
+                          }
                           className={`${
                             active
                               ? "bg-light-blue-600 text-white"
