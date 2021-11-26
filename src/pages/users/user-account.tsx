@@ -1,25 +1,44 @@
 import type { NextPage } from "next";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, Fragment, useCallback, useRef, useState } from "react";
 import { useRouter } from "next/router";
+import ReactCrop, { Crop } from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import { useSession } from "next-auth/client";
 import { Form } from "src/components/Form";
 import { Button } from "src/components/Button";
 import { resizeFile } from "src/lib/resizeFile";
 import { CameraIcon } from "@heroicons/react/solid";
+import { Dialog, Transition } from "@headlessui/react";
 
 const UserProfile: NextPage = () => {
   const [session] = useSession();
+  const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState<string | undefined>(session?.user.name);
-  const [previewImage, setPreviewImage] = useState(session?.user.image);
+  const [previewImage, setPreviewImage] = useState<string | undefined>(
+    session?.user.image
+  );
+  const [crop, setCrop] = useState({ aspect: 1 / 1 });
+  const imageRef = useRef<HTMLImageElement | null>(null);
+  const previewRef = useRef<HTMLCanvasElement | null>(null);
   const router = useRouter();
+
+  const onLoad = useCallback((img: HTMLImageElement) => {
+    imageRef.current = img;
+  }, []);
+
+  const closeModal = async () => {
+    console.log(imageRef.current);
+    setIsOpen(false);
+  };
 
   const onChangeImageHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     // e.target.valueだとpossibly nullエラーが出るので、エラー解消参考記事
     // https://qiita.com/obr-note/items/7229be539405267fb458
     if (e.currentTarget.files !== null) {
-      const image = await resizeFile(e.currentTarget.files[0]);
-      setPreviewImage(image);
+      // const image = await resizeFile(e.currentTarget.files[0]);
+      // setPreviewImage(image);
+      setIsOpen(true);
     }
   };
 
@@ -77,6 +96,65 @@ const UserProfile: NextPage = () => {
           </div>
         </div>
       </div>
+
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className="overflow-y-auto fixed inset-0 z-10"
+          onClose={closeModal}
+        >
+          <div className="px-4 min-h-screen text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <Dialog.Overlay className="fixed inset-0 bg-gray-800 bg-opacity-75 backdrop-filter backdrop-blur-sm transition-opacity" />
+            </Transition.Child>
+
+            {/* This element is to trick the browser into centering the modal contents. */}
+            <span
+              className="inline-block h-screen align-middle"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <div className="inline-block overflow-hidden p-3 my-8 text-left align-middle bg-white rounded-md shadow-xl transition-all transform">
+                <ReactCrop
+                  // style={{ maxWidth: "50%" }}
+                  src={previewImage}
+                  crop={crop}
+                  onImageLoaded={onLoad}
+                  onChange={(c: Crop) => setCrop(c)}
+                />
+                <canvas ref={previewRef} style={{ display: "none" }} />
+                <div className="mt-4">
+                  <button
+                    type="button"
+                    className="inline-flex justify-center py-2 px-4 text-sm font-medium text-blue-900 bg-blue-100 hover:bg-blue-200 rounded-md border border-transparent focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus:outline-none"
+                    onClick={closeModal}
+                  >
+                    トリミングする
+                  </button>
+                </div>
+              </div>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition>
     </BaseLayout>
   );
 };
