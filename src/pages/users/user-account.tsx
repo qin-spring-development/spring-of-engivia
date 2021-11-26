@@ -1,7 +1,6 @@
 import type { NextPage } from "next";
 import { ChangeEvent, Fragment, useState } from "react";
 import { useRouter } from "next/router";
-import "react-image-crop/dist/ReactCrop.css";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import { useSession } from "next-auth/client";
 import { Form } from "src/components/Form";
