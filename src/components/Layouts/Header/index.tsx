@@ -67,7 +67,7 @@ export const Header = () => {
               <Menu.Button>
                 <img
                   className="h-10 rounded-full"
-                  src={session && session.user.image}
+                  src={session.user.image}
                   alt="avatar"
                 />
               </Menu.Button>
@@ -88,7 +88,7 @@ export const Header = () => {
                           onClick={() =>
                             router.push({
                               pathname: "/users/user-account",
-                              query: { uid: session?.user.id },
+                              query: { uid: session.user.id },
                             })
                           }
                           className={`${
