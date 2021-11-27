@@ -68,24 +68,10 @@ export const endBroadcast = async (broadcastId: string) => {
 
 export const updateBroadcastFeatureId = async (
   broadcastId: string,
-  engiviaId: string,
-  isNull: boolean
+  engiviaId?: string
 ) => {
   const broadcastRef = db.collection("broadcasts").doc(broadcastId);
-  if (isNull) {
-    await broadcastRef.set({ featureId: null }, { merge: true });
-  } else {
-    const engivia = await db
-      .collection("broadcasts")
-      .doc(broadcastId)
-      .collection("engivias")
-      .doc(engiviaId)
-      .get()
-      .then((snapshot) => {
-        return snapshot.data();
-      });
-    await broadcastRef.set({ featureId: engivia?.id }, { merge: true });
-  }
+  await broadcastRef.set({ featureId: engiviaId }, { merge: true });
 };
 
 export const updateEngiviaFeatureStatus = async (
@@ -249,7 +235,6 @@ export const voteLikes = async (
   user: UserType
 ) => {
   const joinUserRef = await db
-    // .collection(`broadcasts/${broadcastId}/engivias/${engiviaId}/joinUsers`)
     .collection("broadcasts")
     .doc(broadcastId)
     .collection("engivias")
@@ -260,9 +245,6 @@ export const voteLikes = async (
   const doc = await itemRef.get();
   if (doc.exists) {
     const likesRef = db
-      // .collection(
-      //   `broadcasts/${broadcastId}/engivias/${engiviaId}/joinUsers/${user.uid}`
-      // )
       .collection("broadcasts")
       .doc(broadcastId)
       .collection("engivias")

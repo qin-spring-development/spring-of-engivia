@@ -125,7 +125,7 @@ const Broadcasting = ({
   };
 
   const handleTitleCall = async () => {
-    await updateBroadcastFeatureId(broadcastId, inFeatureId, false);
+    await updateBroadcastFeatureId(broadcastId, inFeatureId);
     await incrementEngiviaNumber(broadcastId, inFeatureId);
   };
 
@@ -283,7 +283,7 @@ const Broadcasting = ({
               switch (overContainer) {
                 case "before": {
                   setInFeatureId("");
-                  updateBroadcastFeatureId(broadcastId, overId, true);
+                  updateBroadcastFeatureId(broadcastId, overId);
                   break;
                 }
                 case "inFeature":
@@ -291,7 +291,7 @@ const Broadcasting = ({
                   break;
                 case "done":
                   setInFeatureId("");
-                  updateBroadcastFeatureId(broadcastId, overId, true);
+                  updateBroadcastFeatureId(broadcastId, overId);
                   break;
               }
 

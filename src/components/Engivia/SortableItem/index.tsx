@@ -2,7 +2,6 @@ import type { FC } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { BroadcastType, EngiviaType } from "src/types/interface";
-import { adjustScale } from "@dnd-kit/core/dist/utilities";
 
 type Props = {
   engivia: EngiviaType;
@@ -35,7 +34,6 @@ export const SortableItem: FC<Props> = ({
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    // opacity: isDragging ? 0.3 : 1,
   };
 
   return (
