@@ -27,6 +27,7 @@ export const createBroadcast = (data: BroadcastFormType) => {
     broadCastUrl: "",
     broadCastingDate: new Date(data.broadCastingDate).toISOString(),
     engiviaCount: 0,
+    engiviaCurrentCount: null,
     featureId: null,
     id: broadcastRef.id,
     status: "BEFORE",

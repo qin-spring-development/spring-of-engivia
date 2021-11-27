@@ -348,13 +348,15 @@ const Broadcasting = ({
                           </span>
                         </div>
                       )}
-                    {broadcast?.status === "IN_PROGRESS" && key === "done" && (
-                      <div className="py-8 px-4 text-center rounded-md border-2 border-gray-300 border-dashed">
-                        <span className="text-lg text-gray-400">
-                          フィーチャーを終える
-                        </span>
-                      </div>
-                    )}
+                    {broadcast?.status === "IN_PROGRESS" &&
+                      key === "done" &&
+                      broadcast.engiviaCurrentCount !== null && (
+                        <div className="py-8 px-4 text-center rounded-md border-2 border-gray-300 border-dashed">
+                          <span className="text-lg text-gray-400">
+                            フィーチャーを終える
+                          </span>
+                        </div>
+                      )}
                     {inFeatureId !== "" &&
                       broadcast?.status === "IN_PROGRESS" &&
                       key === "inFeature" && (

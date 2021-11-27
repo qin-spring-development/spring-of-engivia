@@ -34,6 +34,7 @@ export type BroadcastType = {
   broadCastUrl: string;
   broadCastingDate: string;
   engiviaCount: number;
+  engiviaCurrentCount: number | null;
   featureCount: number;
   featureId: string;
   id: string;
