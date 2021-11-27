@@ -28,11 +28,7 @@ import {
 } from "src/lib/db";
 import { useSubscribeBroadcast } from "src/hooks/useSubscribe";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
-import {
-  BroadcastType,
-  EngiviaType,
-  featureStatusType,
-} from "src/types/interface";
+import { BroadcastType, EngiviaType } from "src/types/interface";
 import { Button } from "src/components/Button";
 import { useUser } from "src/hooks/useSharedState";
 
@@ -192,12 +188,14 @@ const Broadcasting = ({
                 </Button>
               </div>
             ) : (
-              <button
+              <Button
+                isSubmitting={false}
+                isPrimary={false}
+                type="button"
                 onClick={onEndBroadcast}
-                className="py-2 px-4 mr-2 text-light-blue-700 bg-light-blue-100 rounded-md"
               >
                 放送を終了する
-              </button>
+              </Button>
             )}
           </div>
         </div>
@@ -360,14 +358,16 @@ const Broadcasting = ({
                     {inFeatureId !== "" &&
                       broadcast?.status === "IN_PROGRESS" &&
                       key === "inFeature" && (
-                        <Button
-                          type="button"
-                          isSubmitting={inFeatureId === "" ? true : false}
-                          isPrimary={true}
-                          onClick={handleTitleCall}
-                        >
-                          タイトルコールする
-                        </Button>
+                        <div className="mx-auto">
+                          <Button
+                            type="button"
+                            isSubmitting={inFeatureId === "" ? true : false}
+                            isPrimary={true}
+                            onClick={handleTitleCall}
+                          >
+                            タイトルコールする
+                          </Button>
+                        </div>
                       )}
                   </DroppableContainer>
                 </SortableContext>
