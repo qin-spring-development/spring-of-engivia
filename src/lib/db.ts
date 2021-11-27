@@ -71,7 +71,10 @@ export const updateBroadcastFeatureId = async (
   engiviaId?: string
 ) => {
   const broadcastRef = db.collection("broadcasts").doc(broadcastId);
-  await broadcastRef.set({ featureId: engiviaId }, { merge: true });
+  await broadcastRef.set(
+    { featureId: engiviaId ? engiviaId : null },
+    { merge: true }
+  );
 };
 
 export const updateEngiviaFeatureStatus = async (

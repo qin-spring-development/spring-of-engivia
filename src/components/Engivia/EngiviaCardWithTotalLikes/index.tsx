@@ -15,7 +15,7 @@ export const EngiviaCardWithTotalLikes: FC<Props> = ({
       <div className="py-7 px-10 mb-2 bg-white rounded-lg">
         <div className="flex flex-col items-center mb-10">
           <p className="mb-5 text-xl font-bold text-[#0284C7]">
-            {`エンジビア${engivia?.engiviaNumber}`}
+            {`エンジビア${engivia.engiviaNumber}`}
           </p>
           <p className="text-4xl">{engivia?.body}</p>
         </div>

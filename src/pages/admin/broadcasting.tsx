@@ -279,11 +279,10 @@ const Broadcasting = ({
               const overId = over?.id as string;
               const overContainer = findContainer(overId);
 
-              console.log(overContainer);
               switch (overContainer) {
                 case "before": {
                   setInFeatureId("");
-                  updateBroadcastFeatureId(broadcastId, overId);
+                  updateBroadcastFeatureId(broadcastId);
                   break;
                 }
                 case "inFeature":
@@ -291,7 +290,7 @@ const Broadcasting = ({
                   break;
                 case "done":
                   setInFeatureId("");
-                  updateBroadcastFeatureId(broadcastId, overId);
+                  updateBroadcastFeatureId(broadcastId);
                   break;
               }
 
