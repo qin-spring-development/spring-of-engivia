@@ -1,7 +1,8 @@
+import type { NextPage } from "next";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import Link from "next/link";
 
-export default function Custom404() {
+const Custom404: NextPage = () => {
   return (
     <BaseLayout title="404:ページが見つかりません">
       <div className="flex justify-center ">
@@ -13,7 +14,7 @@ export default function Custom404() {
             <li className="text-gray-900">
               URLをご確認の上、再度お試しください。
             </li>
-            <Link href="/">
+            <Link href="/broadcasts">
               <button className="text-xl text-light-blue-600">
                 トップへ戻る
               </button>
@@ -23,4 +24,6 @@ export default function Custom404() {
       </div>
     </BaseLayout>
   );
-}
+};
+
+export default Custom404;
