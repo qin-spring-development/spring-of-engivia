@@ -9,11 +9,11 @@ import {
   useSubscribeJoinUsers,
 } from "src/hooks/useSubscribe";
 import { useUser } from "src/hooks/useSharedState";
-import { voteLikes, updateTotalLikes } from "src/lib/db";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
 import { EngiviaCardWithTotalLikes } from "src/components/Engivia/EngiviaCardWithTotalLikes";
 import { EngiviaJoinUsers } from "src/components/Engivia/EngiviaJoinUsers";
+import { SwitchButton } from "src/components/SwitchButton";
 
 const Broadcasting: NextPage = () => {
   const { user } = useUser();
@@ -33,11 +33,6 @@ const Broadcasting: NextPage = () => {
       }, 5000);
     }
   }, [broadcast?.status, broadcastId, router, broadcast]);
-
-  const handleClick = async () => {
-    await voteLikes(broadcastId, featureEngivia?.id, user);
-    await updateTotalLikes(broadcastId, featureEngivia?.id);
-  };
 
   return (
     <BaseLayout title="放送中">
@@ -63,14 +58,12 @@ const Broadcasting: NextPage = () => {
             totalLikes={totalLikes}
           />
           <div className="mx-auto max-w-2xl">
-            <div className="flex items-center my-10">
-              <button
-                disabled={likes >= 20 && true}
-                className="py-2 px-4 text-white bg-red-500 active:bg-red-900 rounded-lg"
-                onClick={handleClick}
-              >
-                へえボタン
-              </button>
+            <div className="flex justify-center items-center mt-40">
+              <SwitchButton
+                broadcastId={broadcastId}
+                featureEngivia={featureEngivia}
+                likes={likes}
+              />
               <div className="inline ml-10 text-4xl font-bold text-[#0284C7]">
                 <span>{likes === undefined ? 0 : likes}</span>
                 <span className="text-xl">へえ</span>
