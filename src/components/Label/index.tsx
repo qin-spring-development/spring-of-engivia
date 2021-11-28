@@ -2,7 +2,8 @@ import { FC } from "react";
 
 export type Props = {
   className?: string;
-  status: "BEFORE" | "IN_PROGRESS" | "DONE";
+  // status: "BEFORE" | "IN_PROGRESS" | "DONE";
+  status: string | undefined;
 };
 
 export const Label: FC<Props> = ({ className, status }) => {

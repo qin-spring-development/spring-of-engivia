@@ -10,7 +10,7 @@ type props = {
 /**ログインチェックをしないPath */
 const isNotAuthPaths = ["/"];
 const loginPath = "/";
-const loggedInRedirect = "/broadcast";
+const loggedInRedirect = "/broadcasts";
 
 export const Auth = ({ children, pathname }: props) => {
   const [session, loading] = useSession();
