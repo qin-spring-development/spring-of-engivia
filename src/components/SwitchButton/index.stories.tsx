@@ -7,6 +7,6 @@ export default {
   title: "Components/SwitchButton",
 } as Meta;
 
-const Template: Story = () => <SwitchButton />;
+// const Template: Story = () => <SwitchButton />;
 
-export const Button = Template.bind({});
+// export const Button = Template.bind({});
