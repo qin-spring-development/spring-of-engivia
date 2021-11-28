@@ -135,13 +135,13 @@ const UserAccount: NextPage = () => {
               leaveTo="opacity-0 scale-95"
             >
               <div className="inline-block overflow-hidden p-3 my-8 text-left align-middle bg-white rounded-md shadow-xl transition-all transform">
-                <ReactCrop
+                {/* <ReactCrop
                   src={previewImage}
                   onImageLoaded={onLoad}
                   crop={crop}
                   keepSelection={true}
                   onChange={(newCrop) => setCrop(newCrop)}
-                />
+                /> */}
                 <div className="mt-4">
                   <button
                     type="button"
