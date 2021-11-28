@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { ChangeEvent, Fragment, useState } from "react";
+import { ChangeEvent, Fragment, useCallback, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import { useSession } from "next-auth/client";
@@ -7,6 +7,8 @@ import { Form } from "src/components/Form";
 import { Button } from "src/components/Button";
 import { CameraIcon } from "@heroicons/react/solid";
 import { Dialog, Transition } from "@headlessui/react";
+import ReactCrop from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 
 const UserAccount: NextPage = () => {
   const [session] = useSession();
@@ -15,6 +17,14 @@ const UserAccount: NextPage = () => {
   const [previewImage, setPreviewImage] = useState<string | undefined>(
     session?.user.image
   );
+
+  const imgRef = useRef(null);
+  const [crop, setCrop] = useState({ unit: "%", width: 30, aspect: 1 / 1 });
+  const onLoad = useCallback((img) => {
+    imgRef.current = img;
+    console.log(imgRef.current);
+  }, []);
+
   const router = useRouter();
   const closeModal = async () => {
     setIsOpen(false);
@@ -125,7 +135,13 @@ const UserAccount: NextPage = () => {
               leaveTo="opacity-0 scale-95"
             >
               <div className="inline-block overflow-hidden p-3 my-8 text-left align-middle bg-white rounded-md shadow-xl transition-all transform">
-                <img src={previewImage} alt="user" />
+                <ReactCrop
+                  src={previewImage}
+                  onImageLoaded={onLoad}
+                  crop={crop}
+                  keepSelection={true}
+                  onChange={(newCrop) => setCrop(newCrop)}
+                />
                 <div className="mt-4">
                   <button
                     type="button"
