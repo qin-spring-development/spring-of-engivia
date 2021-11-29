@@ -1,6 +1,5 @@
 import type { FC } from "react";
 import { EngiviaType } from "src/types/interface";
-import { EngiviaCard } from "src/components/Engivia/EngiviaCard";
 
 type Props = {
   engivia: EngiviaType;
