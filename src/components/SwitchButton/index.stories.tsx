@@ -7,6 +7,7 @@ export default {
   title: "Components/SwitchButton",
 } as Meta;
 
+// Todo エラー解消する
 // const Template: Story = () => <SwitchButton />;
 
 // export const Button = Template.bind({});
