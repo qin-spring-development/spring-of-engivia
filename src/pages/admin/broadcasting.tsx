@@ -125,8 +125,8 @@ const Broadcasting = ({
   };
 
   const handleTitleCall = async () => {
-    await updateBroadcastFeatureId(broadcastId, inFeatureId);
     await incrementEngiviaNumber(broadcastId, inFeatureId);
+    await updateBroadcastFeatureId(broadcastId, inFeatureId);
   };
 
   const handleBeginBroadcast = () => {
