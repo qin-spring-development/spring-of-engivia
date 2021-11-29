@@ -3,7 +3,7 @@ import type { FC, ReactNode, MouseEventHandler } from "react";
 export type Props = {
   isSubmitting: boolean;
   type: "button" | "submit" | "reset";
-  onClick: MouseEventHandler<HTMLButtonElement>;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   isPrimary: boolean;
   className?: string;
   children: ReactNode;
@@ -22,7 +22,7 @@ export const Button: FC<Props> = ({
       disabled={isSubmitting}
       type={type}
       onClick={onClick}
-      className={`py-2 px-4 mr-2 rounded-md ${className}
+      className={`py-3 px-6 mr-2 rounded-md ${className}
           ${
             isPrimary
               ? "bg-light-blue-600 text-white"

@@ -8,7 +8,7 @@ type Props = {
 
 export const BroadcastTitle: FC<Props> = ({ broadcast }) => {
   return (
-    <div className="flex flex-col items-center pt-10">
+    <div className="flex flex-col items-center py-10">
       <Label status={broadcast?.status} />
       <h1 className="my-4 text-3xl font-bold text-[#111827]">
         {broadcast?.title}

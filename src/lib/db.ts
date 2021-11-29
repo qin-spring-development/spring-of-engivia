@@ -1,5 +1,10 @@
 import { firebase, db } from "src/lib/firebase";
-import { WithOutToken, BroadcastFormType, UserType } from "src/types/interface";
+import {
+  WithOutToken,
+  BroadcastFormType,
+  UserType,
+  featureStatusType,
+} from "src/types/interface";
 
 export const getUser = async (uid: string) => {
   const data = await db
@@ -22,6 +27,7 @@ export const createBroadcast = (data: BroadcastFormType) => {
     broadCastUrl: "",
     broadCastingDate: new Date(data.broadCastingDate).toISOString(),
     engiviaCount: 0,
+    engiviaCurrentCount: null,
     featureId: null,
     id: broadcastRef.id,
     status: "BEFORE",
@@ -62,25 +68,27 @@ export const endBroadcast = async (broadcastId: string) => {
 
 export const updateBroadcastFeatureId = async (
   broadcastId: string,
-  engiviaId: string,
-  isNull: boolean
+  engiviaId?: string
 ) => {
-  const engivia = await db
+  const broadcastRef = db.collection("broadcasts").doc(broadcastId);
+  await broadcastRef.set(
+    { featureId: engiviaId ? engiviaId : null },
+    { merge: true }
+  );
+};
+
+export const updateEngiviaFeatureStatus = async (
+  broadcastId: string,
+  engiviaId: string,
+  featureStatus: featureStatusType
+) => {
+  const engiviaRef = db
     .collection("broadcasts")
     .doc(broadcastId)
     .collection("engivias")
-    .doc(engiviaId)
-    .get()
-    .then((snapshot) => {
-      return snapshot.data();
-    });
+    .doc(engiviaId);
 
-  const broadcastRef = db.collection("broadcasts").doc(broadcastId);
-  if (!isNull) {
-    await broadcastRef.set({ featureId: null }, { merge: true });
-  } else {
-    await broadcastRef.set({ featureId: engivia?.id }, { merge: true });
-  }
+  await engiviaRef.set({ featureStatus: featureStatus }, { merge: true });
 };
 
 export const getEngivias = async (broadcastId: string) => {
@@ -119,7 +127,7 @@ export const createEngivia = async (
   const engivia = {
     body: engiviaBody,
     createdAt: new Date().toISOString(),
-    // engiviaNumber: 0, // なぜか初期値が0で取得してしまう
+    engiviaNumber: null,
     featureStatus: "BEFORE",
     id: engiviaRef.id,
     postUser: {
@@ -138,10 +146,7 @@ export const createEngivia = async (
     .get();
 
   const engiviaLength = engiviaLengthRef.docs.length;
-  engiviaRef.set({ engiviaNumber: engiviaLength }, { merge: true });
-
   const broadcastRef = await db.collection("broadcasts").doc(broadcastId);
-
   broadcastRef.set({ engiviaCount: engiviaLength }, { merge: true });
   return engivia;
 };
@@ -216,9 +221,86 @@ export const deleteEngivia = async (broadcastId: string, engiviaId: string) => {
     .collection("engivias")
     .doc(engiviaId)
     .delete();
+
+  const engiviaLengthRef = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .get();
+  const engiviaLength = engiviaLengthRef.docs.length;
+  const broadcastRef = await db.collection("broadcasts").doc(broadcastId);
+  broadcastRef.set({ engiviaCount: engiviaLength }, { merge: true });
 };
 
 export const voteLikes = async (
+  broadcastId: string,
+  engiviaId: string | undefined,
+  user: UserType
+) => {
+  const likesRef = db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .doc(engiviaId)
+    .collection("joinUsers")
+    .doc(user.uid);
+  likesRef.set(
+    { likes: firebase.firestore.FieldValue.increment(1) },
+    { merge: true }
+  );
+};
+
+export const incrementEngiviaNumber = async (
+  broadcastId: string,
+  engiviaId: string
+) => {
+  const engivia = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .doc(engiviaId)
+    .get()
+    .then((snapshot) => {
+      return snapshot.data();
+    });
+
+  /**エンジビアNoが登録済みなら処理スキップ */
+  if (engivia?.engiviaNumber) return;
+
+  const broadcastRef = await db.collection("broadcasts").doc(broadcastId);
+  broadcastRef.set(
+    { engiviaCurrentCount: firebase.firestore.FieldValue.increment(1) },
+    { merge: true }
+  );
+
+  const broadcast = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .get()
+    .then((snapshot) => {
+      return snapshot.data();
+    });
+
+  const engiviaRef = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .doc(engiviaId);
+  if (broadcast) {
+    engiviaRef.set(
+      { engiviaNumber: broadcast.engiviaCurrentCount },
+      { merge: true }
+    );
+  }
+};
+
+export const setYoutubeURL = async (broadcastId: string, url: string) => {
+  db.collection("broadcasts")
+    .doc(broadcastId)
+    .set({ broadCastUrl: url }, { merge: true });
+};
+
+export const addJoinUser = async (
   broadcastId: string,
   engiviaId: string | undefined,
   user: UserType
@@ -233,35 +315,19 @@ export const voteLikes = async (
   const itemRef = joinUserRef.doc(user.uid);
   const doc = await itemRef.get();
   if (doc.exists) {
-    const likesRef = db
-      .collection("broadcasts")
-      .doc(broadcastId)
-      .collection("engivias")
-      .doc(engiviaId)
-      .collection("joinUsers")
-      .doc(user.uid);
-    likesRef.set(
-      { likes: firebase.firestore.FieldValue.increment(1) },
-      { merge: true }
-    );
-  } else {
-    db.collection("broadcasts")
-      .doc(broadcastId)
-      .collection("engivias")
-      .doc(engiviaId)
-      .collection("joinUsers")
-      .doc(user.uid)
-      .set({
-        likes: 1,
-        name: user.name,
-        image: user.image,
-        uid: user.uid,
-      });
+    return;
   }
-};
 
-export const setYoutubeURL = async (broadcastId: string, url: string) => {
   db.collection("broadcasts")
     .doc(broadcastId)
-    .set({ broadCastUrl: url }, { merge: true });
+    .collection("engivias")
+    .doc(engiviaId)
+    .collection("joinUsers")
+    .doc(user.uid)
+    .set({
+      likes: 0,
+      name: user.name,
+      image: user.image,
+      uid: user.uid,
+    });
 };

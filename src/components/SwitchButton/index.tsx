@@ -1,16 +1,33 @@
-import useSound from "use-sound";
+import type { FC } from "react";
 import { useState } from "react";
+import useSound from "use-sound";
+import { voteLikes, updateTotalLikes } from "src/lib/db";
+import { EngiviaType } from "src/types/interface";
+import { useUser } from "src/hooks/useSharedState";
 
-export type Props = {
-  playbackRate: number;
+type Props = {
+  broadcastId: string;
+  featureEngivia: EngiviaType;
+  likes: number;
 };
 
-export const SwitchButton = () => {
+export const SwitchButton: FC<Props> = ({
+  broadcastId,
+  featureEngivia,
+  likes,
+}) => {
+  const { user } = useUser();
   const [playbackRate, setPlaybackRate] = useState(0);
   const [play] = useSound("/hee.mp3", {
     playbackRate,
     // volume,
   });
+
+  const handleClick = async () => {
+    play();
+    await voteLikes(broadcastId, featureEngivia.id, user);
+    await updateTotalLikes(broadcastId, featureEngivia.id);
+  };
 
   return (
     <div>
@@ -26,7 +43,7 @@ export const SwitchButton = () => {
             borderRadius: "0 0 50% 50%",
           }}
         >
-          <button onClick={() => play()}>
+          <button disabled={likes >= 20 && true} onClick={handleClick}>
             <span className="absolute -top-7 left-0 py-2 w-full h-20 text-4xl font-bold text-center text-gray-200">
               へぇ
             </span>

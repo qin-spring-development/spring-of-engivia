@@ -27,6 +27,7 @@ export const useSubscribeBroadcasts = () => {
   useEffect(() => {
     const unsubscribe = db
       .collection("broadcasts")
+      .limit(5)
       .orderBy("broadCastingDate", "desc")
       .onSnapshot((snapshots) => {
         const broadcasts = snapshots.docs.map((snapshot) => {
