@@ -14,6 +14,7 @@ import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
 import { EngiviaCardWithTotalLikes } from "src/components/Engivia/EngiviaCardWithTotalLikes";
 import { EngiviaJoinUsers } from "src/components/Engivia/EngiviaJoinUsers";
 import { SwitchButton } from "src/components/SwitchButton";
+import { addJoinUser } from "src/lib/db";
 
 const Broadcasting: NextPage = () => {
   const { user } = useUser();
@@ -33,6 +34,12 @@ const Broadcasting: NextPage = () => {
       }, 5000);
     }
   }, [broadcast?.status, broadcastId, router, broadcast]);
+
+  useEffect(() => {
+    if (featureEngivia?.id) {
+      addJoinUser(broadcastId, featureEngivia.id, user);
+    }
+  }, [featureEngivia, broadcastId, user]);
 
   return (
     <BaseLayout title="放送中">

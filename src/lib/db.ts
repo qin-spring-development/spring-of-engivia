@@ -237,41 +237,17 @@ export const voteLikes = async (
   engiviaId: string | undefined,
   user: UserType
 ) => {
-  const joinUserRef = await db
+  const likesRef = db
     .collection("broadcasts")
     .doc(broadcastId)
     .collection("engivias")
     .doc(engiviaId)
-    .collection("joinUsers");
-
-  const itemRef = joinUserRef.doc(user.uid);
-  const doc = await itemRef.get();
-  if (doc.exists) {
-    const likesRef = db
-      .collection("broadcasts")
-      .doc(broadcastId)
-      .collection("engivias")
-      .doc(engiviaId)
-      .collection("joinUsers")
-      .doc(user.uid);
-    likesRef.set(
-      { likes: firebase.firestore.FieldValue.increment(1) },
-      { merge: true }
-    );
-  } else {
-    db.collection("broadcasts")
-      .doc(broadcastId)
-      .collection("engivias")
-      .doc(engiviaId)
-      .collection("joinUsers")
-      .doc(user.uid)
-      .set({
-        likes: 1,
-        name: user.name,
-        image: user.image,
-        uid: user.uid,
-      });
-  }
+    .collection("joinUsers")
+    .doc(user.uid);
+  likesRef.set(
+    { likes: firebase.firestore.FieldValue.increment(1) },
+    { merge: true }
+  );
 };
 
 export const incrementEngiviaNumber = async (
@@ -322,4 +298,36 @@ export const setYoutubeURL = async (broadcastId: string, url: string) => {
   db.collection("broadcasts")
     .doc(broadcastId)
     .set({ broadCastUrl: url }, { merge: true });
+};
+
+export const addJoinUser = async (
+  broadcastId: string,
+  engiviaId: string | undefined,
+  user: UserType
+) => {
+  const joinUserRef = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .doc(engiviaId)
+    .collection("joinUsers");
+
+  const itemRef = joinUserRef.doc(user.uid);
+  const doc = await itemRef.get();
+  if (doc.exists) {
+    return;
+  }
+
+  db.collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .doc(engiviaId)
+    .collection("joinUsers")
+    .doc(user.uid)
+    .set({
+      likes: 0,
+      name: user.name,
+      image: user.image,
+      uid: user.uid,
+    });
 };
