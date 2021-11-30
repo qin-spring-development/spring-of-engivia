@@ -5,7 +5,7 @@ import { voteLikes, updateTotalLikes } from "src/lib/db";
 import { EngiviaType } from "src/types/interface";
 import { useUser } from "src/hooks/useSharedState";
 
-type Props = {
+export type Props = {
   broadcastId: string;
   featureEngivia: EngiviaType;
   likes: number;
