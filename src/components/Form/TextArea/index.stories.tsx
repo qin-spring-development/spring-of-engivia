@@ -3,7 +3,7 @@ import { Story, Meta } from "@storybook/react/types-6-0";
 import { Props, TextArea } from "./index";
 
 export default {
-  // component: Form,
+  component: TextArea,
   title: "Components/Form/TextArea",
 } as Meta;
 
