@@ -17,11 +17,14 @@ export type JoinUserType = {
   image: string;
   uid: string;
 };
+
+export type featureStatusType = "BEFORE" | "IN_FEATURE" | "DONE";
+
 export type EngiviaType = {
   body: string;
   createdAt: string;
   engiviaNumber: number;
-  featureStatus: string;
+  featureStatus: featureStatusType;
   id: string;
   postUser: PostUserType;
   totalLikes: number;
@@ -31,6 +34,7 @@ export type BroadcastType = {
   broadCastUrl: string;
   broadCastingDate: string;
   engiviaCount: number;
+  engiviaCurrentCount: number | null;
   featureCount: number;
   featureId: string;
   id: string;

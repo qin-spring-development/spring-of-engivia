@@ -1,3 +1,5 @@
+import { EngiviaType } from "src/types/interface";
+
 export const initialBroadcastInfo = {
   broadCastUrl: "",
   broadCastingDate: new Date().toISOString(),
@@ -7,7 +9,7 @@ export const initialBroadcastInfo = {
   title: "",
 };
 
-export const initialEngiviaInfo = {
+export const initialEngiviaInfo: EngiviaType = {
   body: "",
   createdAt: new Date().toISOString(),
   engiviaNumber: 0,
