@@ -14,9 +14,9 @@ export const BaseLayout: FC<Props> = ({ className, children, title }) => {
       <Head>
         <title>{title}</title>
       </Head>
-      <div>
+      <div className="h-screen">
         <Header />
-        <main className="h-screen bg-gray-100">{children}</main>
+        <main className="min-h-[calc(100vh-68px)] bg-gray-100">{children}</main>
       </div>
     </>
   );
