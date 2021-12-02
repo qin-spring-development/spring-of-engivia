@@ -18,7 +18,7 @@ export const SwitchButton: FC<Props> = ({
 }) => {
   const { user } = useUser();
   const [playbackRate, setPlaybackRate] = useState(0);
-  const [play] = useSound("/hee.mp3", {
+  const [play] = useSound("/hee_low.mp3", {
     playbackRate,
     // volume,
   });
