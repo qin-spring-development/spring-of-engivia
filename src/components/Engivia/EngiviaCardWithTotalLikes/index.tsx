@@ -13,17 +13,15 @@ export const EngiviaCardWithTotalLikes: FC<Props> = ({
   const [audioString, setAudioString] = useState("");
   useEffect(() => {
     const getAudio = async () => {
-      const res = await fetch("/api/google-tts");
+      const res = await fetch("/api/google-tts", {
+        method: "POST",
+        cache: "no-cache",
+        body: engivia.body,
+      });
       const base64String = await res.json();
       setAudioString(base64String.base64String);
     };
     getAudio();
-    // const url = googleTTS.getAudioUrl(engivia.body, {
-    //   lang: "ja-JP",
-    //   slow: false,
-    //   host: "https://translate.google.com",
-    // });
-    // console.log(url);
   }, []);
 
   return (
