@@ -12,21 +12,21 @@ const Custom404: NextPage = () => {
       <div className="flex flex-col justify-center items-center h-screen">
         <div className="mb-3">
           <Image
+            src="/engivia_logo.png"
+            alt="エンジビアの泉"
+            loading="eager"
+            width={56}
+            height={60}
+          />
+        </div>
+        <div className="mb-4">
+          <Image
             src="/logo.png"
             alt="エンジビアの泉"
             loading="eager"
             width={206}
             height={36}
             priority
-          />
-        </div>
-        <div className="mb-4">
-          <Image
-            src="/logo_sub.png"
-            alt="素晴らしきプログラミング豆知識"
-            loading="eager"
-            width={258}
-            height={20}
           />
         </div>
         <p className="p-4 text-2xl font-bold text-gray-900">
