@@ -1,7 +1,8 @@
 import { db } from "src/lib/firebase";
+import { db as dbAdmin } from "src/lib/firebase-admin";
 
 export type ReqUser = {
-  uid: string;
+  id: string;
   email: string;
   name: string;
   image: string;
@@ -15,9 +16,9 @@ export type ResUser = ReqUser & {
 const adminUsers = [""];
 
 export const createUser = (user: ReqUser) => {
-  const isAdmin = adminUsers.includes(user.uid);
+  const isAdmin = adminUsers.includes(user.id);
   db.collection("users")
-    .doc(user.uid)
+    .doc(user.id)
     .set({ ...user, isAdmin }, { merge: true });
 };
 

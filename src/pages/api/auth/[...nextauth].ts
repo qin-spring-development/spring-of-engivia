@@ -11,19 +11,20 @@ const options = {
     }),
   ],
   callbacks: {
-    async session(session: Session, token: any) {
-      session.user = token.user;
-      return session;
-    },
-    async jwt(token: any, user: User, account: Account, profile: Profile) {
+    jwt: async (token: any, user: User, account: Account, profile: Profile) => {
       if (user) {
         token.user = user;
         token.account = account;
         token.profile = profile;
       }
-      return token;
+      return Promise.resolve(token);
     },
-    async signIn(user: User, account: Account, profile: Profile) {
+    session: async (session: Session, token: any) => {
+      const firebaseUser = await getUser(token.user.id);
+      session.user = firebaseUser as User;
+      return Promise.resolve(session);
+    },
+    signIn: async (user: User, account: Account, profile: Profile) => {
       if (user !== null) {
         (await getUser(user.id)) ?? createUser(toReqUser(user, account));
         const data = await getUser(user.id);
@@ -38,7 +39,7 @@ const options = {
 
 const toReqUser = (user: User, account: Account) => {
   const reqUser: ReqUser = {
-    uid: user.id,
+    id: user.id,
     email: user.email,
     name: user.name,
     image: user.image,
@@ -48,7 +49,7 @@ const toReqUser = (user: User, account: Account) => {
 };
 
 const setResUser = (user: User, resUser: ResUser) => {
-  user.id = resUser.uid;
+  user.id = resUser.id;
   user.email = resUser.email;
   user.isAdmin = resUser.isAdmin;
   user.name = resUser.name;

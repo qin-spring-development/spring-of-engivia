@@ -11,6 +11,7 @@ import { updateUsername } from "src/lib/users";
 
 const UserAccount: NextPage = () => {
   const [session] = useSession();
+
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState<string>(session?.user.name as string);
 
@@ -19,9 +20,9 @@ const UserAccount: NextPage = () => {
     setIsOpen(false);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (session?.user) {
-      updateUsername(session.user.id, name);
+      await updateUsername(session.user.id, name);
       toast("保存しました", {
         duration: 4000,
         position: "top-center",

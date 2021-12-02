@@ -99,7 +99,7 @@ export const useSubscribeUserEngivia = (broadcastId: string, uid: string) => {
           return snapshot.data() as EngiviaType;
         });
         const engivia = engivias.find(
-          (engivia) => engivia.postUser?.uid === uid
+          (engivia) => engivia.postUser?.id === uid
         );
 
         if (engivia === undefined) {
