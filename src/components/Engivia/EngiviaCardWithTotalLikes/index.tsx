@@ -1,5 +1,6 @@
-import type { FC } from "react";
+import { FC, useEffect } from "react";
 import { EngiviaType } from "src/types/interface";
+import * as googleTTS from "google-tts-api";
 
 type Props = {
   engivia: EngiviaType;
@@ -10,6 +11,15 @@ export const EngiviaCardWithTotalLikes: FC<Props> = ({
   engivia,
   totalLikes,
 }) => {
+  useEffect(() => {
+    const url = googleTTS.getAudioUrl(engivia.body, {
+      lang: "ja-JP",
+      slow: false,
+      host: "https://translate.google.com",
+    });
+    console.log(url);
+  }, []);
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="py-7 px-10 mb-2 bg-white rounded-lg">
