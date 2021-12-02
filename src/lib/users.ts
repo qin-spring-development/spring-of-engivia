@@ -31,3 +31,7 @@ export const getUser = async (uid: string) => {
     });
   return data;
 };
+
+export const updateUsername = (uid: string, name: string) => {
+  db.collection("users").doc(uid).set({ name }, { merge: true });
+};
