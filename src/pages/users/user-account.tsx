@@ -11,7 +11,6 @@ import { updateUsername } from "src/lib/users";
 
 const UserAccount: NextPage = () => {
   const [session] = useSession();
-
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState<string>(session?.user.name as string);
 

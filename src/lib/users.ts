@@ -1,5 +1,4 @@
 import { db } from "src/lib/firebase";
-import { db as dbAdmin } from "src/lib/firebase-admin";
 
 export type ReqUser = {
   id: string;
