@@ -1,28 +1,45 @@
 import type { NextPage } from "next";
-import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import Link from "next/link";
+import Image from "next/image";
+import Head from "next/head";
 
 const Custom404: NextPage = () => {
   return (
-    <BaseLayout title="404:ページが見つかりません">
-      <div className="flex justify-center ">
-        <div className="flex items-center h-screen text-3xl font-bold">
-          <ul>
-            <li className="text-gray-900">
-              お探しのページは見つかりませんでした。
-            </li>
-            <li className="text-gray-900">
-              URLをご確認の上、再度お試しください。
-            </li>
-            <Link href="/broadcasts">
-              <button className="text-xl text-light-blue-600">
-                トップへ戻る
-              </button>
-            </Link>
-          </ul>
+    <>
+      <Head>
+        <title>ページが見つかりません</title>
+      </Head>
+      <div className="flex flex-col justify-center items-center h-screen">
+        <div className="mb-3">
+          <Image
+            src="/logo.png"
+            alt="エンジビアの泉"
+            loading="eager"
+            width={206}
+            height={36}
+            priority
+          />
         </div>
+        <div className="mb-4">
+          <Image
+            src="/logo_sub.png"
+            alt="素晴らしきプログラミング豆知識"
+            loading="eager"
+            width={258}
+            height={20}
+          />
+        </div>
+        <p className="p-4 text-2xl font-bold text-gray-900">
+          お探しのページは見つかりませんでした。
+        </p>
+        <p className="p-4 text-2xl font-bold text-gray-900">
+          URLをご確認の上、再度お試しください。
+        </p>
+        <Link href="/broadcasts">
+          <a className="p-4 text-xl text-light-blue-600">トップへ戻る</a>
+        </Link>
       </div>
-    </BaseLayout>
+    </>
   );
 };
 
