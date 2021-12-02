@@ -1,5 +1,4 @@
 import type { FC } from "react";
-import { useState } from "react";
 import useSound from "use-sound";
 import { voteLikes, updateTotalLikes } from "src/lib/db";
 import { EngiviaType } from "src/types/interface";
@@ -17,11 +16,7 @@ export const SwitchButton: FC<Props> = ({
   likes,
 }) => {
   const { user } = useUser();
-  const [playbackRate, setPlaybackRate] = useState(0);
-  const [play] = useSound("/hee_low.mp3", {
-    playbackRate,
-    // volume,
-  });
+  const [play] = useSound("/hee_low.mp3");
 
   const handleClick = async () => {
     play();
