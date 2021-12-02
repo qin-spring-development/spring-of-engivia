@@ -1,6 +1,5 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { EngiviaType } from "src/types/interface";
-import * as googleTTS from "google-tts-api";
 
 type Props = {
   engivia: EngiviaType;
@@ -11,13 +10,20 @@ export const EngiviaCardWithTotalLikes: FC<Props> = ({
   engivia,
   totalLikes,
 }) => {
+  const [audioString, setAudioString] = useState("");
   useEffect(() => {
-    const url = googleTTS.getAudioUrl(engivia.body, {
-      lang: "ja-JP",
-      slow: false,
-      host: "https://translate.google.com",
-    });
-    console.log(url);
+    const getAudio = async () => {
+      const res = await fetch("/api/google-tts");
+      const base64String = await res.json();
+      setAudioString(base64String.base64String);
+    };
+    getAudio();
+    // const url = googleTTS.getAudioUrl(engivia.body, {
+    //   lang: "ja-JP",
+    //   slow: false,
+    //   host: "https://translate.google.com",
+    // });
+    // console.log(url);
   }, []);
 
   return (
@@ -28,6 +34,17 @@ export const EngiviaCardWithTotalLikes: FC<Props> = ({
             {`エンジビア${engivia?.engiviaNumber}`}
           </p>
           <p className="text-4xl">{engivia?.body}</p>
+          {audioString !== "" && (
+            <audio autoPlay>
+              <source src={audioString} type="audio/mp3" />
+              <track
+                src="captions_en.vtt"
+                kind="captions"
+                srcLang="ja"
+                label="english_captions"
+              ></track>
+            </audio>
+          )}
         </div>
         <div className="flex justify-between items-end">
           <div className="flex items-center">
