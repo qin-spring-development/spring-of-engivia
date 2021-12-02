@@ -4,7 +4,7 @@ import { Form, Props } from "./index";
 
 export default {
   component: Form,
-  title: "Components/Form",
+  title: "Components/Form/Input",
 } as Meta;
 
 const Template: Story<Props> = (args) => <Form {...args} />;
