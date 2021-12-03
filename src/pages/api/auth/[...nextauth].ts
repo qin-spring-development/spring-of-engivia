@@ -1,3 +1,4 @@
+import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth, { Account, Profile, Session, User } from "next-auth";
 import Providers from "next-auth/providers";
 import { createUser, getUser, ReqUser, ResUser } from "src/lib/users";
@@ -64,4 +65,5 @@ const setResUser = (user: User, resUser: ResUser) => {
   user.image = resUser.image;
 };
 
-export default (req: any, res: any) => NextAuth(req, res, options);
+export default (req: NextApiRequest, res: NextApiResponse) =>
+  NextAuth(req, res, options);
