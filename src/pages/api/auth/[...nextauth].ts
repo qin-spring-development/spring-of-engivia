@@ -9,6 +9,14 @@ const options = {
       clientId: process.env.SLACK_CLIENT_ID,
       clientSecret: process.env.SLACK_CLIENT_SECRET,
     }),
+    // ユーザー情報更新時の再ログイン
+    Providers.Credentials({
+      authorize: async (credentials) => {
+        const { id } = credentials;
+        const firebaseUser = (await getUser(id)) as User;
+        return firebaseUser;
+      },
+    }),
   ],
   callbacks: {
     jwt: async (token: any, user: User, account: Account, profile: Profile) => {
@@ -20,8 +28,7 @@ const options = {
       return Promise.resolve(token);
     },
     session: async (session: Session, token: any) => {
-      const firebaseUser = await getUser(token.user.id);
-      session.user = firebaseUser as User;
+      session.user = token.user;
       return Promise.resolve(session);
     },
     signIn: async (user: User, account: Account, profile: Profile) => {

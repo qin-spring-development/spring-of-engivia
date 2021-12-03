@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { Fragment, useState } from "react";
 import { useRouter } from "next/router";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
-import { useSession } from "next-auth/client";
+import { signIn, useSession } from "next-auth/client";
 import { Form } from "src/components/Form";
 import { Button } from "src/components/Button";
 import { Dialog, Transition } from "@headlessui/react";
@@ -22,6 +22,7 @@ const UserAccount: NextPage = () => {
   const handleSave = async () => {
     if (session?.user) {
       await updateUsername(session.user.id, name);
+      signIn("credentials", { id: session.user.id });
       toast("保存しました", {
         duration: 4000,
         position: "top-center",
