@@ -57,7 +57,7 @@ export default function Home() {
         </div>
         <img
           className="object-cover w-[57%] h-screen"
-          src="/AdobeStock_162810993_Preview.jpeg"
+          src="/fountain.webp"
           alt="spring"
         />
       </div>
