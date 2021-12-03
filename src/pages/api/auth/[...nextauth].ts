@@ -9,21 +9,29 @@ const options = {
       clientId: process.env.SLACK_CLIENT_ID,
       clientSecret: process.env.SLACK_CLIENT_SECRET,
     }),
+    // ユーザー情報更新時の再ログイン
+    Providers.Credentials({
+      authorize: async (credentials) => {
+        const { id } = credentials;
+        const firebaseUser = (await getUser(id)) as User;
+        return firebaseUser;
+      },
+    }),
   ],
   callbacks: {
-    async session(session: Session, token: any) {
-      session.user = token.user;
-      return session;
-    },
-    async jwt(token: any, user: User, account: Account, profile: Profile) {
+    jwt: async (token: any, user: User, account: Account, profile: Profile) => {
       if (user) {
         token.user = user;
         token.account = account;
         token.profile = profile;
       }
-      return token;
+      return Promise.resolve(token);
     },
-    async signIn(user: User, account: Account, profile: Profile) {
+    session: async (session: Session, token: any) => {
+      session.user = token.user;
+      return Promise.resolve(session);
+    },
+    signIn: async (user: User, account: Account, profile: Profile) => {
       if (user !== null) {
         (await getUser(user.id)) ?? createUser(toReqUser(user, account));
         const data = await getUser(user.id);
@@ -38,7 +46,7 @@ const options = {
 
 const toReqUser = (user: User, account: Account) => {
   const reqUser: ReqUser = {
-    uid: user.id,
+    id: user.id,
     email: user.email,
     name: user.name,
     image: user.image,
@@ -48,7 +56,7 @@ const toReqUser = (user: User, account: Account) => {
 };
 
 const setResUser = (user: User, resUser: ResUser) => {
-  user.id = resUser.uid;
+  user.id = resUser.id;
   user.email = resUser.email;
   user.isAdmin = resUser.isAdmin;
   user.name = resUser.name;

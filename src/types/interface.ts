@@ -1,21 +1,13 @@
-export type UserType = {
-  email: string;
-  image: string;
-  isAdmin: boolean;
-  name: string;
-  provider: string;
-  uid: string;
-};
 export type PostUserType = {
   image: string;
   name: string;
-  uid: string;
+  id: string;
 };
 export type JoinUserType = {
   likes: number;
   name: string;
   image: string;
-  uid: string;
+  id: string;
 };
 
 export type featureStatusType = "BEFORE" | "IN_FEATURE" | "DONE";
@@ -46,7 +38,7 @@ export type WithOutToken = {
   name: string | null;
   photoURL: string | undefined;
   provider: string | undefined;
-  uid: string;
+  id: string;
 };
 export type Broadcast = {
   broadCastUrl: string;
