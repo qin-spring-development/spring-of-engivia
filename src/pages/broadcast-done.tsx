@@ -1,5 +1,5 @@
 import type { GetServerSideProps, NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
@@ -10,7 +10,7 @@ import { deleteBroadcast, setYoutubeURL } from "src/lib/db";
 import { convertEmbedURL } from "src/lib/convertEmbedURL";
 import { Button } from "src/components/Button";
 import { Form } from "src/components/Form";
-import { getBroadcast, getEngivias } from "src/lib/db-admin";
+import { getEngivias } from "src/lib/db-admin";
 import { BroadcastType, EngiviaType } from "src/types/interface";
 
 type Props = {
