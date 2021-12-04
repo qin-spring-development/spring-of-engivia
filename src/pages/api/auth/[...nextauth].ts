@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 import NextAuth, { Account, Profile, Session, User } from "next-auth";
 import Providers from "next-auth/providers";
 import { createUser, getUser, ReqUser, ResUser } from "src/lib/users";
