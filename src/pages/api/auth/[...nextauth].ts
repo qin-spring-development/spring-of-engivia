@@ -32,7 +32,7 @@ const options = {
       session.user = token.user;
       return Promise.resolve(session);
     },
-    signIn: async (user: User, account: Account, profile: Profile) => {
+    signIn: async (user: User, account: Account) => {
       if (user !== null) {
         (await getUser(user.id)) ?? createUser(toReqUser(user, account));
         const data = await getUser(user.id);
