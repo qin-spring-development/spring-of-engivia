@@ -1,3 +1,4 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import NextAuth, { Account, Profile, Session, User } from "next-auth";
 import Providers from "next-auth/providers";
 import { createUser, getUser, ReqUser, ResUser } from "src/lib/users";
@@ -31,7 +32,7 @@ const options = {
       session.user = token.user;
       return Promise.resolve(session);
     },
-    signIn: async (user: User, account: Account, profile: Profile) => {
+    signIn: async (user: User, account: Account) => {
       if (user !== null) {
         (await getUser(user.id)) ?? createUser(toReqUser(user, account));
         const data = await getUser(user.id);
@@ -64,4 +65,5 @@ const setResUser = (user: User, resUser: ResUser) => {
   user.image = resUser.image;
 };
 
-export default (req: any, res: any) => NextAuth(req, res, options);
+export default (req: NextApiRequest, res: NextApiResponse) =>
+  NextAuth(req, res, options);
