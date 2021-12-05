@@ -10,7 +10,7 @@ export const EngiviaJoinUsers: FC<Props> = ({ joinUsers }) => {
     <div>
       <div className="absolute top-0 right-0 mt-5 mb-3 divide-y">
         {joinUsers.map((joinUser) => (
-          <div key={joinUser.uid}>
+          <div key={joinUser.id}>
             <div className="flex justify-between items-center my-3">
               <div className="flex items-center">
                 <img

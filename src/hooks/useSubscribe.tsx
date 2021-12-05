@@ -27,7 +27,6 @@ export const useSubscribeBroadcasts = () => {
   useEffect(() => {
     const unsubscribe = db
       .collection("broadcasts")
-      .limit(5)
       .orderBy("broadCastingDate", "desc")
       .onSnapshot((snapshots) => {
         const broadcasts = snapshots.docs.map((snapshot) => {
@@ -99,7 +98,7 @@ export const useSubscribeUserEngivia = (broadcastId: string, uid: string) => {
           return snapshot.data() as EngiviaType;
         });
         const engivia = engivias.find(
-          (engivia) => engivia.postUser?.uid === uid
+          (engivia) => engivia.postUser?.id === uid
         );
 
         if (engivia === undefined) {
