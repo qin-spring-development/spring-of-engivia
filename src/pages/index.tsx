@@ -23,8 +23,7 @@ export default function Home() {
             width={56}
             height={60}
           />
-
-          <h1 className="mt-6">
+          <div className="mt-6">
             <Image
               src="/logo.png"
               alt="エンジビアの泉"
@@ -33,8 +32,8 @@ export default function Home() {
               height={36}
               priority
             />
-          </h1>
-          <p className="mt-2 mb-10">
+          </div>
+          <div className="mt-2 mb-10">
             <Image
               src="/logo_sub.png"
               alt="〜素晴らしきプログラミング豆知識〜"
@@ -42,7 +41,7 @@ export default function Home() {
               width={258}
               height={20}
             />
-          </p>
+          </div>
           <button
             onClick={() =>
               signIn("slack", {
