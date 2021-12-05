@@ -1,13 +1,12 @@
 import type { NextPage } from "next";
-import Link from "next/link";
 import Image from "next/image";
 import Head from "next/head";
 
-const Custom404: NextPage = () => {
+const Custom500: NextPage = () => {
   return (
     <>
       <Head>
-        <title>ページが見つかりません</title>
+        <title>システムエラー</title>
       </Head>
       <div className="flex flex-col justify-center items-center h-screen">
         <div className="mb-3">
@@ -30,17 +29,14 @@ const Custom404: NextPage = () => {
           />
         </div>
         <p className="p-4 text-2xl font-bold text-gray-900">
-          お探しのページは見つかりませんでした。
+          システムエラーが発生しました。
         </p>
         <p className="p-4 text-2xl font-bold text-gray-900">
-          URLをご確認の上、再度お試しください。
+          管理者へお問い合わせください。
         </p>
-        <Link href="/broadcasts">
-          <a className="p-4 text-xl text-light-blue-600">トップへ戻る</a>
-        </Link>
       </div>
     </>
   );
 };
 
-export default Custom404;
+export default Custom500;

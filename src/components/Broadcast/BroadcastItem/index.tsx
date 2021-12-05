@@ -3,16 +3,16 @@ import { useRouter } from "next/router";
 import { AcademicCapIcon, CalendarIcon } from "@heroicons/react/solid";
 import { format, parseISO } from "date-fns";
 import { BroadcastType } from "src/types/interface";
-import { useUser } from "src/hooks/useSharedState";
 import { Label } from "src/components/Label";
-// import { createJoinUsers } from "src/lib/db";
+import { useSession } from "next-auth/client";
 
 type Props = {
   broadcast: BroadcastType;
 };
 
 export const BroadcastItem: FC<Props> = ({ broadcast }) => {
-  const { user } = useUser();
+  const [session] = useSession();
+  const user = session?.user;
   const { title, broadCastingDate, engiviaCount, status, id } = broadcast;
 
   const router = useRouter();
@@ -24,12 +24,12 @@ export const BroadcastItem: FC<Props> = ({ broadcast }) => {
         pathname: "/broadcast-done",
         query: { id: id },
       });
-    } else if (user.isAdmin && status === "BEFORE") {
+    } else if (session?.user.isAdmin && status === "BEFORE") {
       router.push({
         pathname: "/admin/broadcasting",
         query: { id: id },
       });
-    } else if (user.isAdmin && status === "IN_PROGRESS") {
+    } else if (session?.user.isAdmin && status === "IN_PROGRESS") {
       router.push({
         pathname: "/admin/broadcasting",
         query: { id: id },
@@ -43,7 +43,7 @@ export const BroadcastItem: FC<Props> = ({ broadcast }) => {
     } else if (status === "BEFORE") {
       router.push({
         pathname: "/users/engivia-registration",
-        query: { id: id, uid: user.uid },
+        query: { id: id, uid: user?.id },
       });
     }
   };
