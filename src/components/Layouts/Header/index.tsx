@@ -31,7 +31,6 @@ export const Header = () => {
           <div>
             <Menu as="div">
               <div className="flex items-center">
-                <p className="mr-5">{session.user.name}</p>
                 <Menu.Button>
                   <img
                     className="h-10 rounded-full"
