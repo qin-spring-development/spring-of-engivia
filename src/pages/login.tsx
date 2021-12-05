@@ -20,7 +20,7 @@ const Login: NextPage = () => {
 
     getToken()
       .then((token) => {
-        auth.signInWithCustomToken(token);
+        return auth.signInWithCustomToken(token);
       })
       .then(() => {
         router.push("/broadcasts");
