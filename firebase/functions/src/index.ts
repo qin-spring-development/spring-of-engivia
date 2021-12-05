@@ -23,21 +23,3 @@ export const deleteBroadcastSubCollection = functions
       throw error;
     }
   });
-
-export const deleteEngiviaSubCollection = functions
-  .region("asia-northeast1")
-  .firestore.document("broadcasts/{id}/engivias/{id}")
-  .onDelete(async (snapshot) => {
-    try {
-      const path = snapshot.ref.path;
-      await firebase_tools.firestore.delete(path, {
-        project: process.env.GCLOUD_PROJECT,
-        recursive: true,
-        yes: true,
-        token: functions.config().fb.token,
-      });
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  });
