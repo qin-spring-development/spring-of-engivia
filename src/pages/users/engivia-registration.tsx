@@ -13,14 +13,15 @@ import {
   useSubscribeBroadcast,
   useSubscribeUserEngivia,
 } from "src/hooks/useSubscribe";
-import { useUser } from "src/hooks/useSharedState";
+import { useSession } from "next-auth/client";
 
 const EngiviaRegistration: NextPage = () => {
-  const { user } = useUser();
+  const [session] = useSession();
+  const user = session?.user;
   const router = useRouter();
   const broadcastId = router.query.id as string;
   const broadcast = useSubscribeBroadcast(broadcastId);
-  const userEngivia = useSubscribeUserEngivia(broadcastId, user.uid);
+  const userEngivia = useSubscribeUserEngivia(broadcastId, user?.id as string);
   const [confirm, setConfirm] = useState<boolean>(true);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -28,7 +29,7 @@ const EngiviaRegistration: NextPage = () => {
     if (broadcast?.status === "IN_PROGRESS") {
       router.push(`/users/broadcasting?id=${broadcastId}`);
     }
-    if (user.isAdmin) {
+    if (user?.isAdmin) {
       router.push(`/admin/broadcasting?id=${broadcastId}`);
     }
   }, [broadcast?.status, broadcastId, router, user]);

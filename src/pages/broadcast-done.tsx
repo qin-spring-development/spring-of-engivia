@@ -1,17 +1,17 @@
 import type { GetServerSideProps, NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
 import { useSubscribeBroadcast } from "src/hooks/useSubscribe";
-import { useUser } from "src/hooks/useSharedState";
 import { EngiviaList } from "src/components/Engivia/EngiviaList";
 import { deleteBroadcast, setYoutubeURL } from "src/lib/db";
 import { convertEmbedURL } from "src/lib/convertEmbedURL";
 import { Button } from "src/components/Button";
 import { Form } from "src/components/Form";
-import { getBroadcast, getEngivias } from "src/lib/db-admin";
+import { getEngivias } from "src/lib/db-admin";
 import { BroadcastType, EngiviaType } from "src/types/interface";
+import { useSession } from "next-auth/client";
 
 type Props = {
   broadcast: BroadcastType;
@@ -19,7 +19,7 @@ type Props = {
 };
 
 const BroadcastDone: NextPage<Props> = ({ engivias }) => {
-  const { user } = useUser();
+  const [session] = useSession();
   const [url, setUrl] = useState<string>("");
   const router = useRouter();
   const broadcastId = router.query.id as string;
@@ -41,17 +41,16 @@ const BroadcastDone: NextPage<Props> = ({ engivias }) => {
       <div className="flex flex-col items-center text-center">
         {broadcast?.broadCastUrl && (
           <iframe
-            width="765"
-            height="400"
+            width="896"
+            height="504"
             src={broadcast.broadCastUrl}
             title="YouTube video"
-            frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-            className="mb-5"
+            className="mb-5 w-full max-w-4xl"
           ></iframe>
         )}
-        {user.isAdmin && (
+        {session?.user.isAdmin && (
           <div className="w-full max-w-4xl">
             <Form
               type="text"
