@@ -7,6 +7,7 @@ import { useSession } from "next-auth/client";
 import { User } from "next-auth";
 
 export type Props = {
+  classNameLock?: string;
   broadcastId: string;
   featureEngivia: EngiviaType;
   likes: number;
@@ -16,6 +17,7 @@ export const SwitchButton: FC<Props> = ({
   broadcastId,
   featureEngivia,
   likes,
+  classNameLock,
 }) => {
   const [session] = useSession();
   const [playbackRate, setPlaybackRate] = useState(0);
@@ -30,6 +32,14 @@ export const SwitchButton: FC<Props> = ({
     await updateTotalLikes(broadcastId, featureEngivia.id);
   };
 
+  switch (true) {
+    case likes <= 20:
+      classNameLock = "hover:h-[52px] active:h-10  hover:top-1 active:top-4 ";
+      break;
+    default:
+      break;
+  }
+
   return (
     <div>
       <div className="block relative m-0 w-[200px] h-32">
@@ -38,7 +48,7 @@ export const SwitchButton: FC<Props> = ({
           style={{ borderRadius: "100px / 40px", boxShadow: "0 8px 0 #c4cacc" }}
         ></span>
         <span
-          className="absolute before:absolute top-0 before:-top-7 hover:top-1 active:top-4 before:left-0 left-5 mt-8 w-40 before:w-40 before:h-14 h-14 hover:h-[52px] active:h-10 bg-light-blue-700 before:bg-light-blue-600 before:rounded-[80px/30px]"
+          className={`absolute before:absolute top-0 before:-top-7 before:left-0 left-5 mt-8 w-40 before:w-40 before:h-14 h-14 bg-light-blue-700 before:bg-light-blue-600 before:rounded-[80px/30px] ${classNameLock}`}
           style={{
             transition: "all 0.3s",
             borderRadius: "0 0 50% 50%",
