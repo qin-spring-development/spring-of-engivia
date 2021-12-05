@@ -18,7 +18,7 @@ export const initialEngiviaInfo: EngiviaType = {
   postUser: {
     image: "",
     name: "",
-    uid: "",
+    id: "",
   },
   totalLikes: 0,
 };

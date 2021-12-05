@@ -2,9 +2,10 @@ import { firebase, db } from "src/lib/firebase";
 import {
   WithOutToken,
   BroadcastFormType,
-  UserType,
   featureStatusType,
 } from "src/types/interface";
+import { ReqUser } from "src/lib/users";
+import { User } from "next-auth";
 
 export const getUser = async (uid: string) => {
   const data = await db
@@ -117,7 +118,7 @@ export const getEngivia = async (broadcastId: string, engiviaId: string) => {
 export const createEngivia = async (
   broadcastId: string,
   engiviaBody: string,
-  user: UserType
+  user: User
 ) => {
   const engiviaRef = await db
     .collection("broadcasts")
@@ -133,7 +134,7 @@ export const createEngivia = async (
     postUser: {
       name: user.name,
       image: user.image,
-      uid: user.uid,
+      id: user.id,
     },
     totalLikes: 0,
   };
@@ -154,19 +155,19 @@ export const createEngivia = async (
 export const createJoinUsers = async (
   broadcastId: string,
   engiviaId: string,
-  user: UserType
+  user: ReqUser
 ) => {
   db.collection("broadcasts")
     .doc(broadcastId)
     .collection("engivias")
     .doc(engiviaId)
     .collection("joinUsers")
-    .doc(user.uid)
+    .doc(user.id)
     .set({
       likes: 0,
       name: user.name,
       image: user.image,
-      uid: user.uid,
+      iid: user.id,
     });
 };
 
@@ -235,7 +236,7 @@ export const deleteEngivia = async (broadcastId: string, engiviaId: string) => {
 export const voteLikes = async (
   broadcastId: string,
   engiviaId: string | undefined,
-  user: UserType
+  user: User
 ) => {
   const likesRef = db
     .collection("broadcasts")
@@ -243,7 +244,7 @@ export const voteLikes = async (
     .collection("engivias")
     .doc(engiviaId)
     .collection("joinUsers")
-    .doc(user.uid);
+    .doc(user.id);
   likesRef.set(
     { likes: firebase.firestore.FieldValue.increment(1) },
     { merge: true }
@@ -303,7 +304,7 @@ export const setYoutubeURL = async (broadcastId: string, url: string) => {
 export const addJoinUser = async (
   broadcastId: string,
   engiviaId: string | undefined,
-  user: UserType
+  user: ReqUser
 ) => {
   const joinUserRef = await db
     .collection("broadcasts")
@@ -312,7 +313,7 @@ export const addJoinUser = async (
     .doc(engiviaId)
     .collection("joinUsers");
 
-  const itemRef = joinUserRef.doc(user.uid);
+  const itemRef = joinUserRef.doc(user.id);
   const doc = await itemRef.get();
   if (doc.exists) {
     return;
@@ -323,11 +324,11 @@ export const addJoinUser = async (
     .collection("engivias")
     .doc(engiviaId)
     .collection("joinUsers")
-    .doc(user.uid)
+    .doc(user.id)
     .set({
       likes: 0,
       name: user.name,
       image: user.image,
-      uid: user.uid,
+      id: user.id,
     });
 };

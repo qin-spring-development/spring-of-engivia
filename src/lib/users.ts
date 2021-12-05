@@ -1,7 +1,7 @@
 import { db } from "src/lib/firebase";
 
 export type ReqUser = {
-  uid: string;
+  id: string;
   email: string;
   name: string;
   image: string;
@@ -15,9 +15,9 @@ export type ResUser = ReqUser & {
 const adminUsers = [""];
 
 export const createUser = (user: ReqUser) => {
-  const isAdmin = adminUsers.includes(user.uid);
+  const isAdmin = adminUsers.includes(user.id);
   db.collection("users")
-    .doc(user.uid)
+    .doc(user.id)
     .set({ ...user, isAdmin }, { merge: true });
 };
 
@@ -30,4 +30,8 @@ export const getUser = async (uid: string) => {
       return snapshot.data();
     });
   return data;
+};
+
+export const updateUsername = (uid: string, name: string) => {
+  db.collection("users").doc(uid).set({ name }, { merge: true });
 };

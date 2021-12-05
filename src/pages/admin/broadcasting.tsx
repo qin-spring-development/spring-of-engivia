@@ -30,7 +30,6 @@ import { useSubscribeBroadcast } from "src/hooks/useSubscribe";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
 import { BroadcastType, EngiviaType } from "src/types/interface";
 import { Button } from "src/components/Button";
-import { useUser } from "src/hooks/useSharedState";
 
 type Items = Record<string, EngiviaType[]>;
 interface Props {
@@ -100,7 +99,6 @@ const Broadcasting = ({
     items.inFeature[0] ? items.inFeature[0].id : ""
   );
   const sensors = useSensors(useSensor(PointerSensor));
-  const { user } = useUser();
   const router = useRouter();
   const broadcast = useSubscribeBroadcast(router.query.id as string);
   const broadcastId = broadcast?.id as string;
