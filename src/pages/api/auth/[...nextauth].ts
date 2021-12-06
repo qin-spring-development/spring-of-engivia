@@ -1,6 +1,8 @@
+import { auth } from "src/lib/firebase";
 import type { NextApiRequest, NextApiResponse } from "next";
 import NextAuth, { Account, Profile, Session, User } from "next-auth";
 import Providers from "next-auth/providers";
+import { adminAuth } from "src/lib/firebase-admin";
 import { createUser, getUser, ReqUser, ResUser } from "src/lib/users";
 
 const options = {
@@ -33,12 +35,19 @@ const options = {
       return Promise.resolve(session);
     },
     signIn: async (user: User, account: Account) => {
-      if (user !== null) {
-        (await getUser(user.id)) ?? createUser(toReqUser(user, account));
-        const data = await getUser(user.id);
-        setResUser(user, data as ResUser);
-        return true;
-      } else {
+      try {
+        if (user !== null) {
+          const customToken = await adminAuth.createCustomToken(user.id);
+          await auth.signInWithCustomToken(customToken);
+
+          (await getUser(user.id)) ?? createUser(toReqUser(user, account));
+          const data = await getUser(user.id);
+          setResUser(user, data as ResUser);
+          return true;
+        }
+        return false;
+      } catch (e) {
+        console.error(e);
         return false;
       }
     },
