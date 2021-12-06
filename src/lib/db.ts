@@ -326,4 +326,15 @@ export const addJoinUser = async (
       image: user.image,
       id: user.id,
     });
+
+  const engiviaRef = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .doc(engiviaId);
+
+  engiviaRef.set(
+    { joinUsersCount: firebase.firestore.FieldValue.increment(1) },
+    { merge: true }
+  );
 };
