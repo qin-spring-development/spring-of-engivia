@@ -14,6 +14,7 @@ import { EngiviaCardWithTotalLikes } from "src/components/Engivia/EngiviaCardWit
 import { EngiviaJoinUsers } from "src/components/Engivia/EngiviaJoinUsers";
 import { SwitchButton } from "src/components/SwitchButton";
 import { addJoinUser } from "src/lib/db";
+import { sumTotalLikes } from "src/lib/sumTotalLikes";
 import { useSession } from "next-auth/client";
 
 const Broadcasting: NextPage = () => {
@@ -31,6 +32,9 @@ const Broadcasting: NextPage = () => {
   );
   const totalLikes = useSubscribeTotalLikes(broadcastId, featureEngivia?.id);
   const joinUsers = useSubscribeJoinUsers(broadcastId, featureEngivia?.id);
+  const currentTotalLikes = sumTotalLikes(joinUsers.length, totalLikes);
+
+  console.log({ currentTotalLikes });
 
   useEffect(() => {
     if (broadcast?.status === "DONE") {
@@ -67,7 +71,7 @@ const Broadcasting: NextPage = () => {
         <div>
           <EngiviaCardWithTotalLikes
             engivia={featureEngivia}
-            totalLikes={totalLikes}
+            currentTotalLikes={currentTotalLikes}
           />
           <div className="mx-auto max-w-2xl">
             <div className="flex justify-center items-center mt-40">
