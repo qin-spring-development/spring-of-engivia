@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { db } from "src/lib/firebase";
 import useSound from "use-sound";
 import { EngiviaType, BroadcastType, JoinUserType } from "src/types/interface";
@@ -142,6 +142,7 @@ export const useSubscribeTotalLikes = (
   broadcastId: string,
   engiviaId: string | undefined
 ) => {
+  const soundFlgRef = useRef(false);
   const [totalLikes, setTotalLikes] = useState<number>(0);
   const [play] = useSound("/hee.mp3");
 
@@ -154,17 +155,17 @@ export const useSubscribeTotalLikes = (
       .onSnapshot(async (snapshot) => {
         const totalLikesDoc = await snapshot.data();
         if (totalLikesDoc) {
-          if (totalLikesDoc.totalLikes === 0) {
-            setTotalLikes(totalLikesDoc.totalLikes);
-          } else {
-            play();
-            setTotalLikes(totalLikesDoc.totalLikes);
-          }
+          setTotalLikes(totalLikesDoc.totalLikes);
+          soundFlgRef.current && play();
+          soundFlgRef.current = true;
+        } else {
+          setTotalLikes(0);
+          soundFlgRef.current = false;
         }
       });
 
     return () => unsubscribe();
-  }, [broadcastId, engiviaId, totalLikes, play]);
+  }, [broadcastId, engiviaId]);
 
   return totalLikes;
 };
