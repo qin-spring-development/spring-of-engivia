@@ -201,18 +201,13 @@ export const updateTotalLikes = async (
     .map((doc) => doc.data().likes)
     .reduce((prev, current) => prev + current, 0);
 
-  const totalJoinUsersLength = snapshot.docs.length;
-
-  const sumTotalLikes =
-    (Math.round((totalLikes / totalJoinUsersLength) * 5) * 10) / 10;
-
   const engiviaRef = await db
     .collection("broadcasts")
     .doc(broadcastId)
     .collection("engivias")
     .doc(engiviaId);
 
-  engiviaRef.set({ totalLikes: sumTotalLikes }, { merge: true });
+  engiviaRef.set({ totalLikes }, { merge: true });
 };
 
 export const deleteEngivia = async (broadcastId: string, engiviaId: string) => {
