@@ -94,6 +94,7 @@ const Broadcasting = ({
   });
 
   const [clonedItems, setClonedItems] = useState<Items | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [activeId, setActiveId] = useState<string | null>(null);
   const [inFeatureId, setInFeatureId] = useState<string>(
     items.inFeature[0] ? items.inFeature[0].id : ""

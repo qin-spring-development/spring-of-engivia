@@ -165,6 +165,7 @@ export const useSubscribeTotalLikes = (
       });
 
     return () => unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [broadcastId, engiviaId]);
 
   return totalLikes;
