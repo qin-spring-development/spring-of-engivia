@@ -41,7 +41,14 @@ const Broadcasting: NextPage = () => {
     if (featureEngivia?.id && user) {
       addJoinUser(broadcastId, featureEngivia.id, user);
     }
-  }, [broadcast?.status, featureEngivia, broadcastId, user, router]);
+  }, [
+    broadcast?.status,
+    featureEngivia,
+    broadcastId,
+    user,
+    router,
+    session?.user.isAdmin,
+  ]);
 
   return (
     <BaseLayout title="放送中">
