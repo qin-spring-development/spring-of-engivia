@@ -6,6 +6,7 @@ import { Fragment } from "react";
 import { UserIcon } from "@heroicons/react/solid";
 import { LogoutIcon, IdentificationIcon } from "@heroicons/react/outline";
 import { signOut, useSession } from "next-auth/client";
+import { auth } from "src/lib/firebase";
 
 export const Header = () => {
   const [session] = useSession();
@@ -84,7 +85,10 @@ export const Header = () => {
                       <Menu.Item>
                         {({ active }) => (
                           <button
-                            onClick={() => signOut({ callbackUrl: "/" })}
+                            onClick={() => {
+                              auth.signOut();
+                              signOut({ callbackUrl: "/" });
+                            }}
                             className={`${
                               active
                                 ? "bg-light-blue-600 text-white"
