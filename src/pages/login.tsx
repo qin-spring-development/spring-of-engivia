@@ -29,7 +29,7 @@ const Login: NextPage = () => {
         console.log(e);
         router.push("/");
       });
-  }, []);
+  }, [router, session?.user.id]);
 
   return <div></div>;
 };

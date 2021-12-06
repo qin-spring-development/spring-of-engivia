@@ -30,6 +30,7 @@ import { useSubscribeBroadcast } from "src/hooks/useSubscribe";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
 import { BroadcastType, EngiviaType } from "src/types/interface";
 import { Button } from "src/components/Button";
+import { useSession } from "next-auth/client";
 
 type Items = Record<string, EngiviaType[]>;
 interface Props {
@@ -68,6 +69,7 @@ const Broadcasting = ({
   strategy = verticalListSortingStrategy,
   engivias,
 }: Props) => {
+  const [session] = useSession();
   const getContainerName = (key: string): string => {
     switch (key) {
       case "before":
@@ -94,6 +96,7 @@ const Broadcasting = ({
   });
 
   const [clonedItems, setClonedItems] = useState<Items | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [activeId, setActiveId] = useState<string | null>(null);
   const [inFeatureId, setInFeatureId] = useState<string>(
     items.inFeature[0] ? items.inFeature[0].id : ""
@@ -145,6 +148,9 @@ const Broadcasting = ({
   };
 
   useEffect(() => {
+    if (!session?.user.isAdmin) {
+      router.push("/404");
+    }
     return () => {
       if (broadcastId) {
         items.before.forEach((engivia) =>

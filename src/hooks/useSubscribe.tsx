@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { db } from "src/lib/firebase";
+import useSound from "use-sound";
 import { EngiviaType, BroadcastType, JoinUserType } from "src/types/interface";
 import { getEngivia } from "src/lib/db";
 import { initialEngiviaInfo } from "src/constant/initialState";
@@ -141,7 +142,9 @@ export const useSubscribeTotalLikes = (
   broadcastId: string,
   engiviaId: string | undefined
 ) => {
+  const soundFlgRef = useRef(false);
   const [totalLikes, setTotalLikes] = useState<number>(0);
+  const [play] = useSound("/hee_low.mp3");
 
   useEffect(() => {
     const unsubscribe = db
@@ -150,14 +153,20 @@ export const useSubscribeTotalLikes = (
       .collection("engivias")
       .doc(engiviaId)
       .onSnapshot(async (snapshot) => {
-        const totalLikesDoc = await snapshot.data();
-        if (totalLikesDoc) {
-          setTotalLikes(totalLikesDoc?.totalLikes);
+        const engiviaDoc = await snapshot.data();
+        if (engiviaDoc) {
+          setTotalLikes(engiviaDoc.totalLikes);
+          soundFlgRef.current && play();
+          soundFlgRef.current = true;
+        } else {
+          setTotalLikes(0);
+          soundFlgRef.current = false;
         }
       });
 
     return () => unsubscribe();
-  }, [broadcastId, engiviaId, totalLikes]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [broadcastId, engiviaId]);
 
   return totalLikes;
 };
