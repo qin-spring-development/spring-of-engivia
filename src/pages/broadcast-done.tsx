@@ -4,7 +4,10 @@ import { useRouter } from "next/router";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import useSWR from "swr";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
-import { useSubscribeBroadcast } from "src/hooks/useSubscribe";
+import {
+  useSubscribeBroadcast,
+  useSubscribeEngivias,
+} from "src/hooks/useSubscribe";
 import { EngiviaList } from "src/components/Engivia/EngiviaList";
 import { deleteBroadcast, setYoutubeURL } from "src/lib/db";
 import { convertEmbedURL } from "src/lib/convertEmbedURL";
@@ -19,10 +22,7 @@ const BroadcastDone: NextPage = () => {
   const router = useRouter();
   const broadcastId = router.query.id as string;
   const broadcast = useSubscribeBroadcast(broadcastId);
-  const { data, error } = useSWR(
-    `/api/engivias?broadcastId=${broadcastId}`,
-    fetcher
-  );
+  const engivias = useSubscribeEngivias(broadcastId);
 
   const onDeleteBroadcast = () => {
     deleteBroadcast(broadcastId);
@@ -33,11 +33,6 @@ const BroadcastDone: NextPage = () => {
     const convertedUrl = convertEmbedURL(url);
     setYoutubeURL(broadcastId, convertedUrl);
   };
-
-  console.log({ data });
-
-  if (error) return <div>failed to load</div>;
-  if (!data) return <div>loading...</div>;
 
   return (
     <BaseLayout title="放送済み">
@@ -83,7 +78,7 @@ const BroadcastDone: NextPage = () => {
           </div>
         )}
       </div>
-      <EngiviaList engivias={data.engivias} />
+      {engivias && <EngiviaList engivias={engivias} />}
     </BaseLayout>
   );
 };

@@ -19,7 +19,7 @@ const Broadcasts: NextPage = () => {
     <BaseLayout title="放送一覧">
       <div className="mx-auto max-w-3xl">
         <div className="flex justify-between items-center">
-          <h1 className="py-10 text-4xl font-bold">放送一覧</h1>
+          <h1 className="py-10 text-4xl font-bold">放送一覧です</h1>
           {session?.user.isAdmin && (
             <Button
               isSubmitting={false}
