@@ -5,8 +5,8 @@ import { EngiviaType, BroadcastType } from "src/types/interface";
 import { deleteEngivia } from "src/lib/db";
 import { getUserEngivia, getBroadcast } from "src/lib/db-admin";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
-import { useUser } from "src/hooks/useSharedState";
 import { Button } from "src/components/Button";
+import { useSession } from "next-auth/client";
 
 type Props = {
   userEngivia: EngiviaType;
@@ -14,7 +14,8 @@ type Props = {
 };
 
 const EngiviaConfirm: NextPage<Props> = ({ userEngivia, broadcast }) => {
-  const { user } = useUser();
+  const [session] = useSession();
+  const user = session?.user;
   const router = useRouter();
 
   const handleDeleteEngivia = () => {
@@ -24,7 +25,7 @@ const EngiviaConfirm: NextPage<Props> = ({ userEngivia, broadcast }) => {
   const handleEditEngivia = () => {
     router.push({
       pathname: "/users/engivia-registration",
-      query: { id: router.query.id, uid: user.uid },
+      query: { id: router.query.id, uid: user?.id },
     });
   };
 

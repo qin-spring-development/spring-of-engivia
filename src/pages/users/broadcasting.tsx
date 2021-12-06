@@ -8,22 +8,27 @@ import {
   useSubscribeTotalLikes,
   useSubscribeJoinUsers,
 } from "src/hooks/useSubscribe";
-import { useUser } from "src/hooks/useSharedState";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
 import { EngiviaCardWithTotalLikes } from "src/components/Engivia/EngiviaCardWithTotalLikes";
 import { EngiviaJoinUsers } from "src/components/Engivia/EngiviaJoinUsers";
 import { SwitchButton } from "src/components/SwitchButton";
 import { addJoinUser } from "src/lib/db";
+import { useSession } from "next-auth/client";
 
 const Broadcasting: NextPage = () => {
-  const { user } = useUser();
+  const [session] = useSession();
+  const user = session?.user;
   const router = useRouter();
   const broadcastId = router.query.id as string;
 
   const broadcast = useSubscribeBroadcast(broadcastId);
   const featureEngivia = useSubscribeFeatureEngivia(broadcastId);
-  const likes = useSubscribeLikes(broadcastId, featureEngivia?.id, user.uid);
+  const likes = useSubscribeLikes(
+    broadcastId,
+    featureEngivia?.id,
+    user?.id as string
+  );
   const totalLikes = useSubscribeTotalLikes(broadcastId, featureEngivia?.id);
   const joinUsers = useSubscribeJoinUsers(broadcastId, featureEngivia?.id);
 
@@ -36,7 +41,7 @@ const Broadcasting: NextPage = () => {
   }, [broadcast?.status, broadcastId, router, broadcast]);
 
   useEffect(() => {
-    if (featureEngivia?.id) {
+    if (featureEngivia?.id && user) {
       addJoinUser(broadcastId, featureEngivia.id, user);
     }
   }, [featureEngivia, broadcastId, user]);

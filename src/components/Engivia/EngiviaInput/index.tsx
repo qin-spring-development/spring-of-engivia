@@ -5,8 +5,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { createEngivia, updateEngivia } from "src/lib/db";
 import { EngiviaType } from "src/types/interface";
 import { Button } from "src/components/Button";
-import { useUser } from "src/hooks/useSharedState";
 import { engiviaSchema } from "src/lib/yupSchema/engiviaSchema";
+import { useSession } from "next-auth/client";
+import { User } from "next-auth";
 
 type Props = {
   userEngivia: EngiviaType;
@@ -19,7 +20,7 @@ export const EngiviaInput: FC<Props> = ({
   broadcastId,
   setConfirm,
 }) => {
-  const { user } = useUser();
+  const [session] = useSession();
   const [engiviaBody, setEngiviaBody] = useState<string>(userEngivia?.body);
   const {
     register,
@@ -36,7 +37,7 @@ export const EngiviaInput: FC<Props> = ({
       updateEngivia(broadcastId, userEngivia.id, data.engivia);
       setConfirm(true);
     } else {
-      await createEngivia(broadcastId, data.engivia, user);
+      await createEngivia(broadcastId, data.engivia, session?.user as User);
       setConfirm(true);
     }
   };
