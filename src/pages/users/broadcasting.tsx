@@ -34,8 +34,6 @@ const Broadcasting: NextPage = () => {
   const joinUsers = useSubscribeJoinUsers(broadcastId, featureEngivia?.id);
   const currentTotalLikes = sumTotalLikes(joinUsers.length, totalLikes);
 
-  console.log({ currentTotalLikes });
-
   useEffect(() => {
     if (broadcast?.status === "DONE") {
       setTimeout(() => {
