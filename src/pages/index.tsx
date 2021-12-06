@@ -16,6 +16,7 @@ export default function Home() {
 
       <div className="flex">
         <div className="flex flex-col items-center my-auto w-[43%]">
+          <p>useSWR使用</p>
           <Image
             src="/engivia_logo.png"
             alt="エンジビアの泉"
