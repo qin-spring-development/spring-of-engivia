@@ -41,9 +41,10 @@ const BroadcastDone: NextPage<Props> = ({ engivias }) => {
       <div className="flex flex-col items-center text-center">
         {broadcast?.broadCastUrl && (
           <iframe
+            width="896"
+            height="504"
             src={broadcast.broadCastUrl}
             title="YouTube video"
-            // frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             className="mb-5 w-full max-w-4xl"

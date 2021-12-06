@@ -146,17 +146,19 @@ const Broadcasting = ({
 
   useEffect(() => {
     return () => {
-      items.before.forEach((engivia) =>
-        updateEngiviaFeatureStatus(broadcastId, engivia.id, "BEFORE")
-      );
+      if (broadcastId) {
+        items.before.forEach((engivia) =>
+          updateEngiviaFeatureStatus(broadcastId, engivia.id, "BEFORE")
+        );
 
-      items.inFeature.forEach((engivia) =>
-        updateEngiviaFeatureStatus(broadcastId, engivia.id, "IN_FEATURE")
-      );
+        items.inFeature.forEach((engivia) =>
+          updateEngiviaFeatureStatus(broadcastId, engivia.id, "IN_FEATURE")
+        );
 
-      items.done.forEach((engivia) =>
-        updateEngiviaFeatureStatus(broadcastId, engivia.id, "DONE")
-      );
+        items.done.forEach((engivia) =>
+          updateEngiviaFeatureStatus(broadcastId, engivia.id, "DONE")
+        );
+      }
     };
   });
 

@@ -36,24 +36,6 @@ const Broadcasts: NextPage = () => {
             <BroadcastItem broadcast={broadcast} />
           </div>
         ))}
-        <div className="mt-5 text-center">
-          <Button
-            type="button"
-            isSubmitting={false}
-            isPrimary={false}
-            onClick={() => console.log("次へ")}
-          >
-            戻る
-          </Button>
-          <Button
-            type="button"
-            isSubmitting={false}
-            isPrimary={false}
-            onClick={() => console.log("次へ")}
-          >
-            次へ
-          </Button>
-        </div>
       </div>
     </BaseLayout>
   );
