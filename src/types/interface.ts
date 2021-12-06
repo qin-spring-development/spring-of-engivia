@@ -20,6 +20,7 @@ export type EngiviaType = {
   id: string;
   postUser: PostUserType;
   totalLikes: number;
+  joinUsersCount: number;
 };
 
 export type BroadcastType = {
