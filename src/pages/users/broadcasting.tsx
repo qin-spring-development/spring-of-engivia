@@ -32,7 +32,9 @@ const Broadcasting: NextPage = () => {
   const totalLikes = useSubscribeTotalLikes(broadcastId, featureEngivia?.id);
   const joinUsers = useSubscribeJoinUsers(broadcastId, featureEngivia?.id);
   const currentTotalLikes =
-    Math.round((totalLikes / joinUsers.length) * 5 * 10) / 10;
+    joinUsers.length != 0
+      ? Math.round((totalLikes / joinUsers.length) * 5 * 10) / 10
+      : 0;
 
   useEffect(() => {
     if (broadcast?.status === "DONE") {
