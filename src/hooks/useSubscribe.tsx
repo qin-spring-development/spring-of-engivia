@@ -144,7 +144,7 @@ export const useSubscribeTotalLikes = (
 ) => {
   const soundFlgRef = useRef(false);
   const [totalLikes, setTotalLikes] = useState<number>(0);
-  const [play] = useSound("/hee.mp3");
+  const [play] = useSound("/hee_low.mp3");
 
   useEffect(() => {
     const unsubscribe = db
