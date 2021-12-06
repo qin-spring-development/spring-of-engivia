@@ -14,7 +14,6 @@ import { EngiviaCardWithTotalLikes } from "src/components/Engivia/EngiviaCardWit
 import { EngiviaJoinUsers } from "src/components/Engivia/EngiviaJoinUsers";
 import { SwitchButton } from "src/components/SwitchButton";
 import { addJoinUser } from "src/lib/db";
-import { sumTotalLikes } from "src/lib/sumTotalLikes";
 import { useSession } from "next-auth/client";
 
 const Broadcasting: NextPage = () => {
@@ -32,21 +31,17 @@ const Broadcasting: NextPage = () => {
   );
   const totalLikes = useSubscribeTotalLikes(broadcastId, featureEngivia?.id);
   const joinUsers = useSubscribeJoinUsers(broadcastId, featureEngivia?.id);
-  const currentTotalLikes = sumTotalLikes(joinUsers.length, totalLikes);
+  const currentTotalLikes =
+    Math.round((totalLikes / joinUsers.length) * 5 * 10) / 10;
 
   useEffect(() => {
     if (broadcast?.status === "DONE") {
-      setTimeout(() => {
-        router.push("/broadcasts");
-      }, 5000);
+      setTimeout(() => router.push("/broadcasts"), 5000);
     }
-  }, [broadcast?.status, broadcastId, router, broadcast]);
-
-  useEffect(() => {
     if (featureEngivia?.id && user) {
       addJoinUser(broadcastId, featureEngivia.id, user);
     }
-  }, [featureEngivia, broadcastId, user]);
+  }, [broadcast?.status, featureEngivia, broadcastId, user, router]);
 
   return (
     <BaseLayout title="放送中">

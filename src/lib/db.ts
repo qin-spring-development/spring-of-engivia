@@ -64,7 +64,7 @@ export const beginBroadcast = async (broadcastId: string) => {
 
 export const endBroadcast = async (broadcastId: string) => {
   const broadcastRef = await db.collection("broadcasts").doc(broadcastId);
-  broadcastRef.set({ status: "DONE" }, { merge: true });
+  broadcastRef.set({ status: "DONE", featureId: null }, { merge: true });
 };
 
 export const updateBroadcastFeatureId = async (
