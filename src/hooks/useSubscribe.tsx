@@ -153,9 +153,9 @@ export const useSubscribeTotalLikes = (
       .collection("engivias")
       .doc(engiviaId)
       .onSnapshot(async (snapshot) => {
-        const totalLikesDoc = await snapshot.data();
-        if (totalLikesDoc) {
-          setTotalLikes(totalLikesDoc.totalLikes);
+        const engiviaDoc = await snapshot.data();
+        if (engiviaDoc) {
+          setTotalLikes(engiviaDoc.totalLikes);
           soundFlgRef.current && play();
           soundFlgRef.current = true;
         } else {
