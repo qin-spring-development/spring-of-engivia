@@ -20,6 +20,7 @@ export const Auth = ({ children, pathname }: props) => {
   useEffect(() => {
     if (loading) return;
     if (!isUser) router.push(loginPath);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUser, loading]);
 
   if (isUser && pathname === loginPath) {

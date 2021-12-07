@@ -31,20 +31,24 @@ const Broadcasting: NextPage = () => {
   );
   const totalLikes = useSubscribeTotalLikes(broadcastId, featureEngivia?.id);
   const joinUsers = useSubscribeJoinUsers(broadcastId, featureEngivia?.id);
+  const currentTotalLikes =
+    Math.round((totalLikes / joinUsers.length) * 5 * 10) / 10;
 
   useEffect(() => {
     if (broadcast?.status === "DONE") {
-      setTimeout(() => {
-        router.push("/broadcasts");
-      }, 5000);
+      setTimeout(() => router.push("/broadcasts"), 5000);
     }
-  }, [broadcast?.status, broadcastId, router, broadcast]);
-
-  useEffect(() => {
     if (featureEngivia?.id && user) {
       addJoinUser(broadcastId, featureEngivia.id, user);
     }
-  }, [featureEngivia, broadcastId, user]);
+  }, [
+    broadcast?.status,
+    featureEngivia,
+    broadcastId,
+    user,
+    router,
+    session?.user.isAdmin,
+  ]);
 
   return (
     <BaseLayout title="放送中">
@@ -67,7 +71,7 @@ const Broadcasting: NextPage = () => {
         <div>
           <EngiviaCardWithTotalLikes
             engivia={featureEngivia}
-            totalLikes={totalLikes}
+            currentTotalLikes={currentTotalLikes}
           />
           <div className="mx-auto max-w-2xl">
             <div className="flex justify-center items-center mt-40">

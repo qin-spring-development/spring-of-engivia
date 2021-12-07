@@ -8,7 +8,7 @@ type Props = {
   title: string;
 };
 
-export const BaseLayout: FC<Props> = ({ className, children, title }) => {
+export const BaseLayout: FC<Props> = ({ children, title }) => {
   return (
     <>
       <Head>

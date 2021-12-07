@@ -3,12 +3,12 @@ import { EngiviaType } from "src/types/interface";
 
 type Props = {
   engivia: EngiviaType;
-  totalLikes?: number;
+  currentTotalLikes: number;
 };
 
 export const EngiviaCardWithTotalLikes: FC<Props> = ({
   engivia,
-  totalLikes,
+  currentTotalLikes,
 }) => {
   return (
     <div className="mx-auto max-w-2xl">
@@ -31,7 +31,7 @@ export const EngiviaCardWithTotalLikes: FC<Props> = ({
             </span>
           </div>
           <div className="inline py-3 px-10 text-4xl font-bold text-[#0284C7] bg-[#FEF3C7] rounded-lg">
-            <span>{totalLikes}</span>
+            <span>{currentTotalLikes}</span>
             <span className="text-xl">へえ</span>
           </div>
         </div>

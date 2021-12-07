@@ -1,6 +1,4 @@
 import type { FC } from "react";
-import { useState } from "react";
-import useSound from "use-sound";
 import { voteLikes, updateTotalLikes } from "src/lib/db";
 import { EngiviaType } from "src/types/interface";
 import { useSession } from "next-auth/client";
@@ -18,14 +16,8 @@ export const SwitchButton: FC<Props> = ({
   likes,
 }) => {
   const [session] = useSession();
-  const [playbackRate, setPlaybackRate] = useState(0);
-  const [play] = useSound("/hee.mp3", {
-    playbackRate,
-    // volume,
-  });
 
   const handleClick = async () => {
-    play();
     await voteLikes(broadcastId, featureEngivia.id, session?.user as User);
     await updateTotalLikes(broadcastId, featureEngivia.id);
   };
