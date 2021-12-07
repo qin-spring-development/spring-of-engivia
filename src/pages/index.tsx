@@ -1,6 +1,6 @@
 import Head from "next/head";
 import SlackIcon from "src/svg/slack-icon.svg";
-import { signIn, signOut } from "next-auth/client";
+import { signIn } from "next-auth/client";
 import Image from "next/image";
 
 export default function Home() {
@@ -45,7 +45,7 @@ export default function Home() {
           <button
             onClick={() =>
               signIn("slack", {
-                callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/broadcasts`,
+                callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/login`,
               })
             }
             className="flex items-center py-2 px-4 hover:bg-gray-100 rounded-md border-2"
