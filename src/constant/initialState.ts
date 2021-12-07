@@ -15,6 +15,7 @@ export const initialEngiviaInfo: EngiviaType = {
   engiviaNumber: 0,
   featureStatus: "BEFORE",
   id: "",
+  joinUsersCount: 0,
   postUser: {
     image: "",
     name: "",

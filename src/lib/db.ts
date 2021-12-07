@@ -131,6 +131,7 @@ export const createEngivia = async (
     engiviaNumber: null,
     featureStatus: "BEFORE",
     id: engiviaRef.id,
+    joinUsersCount: 0,
     postUser: {
       name: user.name,
       image: user.image,

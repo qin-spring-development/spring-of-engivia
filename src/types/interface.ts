@@ -18,6 +18,7 @@ export type EngiviaType = {
   engiviaNumber: number;
   featureStatus: featureStatusType;
   id: string;
+  joinUsersCount: number;
   postUser: PostUserType;
   totalLikes: number;
 };
