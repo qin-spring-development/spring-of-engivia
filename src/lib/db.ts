@@ -308,20 +308,4 @@ export const addJoinUser = async (
       image: user.image,
       id: user.id,
     });
-
-  const joinUserRef2 = await db
-    .collection("broadcasts")
-    .doc(broadcastId)
-    .collection("engivias")
-    .doc(engiviaId)
-    .collection("joinUsers")
-    .get();
-
-  const joinUsersLength = joinUserRef2.docs.length;
-  const engiviaRef = await db
-    .collection("broadcasts")
-    .doc(broadcastId)
-    .collection("engivias")
-    .doc(engiviaId);
-  engiviaRef.set({ joinUsersCount: joinUsersLength }, { merge: true });
 };
