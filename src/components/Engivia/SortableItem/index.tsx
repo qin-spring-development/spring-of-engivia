@@ -73,7 +73,7 @@ export const SortableItem: FC<Props> = ({
                 {`人: ${joinUsersCount}`}
               </span>
               <span className="py-1 px-2 text-xs text-gray-600 bg-gray-200 rounded-full">
-                {`数: ${currentTotalLikes}`}
+                {`数: ${currentTotalLikes ? currentTotalLikes : 0}`}
               </span>
             </div>
           )}
