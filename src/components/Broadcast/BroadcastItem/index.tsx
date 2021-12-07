@@ -35,7 +35,6 @@ export const BroadcastItem: FC<Props> = ({ broadcast }) => {
         query: { id: id },
       });
     } else if (status === "IN_PROGRESS") {
-      // createJoinUsers(id, engivia.id, user);
       router.push({
         pathname: "/users/broadcasting",
         query: { id: id },

@@ -153,25 +153,6 @@ export const createEngivia = async (
   return engivia;
 };
 
-export const createJoinUsers = async (
-  broadcastId: string,
-  engiviaId: string,
-  user: ReqUser
-) => {
-  db.collection("broadcasts")
-    .doc(broadcastId)
-    .collection("engivias")
-    .doc(engiviaId)
-    .collection("joinUsers")
-    .doc(user.id)
-    .set({
-      likes: 0,
-      name: user.name,
-      image: user.image,
-      iid: user.id,
-    });
-};
-
 export const updateEngivia = async (
   broadcastId: string,
   engiviaId: string,
@@ -327,4 +308,20 @@ export const addJoinUser = async (
       image: user.image,
       id: user.id,
     });
+
+  const joinUserRef2 = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .doc(engiviaId)
+    .collection("joinUsers")
+    .get();
+
+  const joinUsersLength = joinUserRef2.docs.length;
+  const engiviaRef = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .doc(engiviaId);
+  engiviaRef.set({ joinUsersCount: joinUsersLength }, { merge: true });
 };
