@@ -31,11 +31,13 @@ const Broadcasts: NextPage = () => {
             </Button>
           )}
         </div>
-        {broadcasts.map((broadcast, index) => (
-          <div key={index}>
-            <BroadcastItem broadcast={broadcast} />
-          </div>
-        ))}
+        <div className="pb-10">
+          {broadcasts.map((broadcast, index) => (
+            <div key={index}>
+              <BroadcastItem broadcast={broadcast} />
+            </div>
+          ))}
+        </div>
       </div>
     </BaseLayout>
   );

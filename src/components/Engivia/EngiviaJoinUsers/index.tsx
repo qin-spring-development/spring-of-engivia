@@ -8,7 +8,7 @@ type Props = {
 export const EngiviaJoinUsers: FC<Props> = ({ joinUsers }) => {
   return (
     <div>
-      <div className="absolute top-0 right-0 mt-5 mb-3 divide-y">
+      <div className="absolute top-0 right-0 mt-5 mr-6 mb-3 divide-y">
         {joinUsers.map((joinUser) => (
           <div key={joinUser.id}>
             <div className="flex justify-between items-center my-3">

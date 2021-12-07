@@ -1,6 +1,6 @@
 import Head from "next/head";
 import SlackIcon from "src/svg/slack-icon.svg";
-import { signIn, signOut } from "next-auth/client";
+import { signIn } from "next-auth/client";
 import Image from "next/image";
 
 export default function Home() {
