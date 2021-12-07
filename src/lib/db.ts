@@ -3,6 +3,7 @@ import {
   WithOutToken,
   BroadcastFormType,
   featureStatusType,
+  EngiviaType,
 } from "src/types/interface";
 import { ReqUser } from "src/lib/users";
 import { User } from "next-auth";
@@ -125,7 +126,7 @@ export const createEngivia = async (
     .doc(broadcastId)
     .collection("engivias")
     .doc();
-  const engivia = {
+  const engivia: EngiviaType = {
     body: engiviaBody,
     createdAt: new Date().toISOString(),
     engiviaNumber: null,
@@ -137,6 +138,7 @@ export const createEngivia = async (
       id: user.id,
     },
     totalLikes: 0,
+    joinUsersCount: 0,
   };
   engiviaRef.set(engivia);
 
