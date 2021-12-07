@@ -64,7 +64,11 @@ export const SortableItem: FC<Props> = ({
                 src={engivia.postUser.image}
                 alt="avatar"
               />
-              <span className="text-sm">{engivia.postUser.name}</span>
+              <span className="text-sm">
+                {engivia.postUser.name.length > 18
+                  ? `${engivia.postUser.name.slice(0, 18)}…`
+                  : engivia.postUser.name}
+              </span>
             </div>
           </div>
           {inFeatureId === engivia.id && (
