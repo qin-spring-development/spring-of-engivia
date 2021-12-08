@@ -10,7 +10,7 @@ export type Props = {
   onChange: ChangeEventHandler<HTMLInputElement>;
 };
 
-export const Form: FC<Props> = ({
+export const InputFiled: FC<Props> = ({
   className,
   type = "text",
   value,
