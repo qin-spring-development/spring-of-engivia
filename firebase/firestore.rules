@@ -1,18 +1,165 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+  	//サインイン認証
     function isAuthenticated() {
-          return request.auth != null;
-        }
-
-    function isUserAuthenticated(userID) { 
-        return isAuthenticated() && userID == request.auth.uid;
+      return request.auth != null;
     }
 
+    //本人の認証
+    function isUserAuthenticated(userID) {
+      return isAuthenticated() && userID == request.auth.uid;
+    }
+
+    //admin認証
+    function isAdminAuthenticated() {
+      return isAuthenticated()
+      && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+
+
+    //***************************
+    //usersコレクションへのルール
+    //***************************
     match /users/{userID} {
-        allow get: if isUserAuthenticated(userID);
-        allow create: if isUserAuthenticated(userID);
-        allow update: if isUserAuthenticated(userID);
+      function validate() {
+        return request.resource.data.name.size() <= 20
       }
+      //許可したフィールドのみリクエストに含まれているか
+      function allowedFields() {
+        return request.resource.data.keys().hasOnly(["email",
+                                                      "id",
+                                                      "image",
+                                                      "isAdmin",
+                                                      "name",
+                                                      "provider"]);
+      }
+      allow read: if isUserAuthenticated(userID);
+      allow create: if isUserAuthenticated(userID) && allowedFields() && validate();
+      allow update: if isUserAuthenticated(userID) && allowedFields() && validate();
+      allow delete: if isUserAuthenticated(userID);
+    }
+
+    //***************************
+    //broadcastsコレクションへのルール
+    //***************************
+    match /broadcasts/{broadcastId} {
+    	//許可したフィールドのみリクエストに含まれているか
+      function allowedFields() {
+      return request.resource.data.keys().hasOnly(["broadCastUrl",
+                                                    "broadCastingDate",
+                                                    "engiviaCount",
+                                                    "engiviaCurrentCount",
+                                                    "featureId",
+                                                    "id",
+                                                    "status",
+                                                    "title"]);
+      }
+    	//admin以外のユーザーが変更不可のフィールド
+      function otherUserNotAllowedChange() {
+        return resource.data.broadCastUrl == request.resource.data.broadCastUrl
+          && resource.data.broadCastingDate == request.resource.data.broadCastingDate
+          && resource.data.engiviaCurrentCount == request.resource.data.engiviaCurrentCount
+          && resource.data.featureId == request.resource.data.featureId
+          && resource.data.id == request.resource.data.id
+          && resource.data.status == request.resource.data.status
+          && resource.data.title == request.resource.data.title
+      }
+
+      allow read: if isAuthenticated();
+      allow create: if allowedFields() && isAdminAuthenticated();
+      allow update: if allowedFields()
+                    && (
+                          isAdminAuthenticated()
+                          || (isAuthenticated() && otherUserNotAllowedChange())
+                        );
+      allow delete: if isAdminAuthenticated();
+    }
+
+    //***************************
+    //engiviasコレクションへのルール
+    //***************************
+    match /broadcasts/{broadcastId}/engivias/{engiviaId} {
+    	//投稿者が本人か
+      function isMyPostEngivia(broadcastId, engiviaId) {
+        return get(/databases/$(database)/documents/broadcasts/$(broadcastId)/engivias/$(engiviaId)).data.postUser.id == request.auth.uid;
+      }
+      //各フィールドへのバリデーション
+      function validate() {
+        return (!request.resource.data.keys().hasAny(["body"])
+              || 1 <= request.resource.data.body.size() && request.resource.data.body.size() <= 100)
+              && (!request.resource.data.keys().hasAny(["createAt"])
+              || request.resouce.data.createAt <= request.time)
+      }
+      //許可したフィールドのみリクエストに含まれているか
+      function allowedFields() {
+        return request.resource.data.keys().hasOnly(["body",
+                                                      "createdAt",
+                                                      "engiviaNumber",
+                                                      "featureStatus",
+                                                      "id",
+                                                      "postUser",
+                                                      "totalLikes",
+                                                      "joinUsersCount"])
+      }
+      //いいね数の変更はフィーチャー中のみ許可
+      function incrementLikesInFeature() {
+        return !request.resource.data.hasAny(["totalLikes"])
+                || resource.data.totalLikes == request.resource.data.totalLikes
+                || resource.data.featureStatus == "IN_FEATURE"
+      }
+      //adminユーザーが変更不可のフィールド
+      function adminNotAllowedChange() {
+        return resource.data.body == request.resource.data.body
+          && resource.data.createdAt == request.resource.data.createdAt
+          && resource.data.id == request.resource.data.id
+          && resource.data.postUser == request.resource.data.postUser
+          && resource.data.totalLikes == request.resource.data.totalLikes
+          && resource.data.joinUsersCount == request.resource.data.joinUsersCount
+      }
+      //投稿者以外のユーザーが変更不可のフィールド
+      function otherUserNotAllowedChange() {
+        return resource.data.body == request.resource.data.body
+          && resource.data.createdAt == request.resource.data.createdAt
+          && resource.data.engiviaNumber == request.resource.data.engiviaNumber
+          && resource.data.featureStatus == request.resource.data.featureStatus
+          && resource.data.id == request.resource.data.id
+          && resource.data.postUser == request.resource.data.postUser
+      }
+
+      allow read: if isAuthenticated();
+      allow create: if allowedFields()
+                    && validate()
+                    && isAuthenticated()
+                    && request.resource.data.postUser.id == request.auth.uid;
+      allow update: if allowedFields()
+                    && validate()
+                    && incrementLikesInFeature()
+                    && (
+                          isMyPostEngivia(broadcastId, engiviaId)
+                          || (isAdminAuthenticated() && adminNotAllowedChange())
+                          || (isAuthenticated() && otherUserNotAllowedChange())
+                        );
+      allow delete: if isMyPostEngivia(broadcastId, engiviaId);
+    }
+
+    //***************************
+    //joinUsersコレクションへの変更
+    //***************************
+    match /broadcasts/{broadcastId}/engivias/{engiviaId}/joinUsers/{joinUserId} {
+      //各フィールドへのバリデーション
+      function validate() {
+        return request.resource.data.likes <= 20
+      }
+    	//許可したフィールドのみリクエストに含まれているか
+      function allowedFields() {
+        return request.resource.data.keys().hasOnly(["id",
+                                                      "image",
+                                                      "likes",
+                                                      "name"])
+      }
+      allow read:  if isAuthenticated();
+      allow create: if allowedFields() && validate() && isUserAuthenticated(joinUserId);
+      allow update: if allowedFields() && validate() && isUserAuthenticated(joinUserId);
+    }
   }
-}
