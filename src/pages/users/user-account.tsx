@@ -7,7 +7,7 @@ import { Form } from "src/components/Form";
 import { Button } from "src/components/Button";
 import { Dialog, Transition } from "@headlessui/react";
 import toast from "react-hot-toast";
-import { updateUsername } from "src/lib/users";
+import { Delete, updateUsername } from "src/lib/users";
 
 const UserAccount: NextPage = () => {
   const [session] = useSession();
@@ -32,6 +32,18 @@ const UserAccount: NextPage = () => {
     }
   };
 
+  const handleDelete = async () => {
+    if (session?.user) {
+      await Delete(session.user.id);
+      toast("退会しました", {
+        duration: 4000,
+        position: "top-center",
+        className: "",
+        icon: "🙇‍♂️",
+      });
+    }
+  };
+
   return (
     <BaseLayout title="放送一覧">
       <div className="pt-10 mx-auto max-w-2xl">
@@ -48,23 +60,35 @@ const UserAccount: NextPage = () => {
           />
 
           <hr />
-          <div className="flex flex-row-reverse content-end mt-5">
-            <Button
-              type="button"
-              isSubmitting={false}
-              isPrimary={true}
-              onClick={handleSave}
-            >
-              保存する
-            </Button>
-            <Button
-              type="button"
-              isSubmitting={false}
-              isPrimary={false}
-              onClick={() => router.push("/broadcasts")}
-            >
-              キャンセル
-            </Button>
+          <div className="flex flex-row-reverse justify-between content-end mt-5">
+            <div>
+              <Button
+                type="button"
+                isSubmitting={false}
+                isPrimary={false}
+                onClick={() => router.push("/broadcasts")}
+              >
+                キャンセル
+              </Button>
+              <Button
+                type="button"
+                isSubmitting={false}
+                isPrimary={true}
+                onClick={handleSave}
+              >
+                保存する
+              </Button>
+            </div>
+            <div>
+              <Button
+                type="button"
+                isSubmitting={false}
+                isPrimary={false}
+                onClick={handleDelete}
+              >
+                退会する
+              </Button>
+            </div>
           </div>
         </div>
       </div>
