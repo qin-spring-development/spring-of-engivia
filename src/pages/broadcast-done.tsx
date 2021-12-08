@@ -8,7 +8,7 @@ import { EngiviaList } from "src/components/Engivia/EngiviaList";
 import { deleteBroadcast, setYoutubeURL } from "src/lib/db";
 import { convertEmbedURL } from "src/lib/convertEmbedURL";
 import { Button } from "src/components/Button";
-import { Form } from "src/components/Form";
+import { InputFiled } from "src/components/Form/InputFiled";
 import { getEngivias } from "src/lib/db-admin";
 import { BroadcastType, EngiviaType } from "src/types/interface";
 import { useSession } from "next-auth/client";
@@ -52,7 +52,7 @@ const BroadcastDone: NextPage<Props> = ({ engivias }) => {
         )}
         {session?.user.isAdmin && (
           <div className="w-full max-w-4xl">
-            <Form
+            <InputFiled
               type="text"
               value={url}
               onChange={(e) => setUrl(e.target.value)}

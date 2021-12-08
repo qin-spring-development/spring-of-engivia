@@ -3,7 +3,7 @@ import { Fragment, useState } from "react";
 import { useRouter } from "next/router";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import { signIn, useSession } from "next-auth/client";
-import { Form } from "src/components/Form";
+import { InputFiled } from "src/components/Form/InputFiled";
 import { Button } from "src/components/Button";
 import { Dialog, Transition } from "@headlessui/react";
 import toast from "react-hot-toast";
@@ -40,7 +40,7 @@ const UserAccount: NextPage = () => {
             アカウント編集
           </h1>
           <h2 className="mt-10 mb-2 font-bold text-gray-700">ユーザー名</h2>
-          <Form
+          <InputFiled
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}

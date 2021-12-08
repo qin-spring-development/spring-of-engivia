@@ -1,4 +1,4 @@
-import type { ChangeEvent } from "react";
+import { ChangeEvent, useCallback } from "react";
 import type { NextPage, GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useState, Fragment } from "react";
@@ -6,7 +6,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { format, parseISO } from "date-fns";
 import toast from "react-hot-toast";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
-import { Form } from "src/components/Form";
+import { InputFiled } from "src/components/Form/InputFiled";
 import { Button } from "src/components/Button";
 import { BroadcastFormType, BroadcastType } from "src/types/interface";
 import { createBroadcast, updateBroadcast, deleteBroadcast } from "src/lib/db";
@@ -28,10 +28,13 @@ const Registration: NextPage<Props> = ({ broadcast }) => {
     ),
   });
 
-  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const id = e.target.id;
-    setFormData({ ...formData, [id]: e.target.value });
-  };
+  const handleOnChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const id = e.target.id;
+      setFormData({ ...formData, [id]: e.target.value });
+    },
+    [formData]
+  );
 
   const handleOnSubmit = () => {
     if (broadcast.id === "") {
@@ -42,7 +45,7 @@ const Registration: NextPage<Props> = ({ broadcast }) => {
     router.push("/broadcasts");
   };
 
-  const handleOnDelete = () => {
+  const handleOnDelete = useCallback(() => {
     deleteBroadcast(broadcast.id);
     router.push("/broadcasts");
     toast("放送を削除しました", {
@@ -50,7 +53,7 @@ const Registration: NextPage<Props> = ({ broadcast }) => {
       position: "bottom-center",
       icon: "🗑️",
     });
-  };
+  }, [broadcast.id, router]);
 
   return (
     <BaseLayout title="放送一覧">
@@ -60,14 +63,14 @@ const Registration: NextPage<Props> = ({ broadcast }) => {
         </h1>
         <form>
           <div className="flex flex-col gap-10 w-full">
-            <Form
+            <InputFiled
               id="title"
               type="text"
               value={formData.title}
               placeholder="タイトルを入力する"
               onChange={handleOnChange}
             />
-            <Form
+            <InputFiled
               id="broadCastingDate"
               type="date"
               value={format(parseISO(formData.broadCastingDate), "yyyy-MM-dd")}
