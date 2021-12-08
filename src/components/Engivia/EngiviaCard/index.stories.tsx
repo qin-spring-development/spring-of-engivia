@@ -20,5 +20,6 @@ Default.args = {
     featureStatus: "BEFORE",
     postUser: { image: "./15007672.jpeg", name: "おさむ", id: "000000000" },
     totalLikes: 20,
+    joinUsersCount: 20,
   },
 };
