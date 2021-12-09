@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { EngiviaType } from "src/types/interface";
 
-type Props = {
+export type Props = {
   engivia: EngiviaType;
   totalLikes?: number;
 };

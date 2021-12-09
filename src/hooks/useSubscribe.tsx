@@ -143,7 +143,7 @@ export const useSubscribeTotalLikes = (
   engiviaId: string | undefined
 ) => {
   const soundFlgRef = useRef(false);
-  const [totalLikes, setTotalLikes] = useState<number>(0);
+  const [totalLikes, setTotalLikes] = useState<number | null>(null);
   const [play] = useSound("/hee_low.mp3");
 
   useEffect(() => {
@@ -154,19 +154,21 @@ export const useSubscribeTotalLikes = (
       .doc(engiviaId)
       .onSnapshot(async (snapshot) => {
         const engiviaDoc = await snapshot.data();
-        if (engiviaDoc) {
-          setTotalLikes(engiviaDoc.totalLikes);
-          soundFlgRef.current && play();
-          soundFlgRef.current = true;
-        } else {
-          setTotalLikes(0);
-          soundFlgRef.current = false;
-        }
+        setTotalLikes(engiviaDoc?.totalLikes);
       });
-
     return () => unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [engiviaId]);
+
+  //へぇ数が変わった時だけ音を出す
+  useEffect(() => {
+    if (totalLikes != null) {
+      soundFlgRef.current && play();
+      soundFlgRef.current = true;
+    } else {
+      soundFlgRef.current = false;
+    }
+  }, [totalLikes]);
 
   return totalLikes;
 };
