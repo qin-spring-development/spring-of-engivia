@@ -35,7 +35,9 @@ const Broadcasting: NextPage = () => {
   const joinUsers = useSubscribeJoinUsers(broadcastId, featureEngivia?.id);
 
   const currentTotalLikes = useMemo(
-    () => Math.round((totalLikes / joinUsers.length) * 5 * 10) / 10,
+    joinUsers.length != 0 && totalLikes
+    ? () => Math.round((totalLikes / joinUsers.length) * 5 * 10) / 10
+    : 0,
     [joinUsers.length, totalLikes]
   );
 
