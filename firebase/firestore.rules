@@ -23,7 +23,7 @@ service cloud.firestore {
     //***************************
     match /users/{userID} {
       function validate() {
-        return request.resource.data.name.size() <= 20
+        return 1 <= request.resource.data.name.size() && request.resource.data.name.size() <= 20
       }
       //許可したフィールドのみリクエストに含まれているか
       function allowedFields() {
@@ -44,6 +44,16 @@ service cloud.firestore {
     //broadcastsコレクションへのルール
     //***************************
     match /broadcasts/{broadcastId} {
+      //各フィールドへのバリデーション
+      function validate() {
+        return (
+                !request.resource.data.keys().hasAny(["title"])
+                || (
+                      !request.resource.data.title.matches('( |　)+')
+                      && 1 <= request.resource.data.title.size() && request.resource.data.title.size() <= 100
+                    )
+              )
+      }
     	//許可したフィールドのみリクエストに含まれているか
       function allowedFields() {
       return request.resource.data.keys().hasOnly(["broadCastUrl",
@@ -67,8 +77,9 @@ service cloud.firestore {
       }
 
       allow read: if isAuthenticated();
-      allow create: if allowedFields() && isAdminAuthenticated();
+      allow create: if allowedFields() && validate() && isAdminAuthenticated();
       allow update: if allowedFields()
+                    && validate()
                     && (
                           isAdminAuthenticated()
                           || (isAuthenticated() && otherUserNotAllowedChange())
@@ -86,8 +97,13 @@ service cloud.firestore {
       }
       //各フィールドへのバリデーション
       function validate() {
-        return (!request.resource.data.keys().hasAny(["body"])
-              || 1 <= request.resource.data.body.size() && request.resource.data.body.size() <= 100)
+        return (
+        				!request.resource.data.keys().hasAny(["body"])
+              	|| (
+              				!request.resource.data.body.matches('( |　)+')
+                      && 1 <= request.resource.data.body.size() && request.resource.data.body.size() <= 100
+                    )
+              )
               && (!request.resource.data.keys().hasAny(["createAt"])
               || request.resouce.data.createAt <= request.time)
       }
@@ -163,3 +179,4 @@ service cloud.firestore {
       allow update: if allowedFields() && validate() && isUserAuthenticated(joinUserId);
     }
   }
+}
