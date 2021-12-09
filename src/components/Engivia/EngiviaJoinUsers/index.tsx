@@ -10,7 +10,7 @@ export const EngiviaJoinUsers = forwardRef<HTMLDivElement, Props>(
   ({ joinUsers }, ref) => {
     return (
       <div
-        className="overflow-y-auto absolute top-0 right-0 mt-5 mr-6 mb-3 h-60 divide-y"
+        className="overflow-y-auto absolute top-0 right-0 mt-5 mr-6 mb-3 h-[700px] divide-y"
         ref={ref}
       >
         {joinUsers.map((joinUser) => (
