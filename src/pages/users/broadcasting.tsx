@@ -40,6 +40,7 @@ const Broadcasting: NextPage = () => {
   );
 
   useEffect(() => {
+    ref.current?.scrollTo(0, ref.current.scrollHeight);
     if (broadcast?.status === "DONE") {
       setTimeout(() => router.push("/broadcasts"), 5000);
     }
@@ -92,7 +93,7 @@ const Broadcasting: NextPage = () => {
           <div className="mx-auto max-w-2xl">
             <div className="flex justify-center items-center mt-40">
               <SwitchButton likes={likes} handleClick={handleVoiceClick} />
-              <div className="inline ml-10 text-4xl font-bold text-[#0284C7]">
+              <div className="inline ml-10 text-4xl font-bold text-light-blue-600">
                 <span>{likes === undefined ? 0 : likes}</span>
                 <span className="text-xl">へえ</span>
               </div>
