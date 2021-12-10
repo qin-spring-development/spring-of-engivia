@@ -158,7 +158,7 @@ export const useSubscribeTotalLikes = (
       });
     return () => unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [broadcastId, engiviaId]);
+  }, [engiviaId]);
 
   //へぇ数が変わった時だけ音を出す
   useEffect(() => {
