@@ -25,8 +25,8 @@ export const Button: FC<Props> = ({
       className={`py-3 px-6 mr-2 rounded-md ${className}
           ${
             isPrimary
-              ? "bg-light-blue-600 text-white hover:bg-light-blue-500 active:scale-95 transform transition duration-75"
-              : "bg-light-blue-100 text-light-blue-700 hover:bg-light-blue-200 active:scale-95 transform transition duration-75"
+              ? "bg-light-blue-600 text-white"
+              : "bg-light-blue-100 text-light-blue-700"
           } 
         `}
     >
