@@ -2,12 +2,13 @@ import type { NextPage } from "next";
 import { Fragment, useState } from "react";
 import { useRouter } from "next/router";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
-import { signIn, useSession } from "next-auth/client";
+import { signIn, signOut, useSession } from "next-auth/client";
 import { Form } from "src/components/Form";
 import { Button } from "src/components/Button";
 import { Dialog, Transition } from "@headlessui/react";
 import toast from "react-hot-toast";
-import { Delete, updateUsername } from "src/lib/users";
+import { deleteUser, updateUsername } from "src/lib/users";
+import { auth } from "src/lib/firebase";
 
 const UserAccount: NextPage = () => {
   const [session] = useSession();
@@ -34,13 +35,15 @@ const UserAccount: NextPage = () => {
 
   const handleDelete = async () => {
     if (session?.user) {
-      await Delete(session.user.id);
+      await deleteUser(session.user.id);
       toast("退会しました", {
         duration: 4000,
         position: "top-center",
         className: "",
         icon: "🙇‍♂️",
       });
+      auth.signOut();
+      signOut({ callbackUrl: "/" });
     }
   };
 

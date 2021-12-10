@@ -36,6 +36,6 @@ export const updateUsername = (uid: string, name: string) => {
   db.collection("users").doc(uid).set({ name }, { merge: true });
 };
 
-export const Delete = (uid: string) => {
-  db.collection("users").doc(uid).delete();
+export const deleteUser = async (uid: string) => {
+  await db.collection("users").doc(uid).delete();
 };
