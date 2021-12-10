@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import axios from "axios";
 import { auth } from "src/lib/firebase";
+import { Loader } from "src/components/Loader";
 
 const Login: NextPage = () => {
   const [session] = useSession();
@@ -31,7 +32,11 @@ const Login: NextPage = () => {
       });
   }, [router, session?.user.id]);
 
-  return <div></div>;
+  return (
+    <div>
+      <Loader />
+    </div>
+  );
 };
 
 export default Login;
