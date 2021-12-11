@@ -34,19 +34,19 @@ const Registration: NextPage<Props> = ({ broadcast }) => {
 
   const handleOnSubmit: SubmitHandler<BroadcastFormType> = useCallback(
     (data) => {
-      //   if (broadcast.id === "") {
-      //     createBroadcast(formData);
-      //   } else {
-      //     updateBroadcast(formData, broadcast.id);
-      //   }
-      //   router.push("/broadcasts");
-      // };
-      console.log({
+      const formData = {
         title: data.title,
         broadCastingDate: format(parseISO(data.broadCastingDate), "yyyy-MM-dd"),
-      });
+      };
+
+      if (broadcast.id === "") {
+        createBroadcast(formData);
+      } else {
+        updateBroadcast(formData, broadcast.id);
+      }
+      router.push("/broadcasts");
     },
-    []
+    [broadcast.id, router]
   );
 
   const handleOnDelete = useCallback(() => {
