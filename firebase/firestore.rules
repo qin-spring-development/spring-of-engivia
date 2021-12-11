@@ -23,7 +23,7 @@ service cloud.firestore {
     //***************************
     match /users/{userID} {
       function validate() {
-        return 1 <= request.resource.data.name.size() && request.resource.data.name.size() <= 20
+        return 1 <= request.resource.data.name.size() && request.resource.data.name.size() <= 21
       }
       //許可したフィールドのみリクエストに含まれているか
       function allowedFields() {
@@ -118,12 +118,6 @@ service cloud.firestore {
                                                       "totalLikes",
                                                       "joinUsersCount"])
       }
-      //いいね数の変更はフィーチャー中のみ許可
-      function incrementLikesInFeature() {
-        return !request.resource.data.hasAny(["totalLikes"])
-                || resource.data.totalLikes == request.resource.data.totalLikes
-                || resource.data.featureStatus == "IN_FEATURE"
-      }
       //adminユーザーが変更不可のフィールド
       function adminNotAllowedChange() {
         return resource.data.body == request.resource.data.body
@@ -150,7 +144,6 @@ service cloud.firestore {
                     && request.resource.data.postUser.id == request.auth.uid;
       allow update: if allowedFields()
                     && validate()
-                    && incrementLikesInFeature()
                     && (
                           isMyPostEngivia(broadcastId, engiviaId)
                           || (isAdminAuthenticated() && adminNotAllowedChange())
