@@ -1,5 +1,7 @@
 import type { NextPage } from "next";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useCallback } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import { signIn, useSession } from "next-auth/client";
@@ -7,30 +9,44 @@ import { InputFiled } from "src/components/Form/InputFiled";
 import { Button } from "src/components/Button";
 import { Dialog, Transition } from "@headlessui/react";
 import toast from "react-hot-toast";
+import schemas from "src/lib/yupSchema/engiviaSchema";
 import { updateUsername } from "src/lib/users";
+
+type UserNameForm = {
+  username: string;
+};
 
 const UserAccount: NextPage = () => {
   const [session] = useSession();
   const [isOpen, setIsOpen] = useState(false);
-  const [name, setName] = useState<string>(session?.user.name as string);
+  const [name] = useState<string>(session?.user.name as string);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<UserNameForm>({
+    resolver: yupResolver(schemas().pick(["username"])),
+  });
 
   const router = useRouter();
-  const closeModal = async () => {
-    setIsOpen(false);
-  };
+  const closeModal = useCallback(() => setIsOpen(false), []);
 
-  const handleSave = async () => {
-    if (session?.user) {
-      await updateUsername(session.user.id, name);
-      signIn("credentials", { id: session.user.id });
-      toast("保存しました", {
-        duration: 4000,
-        position: "top-center",
-        className: "",
-        icon: "👏",
-      });
-    }
-  };
+  const handleSave: SubmitHandler<UserNameForm> = useCallback(
+    async (data) => {
+      if (session?.user) {
+        await updateUsername(session.user.id, data.username);
+        signIn("credentials", { id: session.user.id });
+        toast("保存しました", {
+          duration: 4000,
+          position: "top-center",
+          className: "",
+          icon: "👏",
+        });
+      }
+    },
+    [session?.user]
+  );
 
   return (
     <BaseLayout title="放送一覧">
@@ -40,35 +56,35 @@ const UserAccount: NextPage = () => {
             アカウント編集
           </h1>
           <h2 className="mt-10 mb-2 font-bold text-gray-700">ユーザー名</h2>
-          <InputFiled
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="ユーザー名を入力する"
-          />
-
-          <hr />
-          <div className="flex flex-row-reverse content-end mt-5">
-            <Button
-              type="button"
-              isSubmitting={false}
-              isPrimary={true}
-              onClick={handleSave}
-            >
-              保存する
-            </Button>
-            <Button
-              type="button"
-              isSubmitting={false}
-              isPrimary={false}
-              onClick={() => router.push("/broadcasts")}
-            >
-              キャンセル
-            </Button>
-          </div>
+          <form onSubmit={handleSubmit(handleSave)}>
+            <InputFiled
+              id="username"
+              type="text"
+              value={name}
+              placeholder="ユーザー名を入力する"
+              register={register("username")}
+            />
+            {errors.username?.message && (
+              <span className="text-base text-red-500">
+                {errors.username?.message}
+              </span>
+            )}
+            <div className="flex flex-row-reverse content-end mt-5">
+              <Button type="submit" isSubmitting={false} isPrimary>
+                保存する
+              </Button>
+              <Button
+                type="button"
+                isSubmitting={false}
+                isPrimary={false}
+                onClick={() => router.push("/broadcasts")}
+              >
+                キャンセル
+              </Button>
+            </div>
+          </form>
         </div>
       </div>
-
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"

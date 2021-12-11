@@ -6,7 +6,7 @@ import { createEngivia, updateEngivia } from "src/lib/db";
 import { EngiviaType } from "src/types/interface";
 import { Button } from "src/components/Button";
 import { TextArea } from "src/components/Form/TextArea";
-import { engiviaSchema } from "src/lib/yupSchema/engiviaSchema";
+import schemas from "src/lib/yupSchema/engiviaSchema";
 import { useSession } from "next-auth/client";
 import { User } from "next-auth";
 
@@ -31,7 +31,9 @@ export const EngiviaInput: FC<Props> = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<EngiviaForm>({ resolver: yupResolver(engiviaSchema) });
+  } = useForm<EngiviaForm>({
+    resolver: yupResolver(schemas().pick(["engivia"])),
+  });
 
   const HandleEngivia: SubmitHandler<EngiviaForm> = useCallback(
     async (data) => {
