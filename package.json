@@ -13,7 +13,7 @@
     "check-lint": "eslint . --ext ts --ext tsx --ext js",
     "format": "prettier --write .",
     "test-all": "yarn check-types && yarn check-format && yarn check-lint && yarn build",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -s ./public -p 6006",
     "build-storybook": "build-storybook"
   },
   "dependencies": {
@@ -28,6 +28,7 @@
     "date-fns": "^2.25.0",
     "firebase": "8.6.2",
     "firebase-admin": "^10.0.0",
+    "google-tts-api": "^2.0.2",
     "js-cookie": "^3.0.1",
     "next": "11.1.2",
     "next-auth": "^3.29.0",
