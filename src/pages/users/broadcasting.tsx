@@ -34,10 +34,11 @@ const Broadcasting: NextPage = () => {
   const totalLikes = useSubscribeTotalLikes(broadcastId, featureEngivia?.id);
   const joinUsers = useSubscribeJoinUsers(broadcastId, featureEngivia?.id);
 
-  const currentTotalLikes = useMemo(
-    () => Math.round((totalLikes / joinUsers.length) * 5 * 10) / 10,
-    [joinUsers.length, totalLikes]
-  );
+  const currentTotalLikes = useMemo(() => {
+    return joinUsers.length !== 0 && totalLikes
+      ? Math.round((totalLikes / joinUsers.length) * 5 * 10) / 10
+      : 0;
+  }, [joinUsers.length, totalLikes]);
 
   useEffect(() => {
     ref.current?.scrollTo(0, ref.current.scrollHeight);
