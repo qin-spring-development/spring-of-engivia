@@ -29,13 +29,7 @@ export const EngiviaList: FC<Props> = ({ engivias }) => {
                 </span>
               </div>
               <div className="inline py-3 px-10 text-4xl font-bold text-[#0284C7] bg-[#FEF3C7] rounded-lg">
-                <span>
-                  {engivia.joinUsersCount != 0
-                    ? Math.round(
-                        (engivia.totalLikes / engivia.joinUsersCount) * 5 * 10
-                      ) / 10
-                    : 0}
-                </span>
+                <span>{engivia?.totalLikes}</span>
                 <span className="text-xl">へえ</span>
               </div>
             </div>

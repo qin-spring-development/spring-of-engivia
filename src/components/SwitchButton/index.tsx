@@ -1,27 +1,11 @@
 import type { FC } from "react";
-import { voteLikes, updateTotalLikes } from "src/lib/db";
-import { EngiviaType } from "src/types/interface";
-import { useSession } from "next-auth/client";
-import { User } from "next-auth";
 
 export type Props = {
-  broadcastId: string;
-  featureEngivia: EngiviaType;
   likes: number;
+  handleClick: () => void;
 };
 
-export const SwitchButton: FC<Props> = ({
-  broadcastId,
-  featureEngivia,
-  likes,
-}) => {
-  const [session] = useSession();
-
-  const handleClick = async () => {
-    await voteLikes(broadcastId, featureEngivia.id, session?.user as User);
-    await updateTotalLikes(broadcastId, featureEngivia.id);
-  };
-
+export const SwitchButton: FC<Props> = ({ likes, handleClick }) => {
   return (
     <div>
       <div className="block relative m-0 w-[200px] h-32">

@@ -15,12 +15,11 @@ export type featureStatusType = "BEFORE" | "IN_FEATURE" | "DONE";
 export type EngiviaType = {
   body: string;
   createdAt: string;
-  engiviaNumber: number | null;
+  engiviaNumber: number;
   featureStatus: featureStatusType;
   id: string;
   postUser: PostUserType;
   totalLikes: number;
-  joinUsersCount: number;
 };
 
 export type BroadcastType = {
