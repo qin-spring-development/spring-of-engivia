@@ -16,6 +16,8 @@ const options = {
     Providers.Credentials({
       authorize: async (credentials) => {
         const { id } = credentials;
+
+        await customTokenSignIn(id);
         const firebaseUser = (await getUser(id)) as User;
         return firebaseUser;
       },
@@ -37,8 +39,7 @@ const options = {
     signIn: async (user: User, account: Account) => {
       try {
         if (user !== null) {
-          const customToken = await adminAuth.createCustomToken(user.id);
-          await auth.signInWithCustomToken(customToken);
+          await customTokenSignIn(user.id);
 
           (await getUser(user.id)) ?? createUser(toReqUser(user, account));
           const data = await getUser(user.id);
@@ -52,6 +53,11 @@ const options = {
       }
     },
   },
+};
+
+const customTokenSignIn = async (id: string) => {
+  const customToken = await adminAuth.createCustomToken(id);
+  await auth.signInWithCustomToken(customToken);
 };
 
 const toReqUser = (user: User, account: Account) => {
