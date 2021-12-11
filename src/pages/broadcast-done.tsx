@@ -37,6 +37,10 @@ const BroadcastDone: NextPage<Props> = ({ engivias }) => {
     setYoutubeURL(broadcastId, convertedUrl);
   };
 
+  const onModalOpen = () => {
+    setIsOpen(true);
+  };
+
   return (
     <BaseLayout title="放送済み">
       <BroadcastTitle broadcast={broadcast} />
@@ -64,7 +68,7 @@ const BroadcastDone: NextPage<Props> = ({ engivias }) => {
               type="button"
               isSubmitting={false}
               onClick={onSetYoutubeURL}
-              isPrimary={true}
+              isPrimary
               className="my-5 text-center"
             >
               保存する
@@ -72,7 +76,7 @@ const BroadcastDone: NextPage<Props> = ({ engivias }) => {
             <Button
               type="button"
               isSubmitting={false}
-              onClick={() => setIsOpen(true)}
+              onClick={onModalOpen}
               isPrimary={false}
               className="my-5 text-center"
             >
