@@ -23,7 +23,7 @@ service cloud.firestore {
     //***************************
     match /users/{userID} {
       function validate() {
-        return 1 <= request.resource.data.name.size() && request.resource.data.name.size() <= 20
+        return 1 <= request.resource.data.name.size() && request.resource.data.name.size() <= 21
       }
       //許可したフィールドのみリクエストに含まれているか
       function allowedFields() {
