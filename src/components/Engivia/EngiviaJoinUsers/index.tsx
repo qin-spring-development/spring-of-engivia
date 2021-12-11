@@ -22,7 +22,11 @@ export const EngiviaJoinUsers = forwardRef<HTMLDivElement, Props>(
                   src={joinUser.image}
                   alt="avatar"
                 />
-                <h1>{joinUser.name}</h1>
+                <h4>
+                  {joinUser.name.length > 10
+                    ? `${joinUser.name.slice(0, 10)}…`
+                    : joinUser.name}
+                </h4>
               </div>
               <span className="py-1 px-3 text-sm text-gray-700 bg-white rounded-full border-2">
                 {`${joinUser.likes} へえ`}

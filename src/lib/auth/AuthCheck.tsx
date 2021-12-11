@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/client";
+import { Loader } from "src/components/Loader";
 
 type props = {
   children: any;
@@ -29,5 +30,9 @@ export const Auth = ({ children, pathname }: props) => {
   if (isUser || isNotAuthPaths.includes(pathname)) {
     return children;
   }
-  return <div>Loading...</div>;
+  return (
+    <div>
+      <Loader />
+    </div>
+  );
 };

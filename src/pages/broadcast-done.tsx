@@ -1,6 +1,7 @@
 import type { GetServerSideProps, NextPage } from "next";
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import { useRouter } from "next/router";
+import { Dialog, Transition } from "@headlessui/react";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
 import { useSubscribeBroadcast } from "src/hooks/useSubscribe";
@@ -19,6 +20,7 @@ type Props = {
 };
 
 const BroadcastDone: NextPage<Props> = ({ engivias }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [session] = useSession();
   const [url, setUrl] = useState<string>("");
   const router = useRouter();
@@ -33,6 +35,10 @@ const BroadcastDone: NextPage<Props> = ({ engivias }) => {
   const onSetYoutubeURL = async () => {
     const convertedUrl = convertEmbedURL(url);
     setYoutubeURL(broadcastId, convertedUrl);
+  };
+
+  const onModalOpen = () => {
+    setIsOpen(true);
   };
 
   return (
@@ -62,7 +68,7 @@ const BroadcastDone: NextPage<Props> = ({ engivias }) => {
               type="button"
               isSubmitting={false}
               onClick={onSetYoutubeURL}
-              isPrimary={true}
+              isPrimary
               className="my-5 text-center"
             >
               保存する
@@ -70,7 +76,7 @@ const BroadcastDone: NextPage<Props> = ({ engivias }) => {
             <Button
               type="button"
               isSubmitting={false}
-              onClick={onDeleteBroadcast}
+              onClick={onModalOpen}
               isPrimary={false}
               className="my-5 text-center"
             >
@@ -79,6 +85,57 @@ const BroadcastDone: NextPage<Props> = ({ engivias }) => {
           </div>
         )}
       </div>
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className="overflow-y-auto fixed inset-0 z-10"
+          onClose={() => setIsOpen(false)}
+        >
+          <div className="px-4 min-h-screen text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <Dialog.Overlay className="fixed inset-0 bg-gray-800 bg-opacity-75" />
+            </Transition.Child>
+
+            <span
+              className="inline-block h-screen align-middle"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <div className="inline-block overflow-hidden py-6 px-12 my-8 text-left align-middle bg-white rounded-md shadow-xl transition-all transform">
+                <p className="text-2xl">本当に放送を削除しますか？</p>
+                <div className="mt-6 text-center">
+                  <Button
+                    type="button"
+                    isSubmitting={false}
+                    isPrimary={true}
+                    onClick={onDeleteBroadcast}
+                  >
+                    削除する
+                  </Button>
+                </div>
+              </div>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition>
       {engivias && <EngiviaList engivias={engivias} />}
     </BaseLayout>
   );
