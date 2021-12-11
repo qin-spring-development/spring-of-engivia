@@ -64,7 +64,7 @@ const toReqUser = (user: User, account: Account) => {
   const reqUser: ReqUser = {
     id: user.id,
     email: user.email,
-    name: user.name.slice(0, 20),
+    name: user.name.slice(0, 21),
     image: user.image,
     provider: account.provider,
   };
