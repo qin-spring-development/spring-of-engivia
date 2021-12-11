@@ -1,6 +1,7 @@
 import type { GetServerSideProps, NextPage } from "next";
-import { useState } from "react";
+import { useCallback } from "react";
 import { useRouter } from "next/router";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
 import { BroadcastTitle } from "src/components/Broadcast/BroadcastTitle";
 import { useSubscribeBroadcast } from "src/hooks/useSubscribe";
@@ -18,22 +19,31 @@ type Props = {
   engivias: EngiviaType[];
 };
 
+type UrlForm = {
+  url: string;
+};
+
 const BroadcastDone: NextPage<Props> = ({ engivias }) => {
   const [session] = useSession();
-  const [url, setUrl] = useState<string>("");
+
   const router = useRouter();
   const broadcastId = router.query.id as string;
   const broadcast = useSubscribeBroadcast(broadcastId);
 
-  const onDeleteBroadcast = () => {
+  const { register, handleSubmit } = useForm<UrlForm>();
+
+  const onDeleteBroadcast = useCallback(() => {
     deleteBroadcast(broadcastId);
     router.push("/broadcasts");
-  };
+  }, [broadcastId, router]);
 
-  const onSetYoutubeURL = async () => {
-    const convertedUrl = convertEmbedURL(url);
-    setYoutubeURL(broadcastId, convertedUrl);
-  };
+  const onSubmitURL: SubmitHandler<UrlForm> = useCallback(
+    async (data) => {
+      const convertedUrl = convertEmbedURL(data.url);
+      setYoutubeURL(broadcastId, convertedUrl);
+    },
+    [broadcastId]
+  );
 
   return (
     <BaseLayout title="放送済み">
@@ -52,30 +62,31 @@ const BroadcastDone: NextPage<Props> = ({ engivias }) => {
         )}
         {session?.user.isAdmin && (
           <div className="w-full max-w-4xl">
-            <InputFiled
-              type="text"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="URLを入力する"
-            />
-            <Button
-              type="button"
-              isSubmitting={false}
-              onClick={onSetYoutubeURL}
-              isPrimary={true}
-              className="my-5 text-center"
-            >
-              保存する
-            </Button>
-            <Button
-              type="button"
-              isSubmitting={false}
-              onClick={onDeleteBroadcast}
-              isPrimary={false}
-              className="my-5 text-center"
-            >
-              放送を削除する
-            </Button>
+            <form onSubmit={handleSubmit(onSubmitURL)}>
+              <InputFiled
+                id="url"
+                type="text"
+                placeholder="URLを入力する"
+                register={register("url")}
+              />
+              <Button
+                type="submit"
+                isSubmitting={false}
+                isPrimary
+                className="my-5 text-center"
+              >
+                保存する
+              </Button>
+              <Button
+                type="button"
+                isSubmitting={false}
+                onClick={onDeleteBroadcast}
+                isPrimary={false}
+                className="my-5 text-center"
+              >
+                放送を削除する
+              </Button>
+            </form>
           </div>
         )}
       </div>
