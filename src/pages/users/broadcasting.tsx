@@ -57,12 +57,15 @@ const Broadcasting: NextPage = () => {
     session?.user.isAdmin,
   ]);
 
+  useEffect(() => {
+    if (currentTotalLikes === 100) {
+      play();
+    }
+  }, [currentTotalLikes, play]);
+
   return (
     <BaseLayout title="放送中">
-      {currentTotalLikes === 100 && (
-          <Confetti width={width} height={height} />
-        ) &&
-        play()}
+      {currentTotalLikes === 100 && <Confetti width={width} height={height} />}
       <div className="flex relative justify-center items-center">
         <BroadcastTitle broadcast={broadcast} />
         <EngiviaJoinUsers joinUsers={joinUsers} />
