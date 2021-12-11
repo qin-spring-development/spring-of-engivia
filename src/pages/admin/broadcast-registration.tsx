@@ -1,5 +1,7 @@
-import { ChangeEvent, useCallback } from "react";
+import { useCallback } from "react";
 import type { NextPage, GetServerSideProps } from "next";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
 import { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
@@ -11,6 +13,7 @@ import { Button } from "src/components/Button";
 import { BroadcastFormType, BroadcastType } from "src/types/interface";
 import { createBroadcast, updateBroadcast, deleteBroadcast } from "src/lib/db";
 import { getBroadcast } from "src/lib/db-admin";
+import schemas from "src/lib/yupSchema/engiviaSchema";
 import { initialBroadcastInfo } from "src/constant/initialState";
 
 type Props = {
@@ -20,30 +23,31 @@ type Props = {
 const Registration: NextPage<Props> = ({ broadcast }) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [formData, setFormData] = useState<BroadcastFormType>({
-    title: broadcast.title,
-    broadCastingDate: format(
-      parseISO(broadcast.broadCastingDate),
-      "yyyy-MM-dd"
-    ),
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<BroadcastFormType>({
+    resolver: yupResolver(schemas().pick(["title", "broadCastingDate"])),
   });
 
-  const handleOnChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const id = e.target.id;
-      setFormData({ ...formData, [id]: e.target.value });
+  const handleOnSubmit: SubmitHandler<BroadcastFormType> = useCallback(
+    (data) => {
+      //   if (broadcast.id === "") {
+      //     createBroadcast(formData);
+      //   } else {
+      //     updateBroadcast(formData, broadcast.id);
+      //   }
+      //   router.push("/broadcasts");
+      // };
+      console.log({
+        title: data.title,
+        broadCastingDate: format(parseISO(data.broadCastingDate), "yyyy-MM-dd"),
+      });
     },
-    [formData]
+    []
   );
-
-  const handleOnSubmit = () => {
-    if (broadcast.id === "") {
-      createBroadcast(formData);
-    } else {
-      updateBroadcast(formData, broadcast.id);
-    }
-    router.push("/broadcasts");
-  };
 
   const handleOnDelete = useCallback(() => {
     deleteBroadcast(broadcast.id);
@@ -61,30 +65,34 @@ const Registration: NextPage<Props> = ({ broadcast }) => {
         <h1 className="py-10 mx-auto text-4xl font-bold text-gray-900">
           {broadcast.id === "" ? " 放送を作成" : "放送を編集"}
         </h1>
-        <form>
-          <div className="flex flex-col gap-10 w-full">
+        <div className="flex flex-col gap-10 w-full">
+          <form onSubmit={handleSubmit(handleOnSubmit)}>
             <InputFiled
               id="title"
               type="text"
-              value={formData.title}
               placeholder="タイトルを入力する"
-              onChange={handleOnChange}
+              register={register("title")}
             />
+            {errors.title?.message && (
+              <span className="text-base text-red-500">
+                {errors.title?.message}
+              </span>
+            )}
             <InputFiled
               id="broadCastingDate"
               type="date"
-              value={format(parseISO(formData.broadCastingDate), "yyyy-MM-dd")}
+              value={format(parseISO(broadcast.broadCastingDate), "yyyy-MM-dd")}
               placeholder="2021/09/03"
-              onChange={handleOnChange}
+              register={register("broadCastingDate")}
+              className="mt-8 mb-8"
             />
-
+            {errors.broadCastingDate?.message && (
+              <span className="text-base text-red-500">
+                {errors.broadCastingDate?.message}
+              </span>
+            )}
             <div className="space-x-4 w-full text-center">
-              <Button
-                isSubmitting={false}
-                isPrimary={true}
-                type="button"
-                onClick={handleOnSubmit}
-              >
+              <Button isSubmitting={false} isPrimary type="submit">
                 保存する
               </Button>
               <Button
@@ -106,8 +114,8 @@ const Registration: NextPage<Props> = ({ broadcast }) => {
                 </Button>
               )}
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
         <Transition appear show={isOpen} as={Fragment}>
           <Dialog
             as="div"
