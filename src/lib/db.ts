@@ -3,6 +3,7 @@ import {
   WithOutToken,
   BroadcastFormType,
   featureStatusType,
+  EngiviaType,
 } from "src/types/interface";
 import { ReqUser } from "src/lib/users";
 import { User } from "next-auth";
@@ -125,7 +126,7 @@ export const createEngivia = async (
     .doc(broadcastId)
     .collection("engivias")
     .doc();
-  const engivia = {
+  const engivia: EngiviaType = {
     body: engiviaBody,
     createdAt: new Date().toISOString(),
     engiviaNumber: null,
@@ -137,18 +138,10 @@ export const createEngivia = async (
       id: user.id,
     },
     totalLikes: 0,
+    joinUsersCount: 0,
   };
   engiviaRef.set(engivia);
 
-  const engiviaLengthRef = await db
-    .collection("broadcasts")
-    .doc(broadcastId)
-    .collection("engivias")
-    .get();
-
-  const engiviaLength = engiviaLengthRef.docs.length;
-  const broadcastRef = await db.collection("broadcasts").doc(broadcastId);
-  broadcastRef.set({ engiviaCount: engiviaLength }, { merge: true });
   return engivia;
 };
 
@@ -169,6 +162,17 @@ export const createJoinUsers = async (
       image: user.image,
       iid: user.id,
     });
+
+  const engiviaRef = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .doc(engiviaId);
+
+  engiviaRef.set(
+    { joinUsersCount: firebase.firestore.FieldValue.increment(1) },
+    { merge: true }
+  );
 };
 
 export const updateEngivia = async (
@@ -326,4 +330,18 @@ export const addJoinUser = async (
       image: user.image,
       id: user.id,
     });
+
+  await incrementJoinCount(broadcastId);
+};
+
+const incrementJoinCount = async (broadcastId: string) => {
+  const engiviaLengthRef = await db
+    .collection("broadcasts")
+    .doc(broadcastId)
+    .collection("engivias")
+    .get();
+
+  const engiviaLength = engiviaLengthRef.docs.length;
+  const broadcastRef = await db.collection("broadcasts").doc(broadcastId);
+  broadcastRef.set({ engiviaCount: engiviaLength }, { merge: true });
 };
