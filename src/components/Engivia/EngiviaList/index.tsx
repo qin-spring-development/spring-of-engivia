@@ -11,10 +11,18 @@ const getTotalLikes = (engivia: EngiviaType): number => {
     : 0;
 };
 
+const engiviaLankSort = (engivias: EngiviaType[]): EngiviaType[] => {
+  return engivias.sort((a, b) => {
+    const aLikes = getTotalLikes(a);
+    const bLikes = getTotalLikes(b);
+    return aLikes < bLikes ? 1 : -1;
+  });
+};
+
 export const EngiviaList: FC<Props> = ({ engivias }) => {
   return (
     <>
-      {engivias.map((engivia) => (
+      {engiviaLankSort(engivias).map((engivia) => (
         <div key={engivia?.id} className="mx-auto mb-5 max-w-4xl">
           <div className="py-7 px-10 mb-2 bg-white rounded-lg">
             <div className="flex flex-col items-center mb-10">
