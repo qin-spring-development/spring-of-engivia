@@ -16,13 +16,16 @@ import { EngiviaJoinUsers } from "src/components/Engivia/EngiviaJoinUsers";
 import { SwitchButton } from "src/components/SwitchButton";
 import { addJoinUser, voteLikes, updateTotalLikes } from "src/lib/db";
 import { useSession } from "next-auth/client";
+import useWindowSize from "react-use/lib/useWindowSize";
+import Confetti from "react-confetti";
 
 const Broadcasting: NextPage = () => {
   const [session] = useSession();
   const user = session?.user;
   const router = useRouter();
   const broadcastId = router.query.id as string;
-  const ref = useRef<HTMLDivElement>(null);
+
+  const { width, height } = useWindowSize();
 
   const broadcast = useSubscribeBroadcast(broadcastId);
   const featureEngivia = useSubscribeFeatureEngivia(broadcastId);
@@ -57,10 +60,6 @@ const Broadcasting: NextPage = () => {
     session?.user.isAdmin,
   ]);
 
-  useEffect(() => {
-    ref.current?.scrollTo(0, ref.current.scrollHeight);
-  }, []);
-
   const handleVoiceClick = useCallback(async () => {
     await voteLikes(broadcastId, featureEngivia?.id, session?.user as User);
     await updateTotalLikes(broadcastId, featureEngivia?.id);
@@ -68,7 +67,14 @@ const Broadcasting: NextPage = () => {
 
   const broadcastType = useMemo(() => {
     if (broadcast?.status === "DONE") {
-      return (
+  return (
+    <BaseLayout title="放送中">
+      {currentTotalLikes === 100 && <Confetti width={width} height={height} />}
+      <div className="flex relative justify-center items-center">
+        <BroadcastTitle broadcast={broadcast} />
+        <EngiviaJoinUsers joinUsers={joinUsers} />
+      </div>
+      {broadcast?.status === "DONE" ? (
         <div className="mx-auto text-3xl text-center">
           <p className="mb-2">本日のエンジビアの泉は終了しました。</p>
           <p>ご視聴ありがとうございました！</p>

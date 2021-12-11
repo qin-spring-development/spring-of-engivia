@@ -21,6 +21,7 @@ export const getEngivias = async (broadcastId: string) => {
     .collection("broadcasts")
     .doc(broadcastId)
     .collection("engivias")
+    .orderBy("totalLikes", "desc")
     .get();
   const engivias = (await snapshot).docs.map((doc) => doc.data());
   return engivias;
