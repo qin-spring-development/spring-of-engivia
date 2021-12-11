@@ -44,7 +44,6 @@ const Broadcasting: NextPage = () => {
   }, [joinUsers.length, totalLikes]);
 
   useEffect(() => {
-    ref.current?.scrollTo(0, ref.current.scrollHeight);
     if (broadcast?.status === "DONE") {
       setTimeout(() => router.push("/broadcasts"), 5000);
     }
@@ -67,14 +66,7 @@ const Broadcasting: NextPage = () => {
 
   const broadcastType = useMemo(() => {
     if (broadcast?.status === "DONE") {
-  return (
-    <BaseLayout title="放送中">
-      {currentTotalLikes === 100 && <Confetti width={width} height={height} />}
-      <div className="flex relative justify-center items-center">
-        <BroadcastTitle broadcast={broadcast} />
-        <EngiviaJoinUsers joinUsers={joinUsers} />
-      </div>
-      {broadcast?.status === "DONE" ? (
+      return (
         <div className="mx-auto text-3xl text-center">
           <p className="mb-2">本日のエンジビアの泉は終了しました。</p>
           <p>ご視聴ありがとうございました！</p>
@@ -119,9 +111,10 @@ const Broadcasting: NextPage = () => {
 
   return (
     <BaseLayout title="放送中">
+      {currentTotalLikes === 100 && <Confetti width={width} height={height} />}
       <div className="flex relative justify-center items-center">
         <BroadcastTitle broadcast={broadcast} />
-        <EngiviaJoinUsers joinUsers={joinUsers} ref={ref} />
+        <EngiviaJoinUsers joinUsers={joinUsers} />
       </div>
       {broadcastType}
     </BaseLayout>
