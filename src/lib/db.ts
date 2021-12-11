@@ -142,37 +142,17 @@ export const createEngivia = async (
   };
   engiviaRef.set(engivia);
 
-  return engivia;
-};
-
-export const createJoinUsers = async (
-  broadcastId: string,
-  engiviaId: string,
-  user: ReqUser
-) => {
-  db.collection("broadcasts")
-    .doc(broadcastId)
-    .collection("engivias")
-    .doc(engiviaId)
-    .collection("joinUsers")
-    .doc(user.id)
-    .set({
-      likes: 0,
-      name: user.name,
-      image: user.image,
-      iid: user.id,
-    });
-
-  const engiviaRef = await db
+  const engiviaLengthRef = await db
     .collection("broadcasts")
     .doc(broadcastId)
     .collection("engivias")
-    .doc(engiviaId);
+    .get();
 
-  engiviaRef.set(
-    { joinUsersCount: firebase.firestore.FieldValue.increment(1) },
-    { merge: true }
-  );
+  const engiviaLength = engiviaLengthRef.docs.length;
+  const broadcastRef = await db.collection("broadcasts").doc(broadcastId);
+  broadcastRef.set({ engiviaCount: engiviaLength }, { merge: true });
+
+  return engivia;
 };
 
 export const updateEngivia = async (
@@ -331,17 +311,21 @@ export const addJoinUser = async (
       id: user.id,
     });
 
-  await incrementJoinCount(broadcastId);
+  await incrementJoinCount(broadcastId, engiviaId);
 };
 
-const incrementJoinCount = async (broadcastId: string) => {
-  const engiviaLengthRef = await db
+const incrementJoinCount = async (
+  broadcastId: string,
+  engiviaId: string | undefined
+) => {
+  const engiviaRef = await db
     .collection("broadcasts")
     .doc(broadcastId)
     .collection("engivias")
-    .get();
+    .doc(engiviaId);
 
-  const engiviaLength = engiviaLengthRef.docs.length;
-  const broadcastRef = await db.collection("broadcasts").doc(broadcastId);
-  broadcastRef.set({ engiviaCount: engiviaLength }, { merge: true });
+  engiviaRef.set(
+    { joinUsersCount: firebase.firestore.FieldValue.increment(1) },
+    { merge: true }
+  );
 };
