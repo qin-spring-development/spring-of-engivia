@@ -1,5 +1,5 @@
-import { hashSync } from "bcrypt";
 import { NextApiRequest, NextApiResponse } from "next";
+import { toHash } from "src/lib/auth/hash";
 import { adminAuth } from "src/lib/firebase-admin";
 
 export type CustomTokenResponse = {
@@ -13,7 +13,7 @@ export default async function handler(
 ) {
   const userId = req.body?.userId;
   if (userId) {
-    const hash = hashSync(userId, process.env.SALT_VALUE as string);
+    const hash = toHash(userId);
     const customToken = await adminAuth.createCustomToken(hash);
     res.status(200).json({ token: customToken });
   } else {

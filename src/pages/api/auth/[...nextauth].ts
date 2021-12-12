@@ -10,7 +10,7 @@ import {
   ReqUser,
   ResUser,
 } from "src/lib/users";
-import { hashSync } from "bcrypt";
+import { toHash } from "src/lib/auth/hash";
 
 const options = {
   // Configure one or more authentication providers
@@ -63,7 +63,7 @@ const options = {
 };
 
 const customTokenSignIn = async (id: string, email: string) => {
-  const hash = hashSync(id, process.env.SALT_VALUE as string);
+  const hash = toHash(id);
   const customToken = await adminAuth.createCustomToken(hash);
 
   await auth.signInWithCustomToken(customToken).then((res) => {
