@@ -27,6 +27,7 @@ export const Header = () => {
               />
             </a>
           </Link>
+          <p>test</p>
         </div>
         {session?.user ? (
           <div>
