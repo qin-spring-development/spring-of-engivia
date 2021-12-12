@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { User } from "next-auth";
-import { useEffect, useRef, useMemo, useCallback } from "react";
+import { useEffect, useMemo, useCallback } from "react";
 import { useRouter } from "next/router";
 import {
   useSubscribeBroadcast,
