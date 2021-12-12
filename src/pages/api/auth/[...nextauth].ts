@@ -22,9 +22,9 @@ const options = {
     // ユーザー情報更新時の再ログイン
     Providers.Credentials({
       authorize: async (credentials) => {
-        const { id } = credentials;
+        const { id, email } = credentials;
 
-        await customTokenSignIn(id);
+        await customTokenSignIn(id, email);
         const firebaseUser = (await getUser(id)) as User;
         return firebaseUser;
       },
@@ -46,7 +46,7 @@ const options = {
     signIn: async (user: User, account: Account) => {
       try {
         if (user !== null) {
-          await customTokenSignIn(user.id);
+          await customTokenSignIn(user.id, user.email);
 
           (await getUser(user.id)) ?? createUser(toReqUser(user, account));
           const data = await getUser(user.id);
@@ -62,11 +62,13 @@ const options = {
   },
 };
 
-const customTokenSignIn = async (id: string) => {
+const customTokenSignIn = async (id: string, email: string) => {
   const hash = hashSync(id, process.env.SALT_VALUE as string);
   const customToken = await adminAuth.createCustomToken(hash);
 
-  await auth.signInWithCustomToken(customToken);
+  await auth.signInWithCustomToken(customToken).then((res) => {
+    res.user?.updateEmail(email);
+  });
   await createUserToken({ id: id, firebaseUid: hash });
 };
 
