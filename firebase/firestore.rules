@@ -22,7 +22,7 @@ service cloud.firestore {
     //userTokensコレクションへのルール
     //***************************
     match /userTokens/{userID} {
-    	allow read: if isUserAuthenticated(userID);
+      allow read: if isUserAuthenticated(userID);
       allow create: if isAuthenticated();
       allow update: if isUserAuthenticated(userID);
       allow delete: if isUserAuthenticated(userID);
@@ -108,9 +108,9 @@ service cloud.firestore {
       //各フィールドへのバリデーション
       function validate() {
         return (
-        				!request.resource.data.keys().hasAny(["body"])
-              	|| (
-              				!request.resource.data.body.matches('( |　)+')
+                !request.resource.data.keys().hasAny(["body"])
+                || (
+                      !request.resource.data.body.matches('( |　)+')
                       && 1 <= request.resource.data.body.size() && request.resource.data.body.size() <= 100
                     )
               )
