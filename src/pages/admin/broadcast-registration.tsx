@@ -70,6 +70,7 @@ const Registration: NextPage<Props> = ({ broadcast }) => {
             <InputFiled
               id="title"
               type="text"
+              value={broadcast.title}
               placeholder="タイトルを入力する"
               register={register("title")}
             />

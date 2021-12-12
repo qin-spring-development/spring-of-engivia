@@ -47,7 +47,7 @@ const BroadcastDone: NextPage<Props> = ({ engivias }) => {
     [broadcastId]
   );
 
-  const onModalOpen = () => {
+  const onOpenModal = () => {
     setIsOpen(true);
   };
 
@@ -72,6 +72,7 @@ const BroadcastDone: NextPage<Props> = ({ engivias }) => {
               <InputFiled
                 id="url"
                 type="text"
+                value={broadcast?.broadCastUrl}
                 placeholder="URLを入力する"
                 register={register("url")}
               />
@@ -86,7 +87,7 @@ const BroadcastDone: NextPage<Props> = ({ engivias }) => {
               <Button
                 type="button"
                 isSubmitting={false}
-                onClick={onDeleteBroadcast}
+                onClick={onOpenModal}
                 isPrimary={false}
                 className="my-5 text-center"
               >

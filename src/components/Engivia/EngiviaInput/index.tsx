@@ -56,6 +56,7 @@ export const EngiviaInput: FC<Props> = ({
           cols={60}
           rows={3}
           maxlength={100}
+          value={userEngivia.body}
           placeholder="エンジビアを入力する"
           register={register("engivia")}
           className="p-4 mt-2 rounded-md border border-gray-300 focus:ring focus:outline-none"

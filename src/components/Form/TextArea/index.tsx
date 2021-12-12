@@ -26,7 +26,7 @@ export const TextArea: FC<Props> = ({
     <div>
       <textarea
         id={id}
-        value={value}
+        defaultValue={value}
         className={`py-2 px-3 w-full text-base leading-8 text-gray-500 border border-gray-300 bg-white rounded-md focus:ring outline-none ${className}`}
         placeholder={placeholder}
         rows={rows}
