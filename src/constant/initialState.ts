@@ -21,4 +21,5 @@ export const initialEngiviaInfo: EngiviaType = {
     id: "",
   },
   totalLikes: 0,
+  joinUsersCount: 0,
 };
