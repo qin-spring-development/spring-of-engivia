@@ -39,7 +39,7 @@ const EngiviaRegistration: NextPage = () => {
     router.push("/broadcasts");
     toast("エンジビアを削除しました", {
       duration: 4000,
-      position: "bottom-center",
+      position: "top-center",
       icon: "🗑️",
     });
   };

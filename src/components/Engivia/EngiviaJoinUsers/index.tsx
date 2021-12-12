@@ -1,14 +1,18 @@
-import { FC } from "react";
+import { forwardRef } from "react";
 import { JoinUserType } from "src/types/interface";
 
 type Props = {
   joinUsers: JoinUserType[];
 };
 
-export const EngiviaJoinUsers: FC<Props> = ({ joinUsers }) => {
-  return (
-    <div>
-      <div className="absolute top-0 right-0 mt-5 mr-6 mb-3 divide-y">
+// eslint-disable-next-line react/display-name
+export const EngiviaJoinUsers = forwardRef<HTMLDivElement, Props>(
+  ({ joinUsers }, ref) => {
+    return (
+      <div
+        className="overflow-y-auto absolute top-0 right-0 mt-5 mr-6 mb-3 h-[700px] divide-y"
+        ref={ref}
+      >
         {joinUsers.map((joinUser) => (
           <div key={joinUser.id}>
             <div className="flex justify-between items-center my-3">
@@ -18,7 +22,7 @@ export const EngiviaJoinUsers: FC<Props> = ({ joinUsers }) => {
                   src={joinUser.image}
                   alt="avatar"
                 />
-                <h1>{joinUser.name}</h1>
+                <h4 className="max-w-[150px] truncate">{joinUser.name}</h4>
               </div>
               <span className="py-1 px-3 text-sm text-gray-700 bg-white rounded-full border-2">
                 {`${joinUser.likes} へえ`}
@@ -27,6 +31,6 @@ export const EngiviaJoinUsers: FC<Props> = ({ joinUsers }) => {
           </div>
         ))}
       </div>
-    </div>
-  );
-};
+    );
+  }
+);

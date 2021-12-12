@@ -1,13 +1,13 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react/types-6-0";
-import { Form, Props } from "./index";
+import { InputFiled, Props } from "./index";
 
 export default {
-  component: Form,
-  title: "Components/Form/Input",
+  component: InputFiled,
+  title: "Components/Form/InputFiled",
 } as Meta;
 
-const Template: Story<Props> = (args) => <Form {...args} />;
+const Template: Story<Props> = (args) => <InputFiled {...args} />;
 
 export const Default = Template.bind({});
 

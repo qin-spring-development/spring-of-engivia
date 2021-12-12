@@ -156,6 +156,7 @@ export const useSubscribeTotalLikes = (
         const engiviaDoc = await snapshot.data();
         setTotalLikes(engiviaDoc?.totalLikes);
       });
+
     return () => unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [engiviaId]);

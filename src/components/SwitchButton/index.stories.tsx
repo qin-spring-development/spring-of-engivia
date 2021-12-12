@@ -12,6 +12,5 @@ const Template: Story<Props> = (args) => <SwitchButton {...args} />;
 export const Button = Template.bind({});
 
 Button.args = {
-  broadcastId: "string",
   likes: 0,
 };
