@@ -47,6 +47,7 @@ const options = {
       try {
         if (user !== null) {
           await customTokenSignIn(user.id);
+
           (await getUser(user.id)) ?? createUser(toReqUser(user, account));
           const data = await getUser(user.id);
           setResUser(user, data as ResUser);
@@ -64,8 +65,9 @@ const options = {
 const customTokenSignIn = async (id: string) => {
   const hash = hashSync(id, process.env.SALT_KEY as string);
   const customToken = await adminAuth.createCustomToken(hash);
-  await createUserToken({ id: id, firebaseUid: hash });
+
   await auth.signInWithCustomToken(customToken);
+  await createUserToken({ id: id, firebaseUid: hash });
 };
 
 const toReqUser = (user: User, account: Account) => {
