@@ -9,7 +9,6 @@ import { Button } from "src/components/Button";
 import { Dialog, Transition } from "@headlessui/react";
 import toast from "react-hot-toast";
 import schemas from "src/lib/yupSchema/engiviaSchema";
-import { updateUsername } from "src/lib/users";
 import { signIn, signOut, useSession } from "next-auth/client";
 import { deleteUser, updateUsername } from "src/lib/users";
 import { auth } from "src/lib/firebase";
