@@ -368,6 +368,7 @@ const Broadcasting = ({
                             type="button"
                             isSubmitting={inFeatureId === "" ? true : false}
                             isPrimary={true}
+                            className="transition duration-75 transform active:scale-95"
                             onClick={handleTitleCall}
                           >
                             タイトルコールする

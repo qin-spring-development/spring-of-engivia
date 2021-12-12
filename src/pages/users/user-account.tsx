@@ -4,13 +4,15 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
-import { signIn, useSession } from "next-auth/client";
 import { InputFiled } from "src/components/Form/InputFiled";
 import { Button } from "src/components/Button";
 import { Dialog, Transition } from "@headlessui/react";
 import toast from "react-hot-toast";
 import schemas from "src/lib/yupSchema/engiviaSchema";
 import { updateUsername } from "src/lib/users";
+import { signIn, signOut, useSession } from "next-auth/client";
+import { deleteUser, updateUsername } from "src/lib/users";
+import { auth } from "src/lib/firebase";
 
 type UserNameForm = {
   username: string;
@@ -47,6 +49,20 @@ const UserAccount: NextPage = () => {
     },
     [session?.user]
   );
+
+  const handleDelete = async () => {
+    if (session?.user) {
+      await deleteUser(session.user.id);
+      toast("退会しました", {
+        duration: 4000,
+        position: "top-center",
+        className: "",
+        icon: "🙇‍♂️",
+      });
+      auth.signOut();
+      signOut({ callbackUrl: "/" });
+    }
+  };
 
   return (
     <BaseLayout title="放送一覧">
