@@ -63,7 +63,7 @@ const options = {
 };
 
 const customTokenSignIn = async (id: string) => {
-  const hash = hashSync(id, process.env.SALT_KEY as string);
+  const hash = hashSync(id, process.env.SALT_VALUE as string);
   const customToken = await adminAuth.createCustomToken(hash);
 
   await auth.signInWithCustomToken(customToken);

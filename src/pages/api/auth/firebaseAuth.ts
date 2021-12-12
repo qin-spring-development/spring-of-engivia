@@ -13,7 +13,7 @@ export default async function handler(
 ) {
   const userId = req.body?.userId;
   if (userId) {
-    const hash = hashSync(userId, process.env.SALT_KEY as string);
+    const hash = hashSync(userId, process.env.SALT_VALUE as string);
     const customToken = await adminAuth.createCustomToken(hash);
     res.status(200).json({ token: customToken });
   } else {
