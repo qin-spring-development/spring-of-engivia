@@ -15,8 +15,6 @@ EntryTittle.args = {
   placeholder: "エンジビアを入力する",
   rows: 3,
   maxlength: 100,
-  length: 0,
-  classNameAlert: "",
 };
 export const Alert = Template.bind({});
 Alert.args = {
@@ -24,6 +22,4 @@ Alert.args = {
   rows: 3,
   maxlength: 100,
   className: "text-red-700 border-red-300 focus:ring-red-700",
-  length: 100,
-  classNameAlert: "text-red-700",
 };

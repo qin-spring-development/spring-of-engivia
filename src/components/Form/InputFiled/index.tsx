@@ -1,23 +1,22 @@
-import { FC, ChangeEventHandler } from "react";
+import { FC } from "react";
+import { UseFormRegisterReturn } from "react-hook-form";
 
 export type Props = {
   className?: string;
   type: string;
-  value: string;
+  value?: string;
   id?: string;
-  name?: string;
   placeholder?: string;
-  onChange: ChangeEventHandler<HTMLInputElement>;
+  register: UseFormRegisterReturn;
 };
 
-export const Form: FC<Props> = ({
+export const InputFiled: FC<Props> = ({
   className,
   type = "text",
   value,
   id,
-  name,
   placeholder,
-  onChange,
+  register,
 }) => {
   return (
     <div className={className}>
@@ -25,10 +24,9 @@ export const Form: FC<Props> = ({
         type={type}
         id={id}
         defaultValue={value}
-        name={name}
         className="py-1 px-3 w-full text-base leading-8 text-gray-500 bg-white rounded-md border border-gray-300 focus:ring outline-none"
         placeholder={placeholder}
-        onChange={onChange}
+        {...register}
       />
     </div>
   );

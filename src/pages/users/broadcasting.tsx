@@ -18,6 +18,7 @@ import { addJoinUser, voteLikes, updateTotalLikes } from "src/lib/db";
 import { useSession } from "next-auth/client";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
+import useSound from "use-sound";
 
 const Broadcasting: NextPage = () => {
   const [session] = useSession();
@@ -26,6 +27,7 @@ const Broadcasting: NextPage = () => {
   const broadcastId = router.query.id as string;
 
   const { width, height } = useWindowSize();
+  const [play] = useSound("/kansei.mp3");
 
   const broadcast = useSubscribeBroadcast(broadcastId);
   const featureEngivia = useSubscribeFeatureEngivia(broadcastId);
@@ -58,6 +60,12 @@ const Broadcasting: NextPage = () => {
     router,
     session?.user.isAdmin,
   ]);
+
+  useEffect(() => {
+    if (currentTotalLikes === 100) {
+      play();
+    }
+  }, [currentTotalLikes, play]);
 
   const handleVoiceClick = useCallback(async () => {
     await voteLikes(broadcastId, featureEngivia?.id, session?.user as User);
