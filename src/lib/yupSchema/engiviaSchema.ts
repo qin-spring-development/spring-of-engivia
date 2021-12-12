@@ -1,5 +1,6 @@
 import * as yup from "yup";
 
+// Todo: 入力内容は別ファイルに分けた方が良い
 const REQUIRE_MSG = "エンジビアを入力してください";
 const ACCOUNT_NAME_REQUIRE = "アカウント名を入力してください";
 const TITLE_REQUIRE = "タイトルを入力してください";
