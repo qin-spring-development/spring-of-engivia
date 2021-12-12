@@ -148,7 +148,12 @@ const BroadcastDone: NextPage<Props> = ({ engivias }) => {
           </div>
         </Dialog>
       </Transition>
-      {engivias && <EngiviaList engivias={engivias} />}
+
+      {engivias && (
+        <div className="pb-10">
+          <EngiviaList engivias={engivias} />
+        </div>
+      )}
     </BaseLayout>
   );
 };
