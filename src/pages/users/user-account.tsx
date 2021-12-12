@@ -84,18 +84,30 @@ const UserAccount: NextPage = () => {
                 {errors.username?.message}
               </span>
             )}
-            <div className="flex flex-row-reverse content-end mt-5">
-              <Button type="submit" isSubmitting={false} isPrimary>
-                保存する
-              </Button>
-              <Button
-                type="button"
-                isSubmitting={false}
-                isPrimary={false}
-                onClick={() => router.push("/broadcasts")}
-              >
-                キャンセル
-              </Button>
+            <div className="flex flex-row-reverse justify-between content-end mt-5">
+              <div>
+                <Button
+                  type="button"
+                  isSubmitting={false}
+                  isPrimary={false}
+                  onClick={() => router.push("/broadcasts")}
+                >
+                  キャンセル
+                </Button>
+                <Button type="submit" isSubmitting={false} isPrimary>
+                  保存する
+                </Button>
+              </div>
+              <div>
+                <Button
+                  type="button"
+                  isSubmitting={false}
+                  isPrimary={false}
+                  onClick={handleDelete}
+                >
+                  退会する
+                </Button>
+              </div>
             </div>
           </form>
         </div>
