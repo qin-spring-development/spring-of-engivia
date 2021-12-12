@@ -1,3 +1,4 @@
+import { hashSync } from "bcrypt";
 import { NextApiRequest, NextApiResponse } from "next";
 import { adminAuth } from "src/lib/firebase-admin";
 
@@ -12,7 +13,8 @@ export default async function handler(
 ) {
   const userId = req.body?.userId;
   if (userId) {
-    const customToken = await adminAuth.createCustomToken(userId);
+    const hash = hashSync(userId, process.env.SALT_KEY as string);
+    const customToken = await adminAuth.createCustomToken(hash);
     res.status(200).json({ token: customToken });
   } else {
     res.status(400).json({ errorMessage: "userId is required" });
