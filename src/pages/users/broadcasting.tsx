@@ -19,6 +19,8 @@ import { useSession } from "next-auth/client";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 import useSound from "use-sound";
+import Lottie from "react-lottie";
+import animationData from "../../../public/thanks_for_watching.json";
 
 const Broadcasting: NextPage = () => {
   const [session] = useSession();
@@ -28,6 +30,14 @@ const Broadcasting: NextPage = () => {
 
   const { width, height } = useWindowSize();
   const [play] = useSound("/kansei.mp3");
+  const defaultOptions = {
+    loop: false,
+    autoplay: true,
+    animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
 
   const broadcast = useSubscribeBroadcast(broadcastId);
   const featureEngivia = useSubscribeFeatureEngivia(broadcastId);
@@ -75,9 +85,12 @@ const Broadcasting: NextPage = () => {
   const broadcastType = useMemo(() => {
     if (broadcast?.status === "DONE") {
       return (
-        <div className="mx-auto text-3xl text-center">
-          <p className="mb-2">本日のエンジビアの泉は終了しました。</p>
-          <p>ご視聴ありがとうございました！</p>
+        <div className="mx-auto max-w-3xl">
+          <Lottie
+            options={defaultOptions}
+            isClickToPauseDisabled={true}
+            ariaRole={""}
+          />
         </div>
       );
     }
