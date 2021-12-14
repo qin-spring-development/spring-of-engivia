@@ -19,7 +19,7 @@ import { useSession } from "next-auth/client";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 import useSound from "use-sound";
-import Lottie from "react-lottie";
+import Lottie from "react-lottie-player";
 import animationData from "../../../public/thanks_for_watching.json";
 
 const Broadcasting: NextPage = () => {
@@ -30,14 +30,6 @@ const Broadcasting: NextPage = () => {
 
   const { width, height } = useWindowSize();
   const [play] = useSound("/kansei.mp3");
-  const defaultOptions = {
-    loop: false,
-    autoplay: true,
-    animationData,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
 
   const broadcast = useSubscribeBroadcast(broadcastId);
   const featureEngivia = useSubscribeFeatureEngivia(broadcastId);
@@ -86,11 +78,7 @@ const Broadcasting: NextPage = () => {
     if (broadcast?.status === "DONE") {
       return (
         <div className="mx-auto max-w-3xl">
-          <Lottie
-            options={defaultOptions}
-            isClickToPauseDisabled={true}
-            ariaRole={""}
-          />
+          <Lottie loop={false} animationData={animationData} play />
         </div>
       );
     }
