@@ -49,7 +49,7 @@ const Broadcasting: NextPage = () => {
 
   useEffect(() => {
     if (broadcast?.status === "DONE") {
-      setTimeout(() => router.push("/broadcasts"), 5000);
+      setTimeout(() => router.push("/broadcasts"), 7000);
     }
     if (featureEngivia?.id && user) {
       addJoinUser(broadcastId, featureEngivia.id, user);
