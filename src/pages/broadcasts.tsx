@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { BaseLayout } from "src/components/Layouts/BaseLayout";
@@ -11,9 +12,9 @@ const Broadcasts: NextPage = () => {
   const router = useRouter();
   const broadcasts = useSubscribeBroadcasts();
 
-  const handleRegistration = () => {
+  const handleRegistration = useCallback(() => {
     router.push("/admin/broadcast-registration");
-  };
+  }, [router]);
 
   return (
     <BaseLayout title="放送一覧">
@@ -23,7 +24,7 @@ const Broadcasts: NextPage = () => {
           {session?.user.isAdmin && (
             <Button
               isSubmitting={false}
-              isPrimary={true}
+              isPrimary
               type="button"
               onClick={handleRegistration}
             >
