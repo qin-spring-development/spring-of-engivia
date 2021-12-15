@@ -21,6 +21,7 @@ type Props = {
 };
 
 const Registration: NextPage<Props> = ({ broadcast }) => {
+  const currentDate = new Date();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -85,6 +86,7 @@ const Registration: NextPage<Props> = ({ broadcast }) => {
               value={format(parseISO(broadcast.broadCastingDate), "yyyy-MM-dd")}
               placeholder="2021/09/03"
               register={register("broadCastingDate")}
+              min={String(format(currentDate, "yyyy-MM-dd"))}
               className="mt-8 mb-8"
             />
             {errors.broadCastingDate?.message && (
@@ -157,7 +159,7 @@ const Registration: NextPage<Props> = ({ broadcast }) => {
                     <Button
                       type="button"
                       isSubmitting={false}
-                      isPrimary={true}
+                      isPrimary
                       onClick={handleOnDelete}
                     >
                       削除する
