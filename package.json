@@ -38,7 +38,6 @@
     "react-hook-form": "^7.20.2",
     "react-hot-toast": "^2.1.1",
     "react-use": "^17.3.1",
-    "swr": "^1.0.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "yup": "^0.32.11"
   },
