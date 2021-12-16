@@ -88,23 +88,17 @@ const UserAccount: NextPage = () => {
               <div>
                 <Button
                   type="button"
-                  isSubmitting={false}
                   isPrimary={false}
                   onClick={() => router.push("/broadcasts")}
                 >
                   キャンセル
                 </Button>
-                <Button type="submit" isSubmitting={false} isPrimary>
+                <Button type="submit" isPrimary>
                   保存する
                 </Button>
               </div>
               <div>
-                <Button
-                  type="button"
-                  isSubmitting={false}
-                  isPrimary={false}
-                  onClick={handleDelete}
-                >
+                <Button type="button" isPrimary={false} onClick={handleDelete}>
                   退会する
                 </Button>
               </div>

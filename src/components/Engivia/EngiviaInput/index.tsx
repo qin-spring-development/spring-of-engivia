@@ -67,7 +67,7 @@ export const EngiviaInput: FC<Props> = ({
           </span>
         )}
         <div className="flex justify-center mt-5">
-          <Button isSubmitting={false} type="submit" isPrimary>
+          <Button type="submit" isPrimary>
             保存する
           </Button>
         </div>

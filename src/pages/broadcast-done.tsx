@@ -76,17 +76,11 @@ const BroadcastDone: NextPage<Props> = ({ engivias }) => {
                 placeholder="URLを入力する"
                 register={register("url")}
               />
-              <Button
-                type="submit"
-                isSubmitting={false}
-                isPrimary
-                className="my-5 text-center"
-              >
+              <Button type="submit" isPrimary className="my-5 text-center">
                 保存する
               </Button>
               <Button
                 type="button"
-                isSubmitting={false}
                 onClick={onOpenModal}
                 isPrimary={false}
                 className="my-5 text-center"
@@ -134,12 +128,7 @@ const BroadcastDone: NextPage<Props> = ({ engivias }) => {
               <div className="inline-block overflow-hidden py-6 px-12 my-8 text-left align-middle bg-white rounded-md shadow-xl transition-all transform">
                 <p className="text-2xl">本当に放送を削除しますか？</p>
                 <div className="mt-6 text-center">
-                  <Button
-                    type="button"
-                    isSubmitting={false}
-                    isPrimary={true}
-                    onClick={onDeleteBroadcast}
-                  >
+                  <Button type="button" isPrimary onClick={onDeleteBroadcast}>
                     削除する
                   </Button>
                 </div>

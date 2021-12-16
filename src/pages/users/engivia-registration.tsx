@@ -57,16 +57,10 @@ const EngiviaRegistration: NextPage = () => {
         <div>
           <EngiviaCard engivia={userEngivia} />
           <div className="flex justify-center">
-            <Button
-              isSubmitting={false}
-              type="button"
-              isPrimary={true}
-              onClick={handleEditEngivia}
-            >
+            <Button type="button" isPrimary onClick={handleEditEngivia}>
               編集する
             </Button>
             <Button
-              isSubmitting={false}
               type="button"
               isPrimary={false}
               onClick={() => setIsOpen(true)}
@@ -114,8 +108,7 @@ const EngiviaRegistration: NextPage = () => {
                     <div className="mt-6 text-center">
                       <Button
                         type="button"
-                        isSubmitting={false}
-                        isPrimary={true}
+                        isPrimary
                         onClick={handleDeleteEngivia}
                       >
                         削除する
