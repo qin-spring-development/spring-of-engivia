@@ -14,5 +14,4 @@ export const Default = Template.bind({});
 Default.args = {
   type: "button",
   children: "登録",
-  isSubmitting: false,
 };

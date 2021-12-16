@@ -95,11 +95,10 @@ const Registration: NextPage<Props> = ({ broadcast }) => {
               </span>
             )}
             <div className="space-x-4 w-full text-center">
-              <Button isSubmitting={false} isPrimary type="submit">
+              <Button isPrimary type="submit">
                 保存する
               </Button>
               <Button
-                isSubmitting={false}
                 isPrimary={false}
                 type="button"
                 onClick={() => router.push("/broadcasts")}
@@ -108,7 +107,6 @@ const Registration: NextPage<Props> = ({ broadcast }) => {
               </Button>
               {broadcast.id !== "" && (
                 <Button
-                  isSubmitting={false}
                   isPrimary={false}
                   type="button"
                   onClick={() => setIsOpen(true)}
@@ -156,12 +154,7 @@ const Registration: NextPage<Props> = ({ broadcast }) => {
                 <div className="inline-block overflow-hidden py-6 px-12 my-8 text-left align-middle bg-white rounded-md shadow-xl transition-all transform">
                   <p className="text-2xl">本当に放送を削除しますか？</p>
                   <div className="mt-6 text-center">
-                    <Button
-                      type="button"
-                      isSubmitting={false}
-                      isPrimary
-                      onClick={handleOnDelete}
-                    >
+                    <Button type="button" isPrimary onClick={handleOnDelete}>
                       削除する
                     </Button>
                   </div>

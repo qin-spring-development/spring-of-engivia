@@ -22,12 +22,7 @@ const Broadcasts: NextPage = () => {
         <div className="flex justify-between items-center">
           <h1 className="py-10 text-4xl font-bold">放送一覧</h1>
           {session?.user.isAdmin && (
-            <Button
-              isSubmitting={false}
-              isPrimary
-              type="button"
-              onClick={handleRegistration}
-            >
+            <Button isPrimary type="button" onClick={handleRegistration}>
               放送を作成する
             </Button>
           )}
