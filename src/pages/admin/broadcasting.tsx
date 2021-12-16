@@ -355,7 +355,7 @@ const Broadcasting = ({
                         <div className="mx-auto">
                           <Button
                             type="button"
-                            disabled={inFeatureId === "" ? true : false}
+                            disabled={inFeatureId === ""}
                             isPrimary
                             className="transition duration-75 transform active:scale-95"
                             onClick={handleTitleCall}

@@ -84,7 +84,6 @@ const Registration: NextPage<Props> = ({ broadcast }) => {
               id="broadCastingDate"
               type="date"
               value={format(parseISO(broadcast.broadCastingDate), "yyyy-MM-dd")}
-              placeholder="2021/09/03"
               register={register("broadCastingDate")}
               min={String(format(currentDate, "yyyy-MM-dd"))}
               className="mt-8 mb-8"
