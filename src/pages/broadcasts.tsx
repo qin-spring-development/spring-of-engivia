@@ -28,10 +28,8 @@ const Broadcasts: NextPage = () => {
           )}
         </div>
         <div className="pb-10">
-          {broadcasts.map((broadcast, index) => (
-            <div key={index}>
-              <BroadcastItem broadcast={broadcast} />
-            </div>
+          {broadcasts.map((broadcast) => (
+            <BroadcastItem key={broadcast.id} broadcast={broadcast} />
           ))}
         </div>
       </div>
