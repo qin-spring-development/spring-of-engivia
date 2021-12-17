@@ -1,4 +1,5 @@
 import type { FC, ReactNode } from "react";
+import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 
 export type Props = {
@@ -9,7 +10,7 @@ export type Props = {
 
 export const Modal: FC<Props> = ({ children, isOpen, onClose }) => {
   return (
-    <Transition appear show={isOpen}>
+    <Transition appear show={isOpen} as={Fragment}>
       <Dialog
         as="div"
         className="overflow-y-auto fixed inset-0 z-10"
@@ -17,6 +18,7 @@ export const Modal: FC<Props> = ({ children, isOpen, onClose }) => {
       >
         <div className="px-4 min-h-screen text-center">
           <Transition.Child
+            as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0"
             enterTo="opacity-100"
@@ -26,7 +28,6 @@ export const Modal: FC<Props> = ({ children, isOpen, onClose }) => {
           >
             <Dialog.Overlay className="fixed inset-0 bg-gray-800 bg-opacity-75" />
           </Transition.Child>
-
           <span
             className="inline-block h-screen align-middle"
             aria-hidden="true"
@@ -34,6 +35,7 @@ export const Modal: FC<Props> = ({ children, isOpen, onClose }) => {
             &#8203;
           </span>
           <Transition.Child
+            as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0 scale-95"
             enterTo="opacity-100 scale-100"
