@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import * as googleTTS from "google-tts-api";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const googleTtsAudio = await googleTTS.getAudioBase64(req.body, {
+  const googleTtsAudio = await googleTTS.getAudioBase64(req.body.engivia, {
     lang: "ja",
     slow: true,
     host: "https://translate.google.com",
