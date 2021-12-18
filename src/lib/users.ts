@@ -37,7 +37,6 @@ export const getUser = async (uid: string) => {
   return data;
 };
 
-
 export const createUserToken = async (userToken: userTokens) => {
   await db
     .collection("userTokens")
