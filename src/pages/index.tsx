@@ -1,5 +1,5 @@
 import Head from "next/head";
-import SlackIcon from "src/svg/slack-icon.svg";
+import SlackIcon from "public/svg/slack-icon.svg";
 import { signIn } from "next-auth/client";
 import Image from "next/image";
 
@@ -13,7 +13,6 @@ export default function Home() {
           content="気軽にエンジビアの豆知識・ムダ知識を披露する場。Zoomを同時に開きながら楽しむアプリ。"
         />
       </Head>
-
       <div className="flex">
         <div className="flex flex-col items-center my-auto w-[43%]">
           <Image

@@ -19,6 +19,8 @@ import { useSession } from "next-auth/client";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 import useSound from "use-sound";
+import Lottie from "react-lottie-player";
+import animationData from "../../../public/thanks_for_watching.json";
 
 const Broadcasting: NextPage = () => {
   const [session] = useSession();
@@ -47,7 +49,7 @@ const Broadcasting: NextPage = () => {
 
   useEffect(() => {
     if (broadcast?.status === "DONE") {
-      setTimeout(() => router.push("/broadcasts"), 5000);
+      setTimeout(() => router.push("/broadcasts"), 7000);
     }
     if (featureEngivia?.id && user) {
       addJoinUser(broadcastId, featureEngivia.id, user);
@@ -75,9 +77,8 @@ const Broadcasting: NextPage = () => {
   const broadcastType = useMemo(() => {
     if (broadcast?.status === "DONE") {
       return (
-        <div className="mx-auto text-3xl text-center">
-          <p className="mb-2">本日のエンジビアの泉は終了しました。</p>
-          <p>ご視聴ありがとうございました！</p>
+        <div className="mx-auto max-w-3xl">
+          <Lottie loop={false} animationData={animationData} play />
         </div>
       );
     }

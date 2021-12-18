@@ -31,7 +31,7 @@ export type BroadcastType = {
   featureCount: number;
   featureId: string;
   id: string;
-  status: string;
+  status: "BEFORE" | "IN_PROGRESS" | "DONE";
   title: string;
 };
 export type WithOutToken = {

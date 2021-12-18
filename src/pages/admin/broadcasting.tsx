@@ -176,16 +176,10 @@ const Broadcasting = ({
           <div className="absolute right-0">
             {broadcast?.status === "BEFORE" ? (
               <div>
-                <Button
-                  isSubmitting={false}
-                  isPrimary={true}
-                  type="button"
-                  onClick={handleBeginBroadcast}
-                >
+                <Button isPrimary type="button" onClick={handleBeginBroadcast}>
                   放送を開始する
                 </Button>
                 <Button
-                  isSubmitting={false}
                   isPrimary={false}
                   type="button"
                   onClick={handleEditBroadcast}
@@ -194,12 +188,7 @@ const Broadcasting = ({
                 </Button>
               </div>
             ) : (
-              <Button
-                isSubmitting={false}
-                isPrimary={false}
-                type="button"
-                onClick={onEndBroadcast}
-              >
+              <Button isPrimary={false} type="button" onClick={onEndBroadcast}>
                 放送を終了する
               </Button>
             )}
@@ -366,8 +355,8 @@ const Broadcasting = ({
                         <div className="mx-auto">
                           <Button
                             type="button"
-                            isSubmitting={inFeatureId === "" ? true : false}
-                            isPrimary={true}
+                            disabled={inFeatureId === ""}
+                            isPrimary
                             className="transition duration-75 transform active:scale-95"
                             onClick={handleTitleCall}
                           >
