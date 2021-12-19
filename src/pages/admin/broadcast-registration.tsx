@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { NextPage, GetServerSideProps } from "next";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,15 +14,23 @@ import { createBroadcast, updateBroadcast, deleteBroadcast } from "src/lib/db";
 import { getBroadcast } from "src/lib/db-admin";
 import schemas from "src/lib/yupSchema/engiviaSchema";
 import { initialBroadcastInfo } from "src/constant/initialState";
+import { useSession } from "next-auth/client";
 
 type Props = {
   broadcast: BroadcastType;
 };
 
 const Registration: NextPage<Props> = ({ broadcast }) => {
+  const [session] = useSession();
   const currentDate = new Date();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (!session?.user.isAdmin) {
+      router.push("/404");
+    }
+  });
 
   const {
     register,
