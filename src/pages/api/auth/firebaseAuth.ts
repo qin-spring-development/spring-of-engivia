@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { toHash } from "src/lib/auth/hash";
 import { adminAuth } from "src/lib/firebase-admin";
 
 export type CustomTokenResponse = {
@@ -12,7 +13,8 @@ export default async function handler(
 ) {
   const userId = req.body?.userId;
   if (userId) {
-    const customToken = await adminAuth.createCustomToken(userId);
+    const hash = toHash(userId);
+    const customToken = await adminAuth.createCustomToken(hash);
     res.status(200).json({ token: customToken });
   } else {
     res.status(400).json({ errorMessage: "userId is required" });

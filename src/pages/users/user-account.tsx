@@ -33,7 +33,10 @@ const UserAccount: NextPage = () => {
     async (data) => {
       if (session?.user) {
         await updateUsername(session.user.id, data.username);
-        signIn("credentials", { id: session.user.id });
+        signIn("credentials", {
+          id: session.user.id,
+          email: session.user.email,
+        });
         toast("保存しました", {
           duration: 4000,
           position: "top-center",
