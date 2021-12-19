@@ -55,7 +55,6 @@ export const EngiviaInput: FC<Props> = ({
           id="engivia"
           cols={60}
           rows={3}
-          maxlength={100}
           value={userEngivia.body}
           placeholder="エンジビアを入力する"
           register={register("engivia")}
@@ -67,7 +66,7 @@ export const EngiviaInput: FC<Props> = ({
           </span>
         )}
         <div className="flex justify-center mt-5">
-          <Button isSubmitting={false} type="submit" isPrimary>
+          <Button type="submit" isPrimary>
             保存する
           </Button>
         </div>

@@ -1,3 +1,4 @@
+import axios from "axios";
 import type { FC } from "react";
 import { useEffect, useState } from "react";
 import { EngiviaType } from "src/types/interface";
@@ -14,13 +15,10 @@ export const EngiviaCardWithTotalLikes: FC<Props> = ({
   const [audioString, setAudioString] = useState("");
   useEffect(() => {
     const getAudio = async () => {
-      const res = await fetch("/api/google-tts", {
-        method: "POST",
-        cache: "no-cache",
-        body: engivia.body,
+      const { data } = await axios.post("/api/google-tts", {
+        engivia: engivia.body,
       });
-      const base64String = await res.json();
-      setAudioString(base64String.base64String);
+      setAudioString(data.base64String);
     };
     getAudio();
   }, []);

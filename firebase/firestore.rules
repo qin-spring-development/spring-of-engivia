@@ -8,15 +8,25 @@ service cloud.firestore {
 
     //本人の認証
     function isUserAuthenticated(userID) {
-      return isAuthenticated() && userID == request.auth.uid;
+      return isAuthenticated()
+      && get(/databases/$(database)/documents/userTokens/$(userID)).data.firebaseUid == request.auth.uid;
     }
 
     //admin認証
     function isAdminAuthenticated() {
       return isAuthenticated()
-      && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+      && get(/databases/$(database)/documents/users/$(request.auth.token.sid)).data.isAdmin == true;
     }
 
+    //***************************
+    //userTokensコレクションへのルール
+    //***************************
+    match /userTokens/{userID} {
+      allow read: if isUserAuthenticated(userID);
+      allow create: if isAuthenticated() && request.resource.data.id == userID;
+      allow update: if isUserAuthenticated(userID);
+      allow delete: if isUserAuthenticated(userID);
+    }
 
     //***************************
     //usersコレクションへのルール
@@ -93,14 +103,14 @@ service cloud.firestore {
     match /broadcasts/{broadcastId}/engivias/{engiviaId} {
     	//投稿者が本人か
       function isMyPostEngivia(broadcastId, engiviaId) {
-        return get(/databases/$(database)/documents/broadcasts/$(broadcastId)/engivias/$(engiviaId)).data.postUser.id == request.auth.uid;
+        return get(/databases/$(database)/documents/broadcasts/$(broadcastId)/engivias/$(engiviaId)).data.postUser.id == request.auth.token.sid;
       }
       //各フィールドへのバリデーション
       function validate() {
         return (
-        				!request.resource.data.keys().hasAny(["body"])
-              	|| (
-              				!request.resource.data.body.matches('( |　)+')
+                !request.resource.data.keys().hasAny(["body"])
+                || (
+                      !request.resource.data.body.matches('( |　)+')
                       && 1 <= request.resource.data.body.size() && request.resource.data.body.size() <= 100
                     )
               )
@@ -141,7 +151,7 @@ service cloud.firestore {
       allow create: if allowedFields()
                     && validate()
                     && isAuthenticated()
-                    && request.resource.data.postUser.id == request.auth.uid;
+                    && request.resource.data.postUser.id == request.auth.token.sid;
       allow update: if allowedFields()
                     && validate()
                     && (
@@ -150,6 +160,9 @@ service cloud.firestore {
                           || (isAuthenticated() && otherUserNotAllowedChange())
                         );
       allow delete: if isMyPostEngivia(broadcastId, engiviaId);
+      allow write: if allowedFields()
+                    && validate()
+                    && isAdminAuthenticated();
     }
 
     //***************************

@@ -1,27 +1,21 @@
-import type { FC, ReactNode, MouseEventHandler } from "react";
+import type { FC, ReactNode, ComponentProps } from "react";
 
 export type Props = {
-  isSubmitting: boolean;
-  type: "button" | "submit" | "reset";
-  onClick?: MouseEventHandler<HTMLButtonElement>;
   isPrimary: boolean;
   className?: string;
   children: ReactNode;
-};
+} & ComponentProps<"button">;
 
 export const Button: FC<Props> = ({
-  isSubmitting,
-  type,
-  onClick,
   isPrimary,
   className,
   children,
+  ...rest
 }) => {
   return (
     <button
-      disabled={isSubmitting}
-      type={type}
-      onClick={onClick}
+      type="button"
+      {...rest}
       className={`py-3 px-6 mr-2 rounded-md ${className}
           ${
             isPrimary

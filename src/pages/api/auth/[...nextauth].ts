@@ -3,7 +3,14 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import NextAuth, { Account, Profile, Session, User } from "next-auth";
 import Providers from "next-auth/providers";
 import { adminAuth } from "src/lib/firebase-admin";
-import { createUser, getUser, ReqUser, ResUser } from "src/lib/users";
+import {
+  createUser,
+  createUserToken,
+  getUser,
+  ReqUser,
+  ResUser,
+} from "src/lib/users";
+import { toHash } from "src/lib/auth/hash";
 
 const options = {
   // Configure one or more authentication providers
@@ -15,9 +22,9 @@ const options = {
     // ユーザー情報更新時の再ログイン
     Providers.Credentials({
       authorize: async (credentials) => {
-        const { id } = credentials;
+        const { id, email } = credentials;
 
-        await customTokenSignIn(id);
+        await customTokenSignIn(id, email);
         const firebaseUser = (await getUser(id)) as User;
         return firebaseUser;
       },
@@ -39,7 +46,7 @@ const options = {
     signIn: async (user: User, account: Account) => {
       try {
         if (user !== null) {
-          await customTokenSignIn(user.id);
+          await customTokenSignIn(user.id, user.email);
 
           (await getUser(user.id)) ?? createUser(toReqUser(user, account));
           const data = await getUser(user.id);
@@ -55,9 +62,16 @@ const options = {
   },
 };
 
-const customTokenSignIn = async (id: string) => {
-  const customToken = await adminAuth.createCustomToken(id);
-  await auth.signInWithCustomToken(customToken);
+const customTokenSignIn = async (id: string, email: string) => {
+  const hash = toHash(id);
+  const customToken = await adminAuth.createCustomToken(hash);
+
+  await auth.signInWithCustomToken(customToken).then((res) => {
+    res.user?.updateEmail(email);
+  });
+  await adminAuth.setCustomUserClaims(hash, { sid: id });
+
+  await createUserToken({ id: id, firebaseUid: hash });
 };
 
 const toReqUser = (user: User, account: Account) => {
