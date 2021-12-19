@@ -160,6 +160,9 @@ service cloud.firestore {
                           || (isAuthenticated() && otherUserNotAllowedChange())
                         );
       allow delete: if isMyPostEngivia(broadcastId, engiviaId);
+      allow write: if allowedFields()
+                    && validate()
+                    && isAdminAuthenticated();
     }
 
     //***************************
