@@ -69,6 +69,8 @@ const customTokenSignIn = async (id: string, email: string) => {
   await auth.signInWithCustomToken(customToken).then((res) => {
     res.user?.updateEmail(email);
   });
+  await adminAuth.setCustomUserClaims(hash, { sid: id });
+
   await createUserToken({ id: id, firebaseUid: hash });
 };
 
