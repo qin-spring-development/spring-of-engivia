@@ -14,12 +14,10 @@ export const EntryTittle = Template.bind({});
 EntryTittle.args = {
   placeholder: "エンジビアを入力する",
   rows: 3,
-  maxlength: 100,
 };
 export const Alert = Template.bind({});
 Alert.args = {
   placeholder: "100文字以上の場合",
   rows: 3,
-  maxlength: 100,
   className: "text-red-700 border-red-300 focus:ring-red-700",
 };

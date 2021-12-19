@@ -117,7 +117,6 @@ export const Header = () => {
             </Menu>
           </div>
         ) : (
-          /* Todo: next.jsのImageが使えないので一旦このまま */
           <UserIcon className="p-1 h-10 text-gray-500 bg-gray-200 rounded-full" />
         )}
       </div>
