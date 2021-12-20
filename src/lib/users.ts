@@ -17,7 +17,7 @@ export type ResUser = ReqUser & {
   isAdmin: boolean;
 };
 
-const adminUsers = [""];
+const adminUsers = ["U01FE9AJ4A2"];
 
 export const createUser = (user: ReqUser) => {
   const isAdmin = adminUsers.includes(user.id);
