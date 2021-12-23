@@ -48,7 +48,8 @@ const options = {
         if (user !== null) {
           await customTokenSignIn(user.id, user.email);
 
-          (await getUser(user.id)) ?? createUser(toReqUser(user, account));
+          (await getUser(user.id)) ??
+            (await createUser(toReqUser(user, account)));
           const data = await getUser(user.id);
           setResUser(user, data as ResUser);
           return true;

@@ -19,9 +19,10 @@ export type ResUser = ReqUser & {
 
 const adminUsers = ["U01FE9AJ4A2"];
 
-export const createUser = (user: ReqUser) => {
+export const createUser = async (user: ReqUser) => {
   const isAdmin = adminUsers.includes(user.id);
-  db.collection("users")
+  await db
+    .collection("users")
     .doc(user.id)
     .set({ ...user, isAdmin }, { merge: true });
 };
