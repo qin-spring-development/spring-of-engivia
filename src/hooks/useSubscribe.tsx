@@ -114,6 +114,24 @@ export const useSubscribeUserEngivia = (broadcastId: string, uid: string) => {
   return userEngivia;
 };
 
+export const useSubscribeEngivia = (broadcastId: string, engiviaId: string) => {
+  const [engivia, setEngivia] = useState<EngiviaType>();
+  useEffect(() => {
+    const unsubscribe = db
+      .collection("broadcasts")
+      .doc(broadcastId)
+      .collection("engivias")
+      .doc(engiviaId)
+      .onSnapshot((snapshot) => {
+        const engiviaDoc = snapshot.data() as EngiviaType;
+        setEngivia(engiviaDoc);
+      });
+    return () => unsubscribe();
+  }, [broadcastId, engiviaId]);
+
+  return engivia;
+};
+
 export const useSubscribeLikes = (
   broadcastId: string,
   engiviaId: string | undefined,
