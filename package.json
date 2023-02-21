@@ -14,7 +14,8 @@
     "format": "prettier --write .",
     "test-all": "yarn check-types && yarn check-format && yarn check-lint && yarn build",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "fs:seed": "node src/lib/engivia.mjs"
   },
   "dependencies": {
     "4": "^0.0.0",
